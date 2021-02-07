@@ -4,8 +4,8 @@
    bac_logo1.png
    :alt: BAC logo 1
 
-A repository containing lecture and exercise materials for the BAC Advanced
-Team's intro to machine learning curriculum.
+A repository containing lectures and exercises for the BAC Advanced Team's
+intro to machine learning curriculum.
 
 Contents
 --------
