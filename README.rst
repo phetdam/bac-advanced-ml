@@ -7,6 +7,9 @@
 A repository containing lectures and exercises for the BAC Advanced Team's
 intro to machine learning curriculum.
 
+The source code in the repository is structured within a Python package.
+
+
 Contents
 --------
 
