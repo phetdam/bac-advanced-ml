@@ -1,0 +1,8 @@
+# ignore pdflatex output and PDF output
+**/*.aux
+**/*.log
+**/*.nav
+**/*.out
+**/*.pdf
+**/*.snm
+**/*.toc
