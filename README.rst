@@ -2,7 +2,6 @@
 
 .. image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/master/
    bac_logo1.png
-   :scale: 80%
    :alt: BAC logo 1
 
 A repository containing lecture and exercise materials for the BAC Advanced
