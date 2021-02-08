@@ -1,5 +1,7 @@
 # ignore pdflatex output and PDF output
 **/*.aux
+**/*.dvi
+**/*.gz
 **/*.log
 **/*.nav
 **/*.out
