@@ -5,6 +5,8 @@
 # pdflatex compile command. for some reason, -output-directory is ignored.
 # therefore, i used -jobname to modify the output directory, which works for me.
 PDF_TEX="pdflatex -interaction=nonstopmode -halt-on-error -shell-escape"
+# directory this file is located in, the repo root (relative path)
+REPO_ROOT=$(dirname $0)
 # script usage
 USAGE="usage: $0 [-h] [TEXFILE]
 
@@ -25,29 +27,40 @@ optional arguments:
              directory the source file is located in. if omitted, then all .tex
              files in the top-level package directory and each lecture_[0-9]+
              directory within in the top-level package directory are compiled."
-# directory this file is located in, the repo root (relative path)
-REPO_ROOT=$(dirname $0)
+
+# compilation function. only pass one argument (.tex file name)
+compile_tex() {
+    # save current directory so we can cd back
+    BASE_DIR=$(pwd)
+    # so that pdflatex doesn't screw up looking for images, cd to dir of arg.
+    # note sure why pdflatex doesn't respect the \graphicspath command.
+    cd $(dirname $1)
+    # note redirect to /dev/null doesn't include 2>&1 so output from
+    # stderr will still be shown (although it usually doesn't give stderr)
+    echo "$PDF_TEX  $(basename $1) > /dev/null"
+    # return to base directory
+    cd $BASE_DIR
+}
 
 # if no arguments, then compile all lectures
 if [[ $# == 0 ]]
 then
-    # for all .tex files in the top-level package directory
+    # compile all .tex files in the top-level package directory
     for INFILE in $REPO_ROOT/bac_advanced_ml/*.tex
     do
-        # note redirect to /dev/null doesn't include 2>&1 so output from
-        # stderr will still be shown. echo + sed used to replace .tex with
-        # empty string for the job name.
-        $PDF_TEX -jobname="$(echo $INFILE | sed s/.tex//g)" $INFILE > /dev/null
+        compile_tex $INFILE
     done
     # for each lecture directory in the package directory
-    for LEC_DIR in $REPO_ROOT/bac_advanced_ml/lecture*
+    for LEC_DIR in $REPO_ROOT/bac_advanced_ml/lecture_{00..15}
     do
-        # for each .tex file in the directory
+        # compile each .tex file in the directory
         for INFILE in $LEC_DIR/*.tex
         do
-            # use same compilation command as above
-            $PDF_TEX -jobname="$(echo $INFILE | sed s/.tex//g)" $INFILE \
-                > /dev/null
+            # don't feed nonexistent names to compilation function
+            if [ -e $INFILE ]
+            then
+                compile_tex $INFILE
+            fi
         done
     done
 # else if 1 argument
@@ -60,7 +73,7 @@ then
         echo "$USAGE"
     # else treat as .tex file and send to pdflatex. output written in same dir.
     else
-        $PDF_TEX -jobname="$(echo $1 | sed s/.tex//g)" $1 > /dev/null
+        compile_tex $1
     fi
 # else too many arguments
 else
