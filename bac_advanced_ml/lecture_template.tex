@@ -1,0 +1,136 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% title page stuff
+\title[Adaptive SGD: Adam]{Adaptive SGD: Adam}
+% content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute[BAC Advanced Team]{BAC Advanced Team}
+\date[February 8, 2020]{February 8, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+% section
+\section{Adaptive stochastic gradient descent}
+
+% subsection
+\subsection{The Adam algorithm}
+
+% content slide
+\begin{frame}{The Adam algorithm}
+    % algorithms must be forced to stay in place with H specifier. use scalebox
+    % to make sure the algorithm can fit on the slide if need be.
+    \begin{centering}
+    \scalebox{0.85}{
+        \begin{algorithm}[H]
+            % Adam inputs
+            \KwIn{
+                Step size $ \alpha > 0 $, decay rates
+                $ \beta_1, \beta_2 \in [0, 1) $, stochastic objective
+                $ f : \mathcal{X} \rightarrow [0, \infty) $, initial parameter
+                guess $ \mathbf{w}_0 \in \mathcal{X} $, stability constant
+                $ \varepsilon > 0 $, convergence criteria
+            }
+            % Adam output
+            \KwOut{
+                Final weight vector $ \mathbf{w} $
+            }
+            $ \mathbf{w} \leftarrow \mathbf{w}_0 $ \\
+            $ \mathbf{m} \leftarrow \mathbf{0} $ (Initialize biased gradient
+            first central moment estimate) \\
+            $ \mathbf{v} \leftarrow \mathbf{0} $ (Initialize biased gradient
+            second raw moment estimate) \\
+            $ n \leftarrow 0 $ (Current iteration number) \\
+            \While{not converged}{
+                $ n \leftarrow n + 1 $ \\
+                $ \mathbf{g} \leftarrow \nabla f(\mathbf{w}) $ \\
+                $
+                    \mathbf{m} \leftarrow \beta_1\mathbf{m} + (1 - \beta_1)
+                    \mathbf{g}
+                $ \\
+                $
+                    \mathbf{v} \leftarrow \beta_2\mathbf{v} + (1 - \beta_2)
+                    \mathbf{g} \odot \mathbf{g}
+                $ \\
+                $ \hat{\mathbf{m}} \leftarrow \mathbf{m} / (1 - \beta_1^n) $
+                (First moment estimate bias correction) \\
+                $ \hat{\mathbf{v}} \leftarrow \mathbf{v} / (1 - \beta_2^n) $
+                (Second moment estimate bias correction) \\
+                % \oslash is the Hadamard division operator
+                $
+                    \mathbf{w} \leftarrow \mathbf{w} -
+                    \alpha\hat{\mathbf{m}}\oslash\big(
+                        \sqrt{\hat{\mathbf{v}}} + \varepsilon\mathbf{1}
+                    \big)
+                $
+            }
+            % return statement
+            \KwRet{$ \mathbf{w} $}
+            \label{adam_algorithm}
+            % caption displayed underneath the algorithm
+            \caption{The Adam algorithm}
+        \end{algorithm}
+    }
+    \end{centering}
+\end{frame}
+
+% another subsection
+\subsection{Qualitative properties}
+
+% title doesn't have to equal subsection
+\begin{frame}{Qualitative properties}
+    \begin{itemize}
+        \item
+        The descent direction is \textit{adaptive}--the individual components
+        of the gradient vector are deflated by a running exponential average
+        estimate of the uncentered gradient variance.
+
+        \item
+        On expectation, the magnitude of the per-element updates are bound by
+        the stepsize $ \alpha $ and updates are \textit{scale invariant}.
+
+        \item
+        This contrasts with typical gradient descent formulations!
+    \end{itemize}
+\end{frame}
+
+% only sections with slides are shown in the table of contents
+\section{This section is empty}
+
+\end{document}
