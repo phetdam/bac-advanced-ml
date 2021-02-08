@@ -32,16 +32,18 @@ in your shell
 
 Note that currently this repository doesn't have any C extension modules so the
 ``build_ext`` step should not do anything. As a note, building C extension
-modules on your platform require that you use the same compiler that your
+modules on your platform requires that you use the same compiler that your
 Python interpreter was compiled with. On Linux the compiler is usually ``gcc``,
-on Windows it is usually Microsoft Visual C++, and on Mac ``clang``.
+on Windows it is usually Microsoft Visual C++, and on Mac ``clang``. However,
+the ``setup.py`` file will take care of all the details for you and you can
+trust that it gets the sometimes magical compiler invocations correct.
 
 From PyPI
 ---------
 
 Ideally, once the exercise materials are in a relatively stable state, rolling
 releases to PyPI can be made to simplify the installation process. This is a
-future concern, however.
+future concern, however, and won't be available for this semester.
 
 
 Compiling ``.tex`` source
