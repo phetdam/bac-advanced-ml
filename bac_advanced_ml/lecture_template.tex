@@ -31,9 +31,6 @@
 % for later (post-2019) TeX Live installations. see the issue on GitHub:
 % https://github.com/josephwright/beamer/issues/630
 \DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
-% set graphics path since pdflatex is run using compile_tex.sh from the parent
-% directory and gets confused on the graphics path.
-%\graphicspath{{../}{bac_advanced_ml/}{../}}
 
 \begin{document}
 
@@ -99,7 +96,7 @@
                 $
                     \mathbf{w} \leftarrow \mathbf{w} -
                     \alpha\hat{\mathbf{m}}\oslash\big(
-                        \sqrt{\hat{\mathbf{v}}} + \varepsilon\mathbf{1}
+                        \hat{\mathbf{v}}^{\odot(1 / 2)} + \varepsilon\mathbf{1}
                     \big)
                 $
             }
