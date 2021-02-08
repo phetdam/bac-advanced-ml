@@ -2,7 +2,7 @@
 % by Derek Huang
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage{algorithm2e, amsmath, amssymb, amsfonts}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
 % use boadilla theme
 \usetheme{Boadilla}
 % remove navigation symbols
@@ -31,6 +31,9 @@
 % for later (post-2019) TeX Live installations. see the issue on GitHub:
 % https://github.com/josephwright/beamer/issues/630
 \DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+% set graphics path since pdflatex is run using compile_tex.sh from the parent
+% directory and gets confused on the graphics path.
+%\graphicspath{{../}{bac_advanced_ml/}{../}}
 
 \begin{document}
 
@@ -38,7 +41,7 @@
 \begin{frame}
     \titlepage
     \centering
-    \includegraphics[scale = 0.1]{../bac_logo1.png}
+    \includegraphics[scale = 0.1]{bac_logo1.png}
 \end{frame}
 
 % table of contents slide
