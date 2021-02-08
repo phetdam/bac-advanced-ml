@@ -1,6 +1,6 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{amsmath, amssymb, amsfonts, graphicx}
 % use boadilla theme
 \usetheme{Boadilla}
 % remove navigation symbols
@@ -24,6 +24,10 @@
     \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
 % use default enumeration scheme
 \setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
 
 \begin{document}
 
@@ -32,6 +36,214 @@
     \titlepage
     \centering
     \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents
+\begin{frame}{Overview}
+	\tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\subsection{Motivation}
+
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        Why do we need a math review/primer?
+        
+        \item
+        Short answer: so that we can be \textit{informed} model users.
+        
+        \item
+        Being an informed user is important! It's not so simple as just taking
+        data and chucking it into a model--doing exactly that can give
+        \textit{seriously misleading} modeling results.
+
+        \item
+        \textit{Example}. Principal components analysis (PCA). A typical
+        mistake people make\footnotemark\footnotetext{
+            I did this before but caught my mistake before I turned in my
+            analysis.
+        } is to perform PCA on data that has not been scaled to have unit
+        per-component variances.
+
+        \item
+        Since PCA is scaling sensitive, one often ends up with a couple massive
+        eigenvalues/singular values \footnotemark\footnotetext{
+            Define $ \mathbf{X} \in \mathbb{R}^{N \times d} $ as the data
+            matrix with sample covariance matrix $ \mathbf{C} \triangleq
+            \frac{1}{N}\mathbf{X}^\top\mathbf{X} $. Eigendecomposition is used
+            on $ \mathbf{C} $ while singular value decomposition is used on
+            $ \mathbf{X} $.
+        }. This may result in the incorrect conclusion that the data may be
+        well approximated by a lower-dimensional orthogonal eigenbasis.
+
+        % provide some extra space before footnotes
+        \medskip
+    \end{itemize}
+\end{frame}
+
+\subsection{Topics}
+
+\begin{frame}{Topics}
+    \begin{itemize}
+        \item
+        It never hurts to know more math, but our time is limited. Therefore,
+        we will only briefly cover enough mathematical knowledge to give a
+        useful foundation for self-learning.
+
+        \item
+        In general, knowing all the following topics at an undergraduate or
+        early graduate level is ideal: probability theory, linear algebra,
+        vector/matrix calculus, and some convex/nonlinear optimization. An
+        elementary understanding of set theory is also necessary and
+        knowing some real analysis is also helpful.
+
+        \item
+        And without further ado, our first topic awaits.
+    \end{itemize}
+\end{frame}
+
+\section{Discrete math}
+
+\subsection{Set theory}
+
+\begin{frame}{Set theory}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{set} is a collection of items.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Sample space of coin flip.} H for heads, T for tails. The
+            sample space $ \Omega \triangleq \{\text{H}, \text{T}\} $, where
+            $ \triangleq $ means ``is defined as''.
+
+            \item
+            \textit{Natural numbers.} A special set, denoted with
+            $ \mathbb{N} $. Basically the set containing numbers
+            $ 1, 2, \ldots $. This is a \textit{countably infinite} set, as it
+            has an infinite number of elements but they can be ``counted out''.
+
+            \item
+            \textit{Real numbers.} A special set, denoted with $ \mathbb{R} $.
+            This type of set if \textit{uncountably infinite}, as you can't
+            ``count out'' all the real numbers.
+        \end{itemize}
+        \item
+        Of course, we need to define some set operations/operators.
+
+        \item
+        \textit{Definition.} The \textit{cardinality} of a set $ A $, denoted
+        by $ |A| $, gives the number of elements in the set. Cardinality is
+        mostly used in the context of finite sets---infinite sets are a
+        different story.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Set theory}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{subset} $ B $ of a set $ A $ is a set
+        containing only some elements from $ A $. Usually $ B \subseteq A $
+        means that $ B $ might be equal to $ A $ while $ B \subset A $ means
+        that $ B $ is a strict subset of $ A $.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Empty set.} A set containing nothing. For any set $ A $,
+            $ \emptyset \subseteq A $.
+
+            \item
+            \textit{Power set.} Denote $ \Omega \triangleq \{\text{H},
+            \text{T}\} $ as the coin flip sample space. The associated
+            \textit{power set}, or set of all possible non-strict subsets of
+            $ \Omega $ is denoted with $ 2^\Omega \triangleq \{\emptyset,
+            \{\text{H}\}, \{\text{T}\}, \{\text{H}, \text{T}\}\} $.
+            \begin{itemize}
+                \item
+                Note that $ \mathbb{P}(\{\text{H}, \text{T}\}) = 0 $, as the
+                coin is not a quantum coin, and that $ \mathbb{P}(\emptyset)
+                = \mathbf{0} $ obviously as \textit{something} must happen.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Probability}
+
+\subsection{Axioms}
+
+\begin{frame}{Axioms}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{probability measure} $ \mathbb{P} $
+        defined on a sample space $ \Omega $ is a function from a
+        \textit{sigma-algebra} $ \mathcal{F} \subseteq 2^\Omega $ to the unit
+        interval.
+
+        \item
+        \textit{Kolmogorov axioms} \cite{all_of_stats}.
+        \begin{enumerate}
+            \item
+            $ \forall A \in \mathcal{F} $, $ \mathbb{P}(A) \ge 0 $, i.e. any
+            event has a nonnegative probability.
+
+            \item
+            $ \mathbb{P}(\Omega) = 1 $, i.e. the probability that anything
+            happens is 1.
+
+            \item
+            For countable infinite, disjoint $ A_1, A_2, \ldots $, then
+            \begin{equation*}
+                \mathbb{P}\left(\bigcup_{k = 1}^\infty A_k\right) =
+                \sum_{k = 1}^\infty\mathbb{P}(A_k)
+            \end{equation*}
+            The probability of the union of mutually disjoint events is equal
+            to the sum of the individual events' probabilities.
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Axioms}
+    \begin{itemize}
+        \item
+        \textit{Example. Proving} $ \mathbb{P}(A \cup B) = \mathbb{P}(A) +
+        \mathbb{P}(B) - \mathbb{P}(A \cap B) $.
+
+        \item
+        \textit{Proof.} Write $ A, B, A \cup B $ as unions of mutually disjoint
+        events. $ A = (A \cap B) \cup (A \cap B^\mathsf{c}) $,
+        $ B = (A \cap B) \cup (A^\mathsf{c} \cap B) $, $ A \cup B = (A \cap B)
+        \cup (A \cap B^\mathsf{c}) \cup (A^\mathsf{c} \cap B) $. By Axiom 3,
+        \begin{equation*}
+            \begin{split}
+                \mathbb{P}(A \cup B) & = \mathbb{P}(A \cap B) +
+                \mathbb{P}(A \cap B^\mathsf{c}) +
+                \mathbb{P}(A^\mathsf{c} \cap B) \\
+                & = \mathbb{P}(A \cap B) + \mathbb{P}(A \cap B^\mathsf{c}) +
+                \mathbb{P}(A \cap B) \\
+                & \quad + \mathbb{P}(A^\mathsf{c} \cap B) -
+                \mathbb{P}(A \cap B) \\
+                & = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)
+            \end{split}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\section{Linear algebra}
+
+\begin{frame}{References}
+    \begin{thebibliography}{99}
+        \bibitem{all_of_stats}
+        Wasserman, L. (2004). \textit{All of Statistics: A Concise Course in
+        Statistical Inference}. Springer Science \& Business Media.
+    \end{thebibliography}
 \end{frame}
 
 \end{document}
