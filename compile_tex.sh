@@ -32,7 +32,7 @@ then
     # for each lecture directory in the lectures directory
     for LEC_DIR in $REPO_ROOT/lectures/lecture*
     do
-        # for each .tex file in the directory (usually only 1 .tex file)
+        # for each .tex file in the directory
         for INFILE in $LEC_DIR/*.tex
         do
             # note redirect to /dev/null doesn't include 2>&1 so output from
