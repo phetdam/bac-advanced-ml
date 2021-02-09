@@ -46,8 +46,8 @@ releases to PyPI can be made to simplify the installation process. This is a
 future concern, however, and won't be available for this semester.
 
 
-Compiling ``.tex`` source
-=========================
+Compiling TeX source
+====================
 
 To compile the ``.tex`` files using the ``compile_tex.sh`` file, you will need
 to have `TeX Live`__ installed on your system. For Ubuntu users this can be
