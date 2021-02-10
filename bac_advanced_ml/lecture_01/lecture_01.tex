@@ -70,7 +70,7 @@
 
         \item
         Since PCA is scaling sensitive, one often ends up with a couple massive
-        eigenvalues/singular values \footnotemark\footnotetext{
+        and many small eigenvalues/singular values \footnotemark\footnotetext{
             Define $ \mathbf{X} \in \mathbb{R}^{N \times d} $ as the data
             matrix with sample covariance matrix $ \mathbf{C} \triangleq
             \frac{1}{N}\mathbf{X}^\top\mathbf{X} $. Eigendecomposition is used
@@ -89,9 +89,16 @@
 \begin{frame}{Topics}
     \begin{itemize}
         \item
-        It never hurts to know more math, but our time is limited. Therefore,
-        we will only briefly cover enough mathematical knowledge to give a
-        useful foundation for self-learning.
+        It can only help and never hurt to know more
+        math\footnotemark\footnotetext{
+            Interestingly, \href{
+                https://cseweb.ucsd.edu/~yfreund/papers/brownboost.pdf
+            }{\alert{Freund's BrownBoost}} algorithm has connections to
+            Brownian motion and requires the solution to a differential
+            equation at each iteration.
+        }, but our time is
+        limited. Therefore, we will only briefly cover enough mathematical
+        knowledge to give a useful foundation for self-learning.
 
         \item
         In general, knowing all the following topics at an undergraduate or
@@ -111,7 +118,8 @@
 \begin{frame}{Set theory}
     \begin{itemize}
         \item
-        \textit{Definition.} A \textit{set} is a collection of items.
+        \textit{Definition.} A \textit{set} is a collection of non-duplicate
+        items.
 
         \item
         \textit{Examples.}
@@ -124,16 +132,22 @@
             \item
             \textit{Natural numbers.} A special set, denoted with
             $ \mathbb{N} $. Basically the set containing numbers
-            $ 1, 2, \ldots $. This is a \textit{countably infinite} set, as it
+            $ 1, 2, $ etc. This is a \textit{countably infinite} set, as it
             has an infinite number of elements but they can be ``counted out''.
 
             \item
             \textit{Real numbers.} A special set, denoted with $ \mathbb{R} $.
             This type of set if \textit{uncountably infinite}, as you can't
             ``count out'' all the real numbers.
+
+            \item
+            \textit{Open Euclidean ball}. $ B(\mathbf{x}, r) \triangleq
+            \{\mathbf{x}' \in \mathbb{R}^n : \Vert\mathbf{x}'\Vert_2 < r\} $.
+            The set of points in $ \mathbb{R}^n $ centered around
+            $ \mathbf{x} $ whose 2-norm is strictly less than
+            $ r \in (0, \infty) $. A \textit{closed ball} replaces $ < $ with
+            $ \le $.
         \end{itemize}
-        \item
-        Of course, we need to define some set operations/operators.
 
         \item
         \textit{Definition.} The \textit{cardinality} of a set $ A $, denoted
@@ -149,7 +163,7 @@
         \textit{Definition.} A \textit{subset} $ B $ of a set $ A $ is a set
         containing only some elements from $ A $. Usually $ B \subseteq A $
         means that $ B $ might be equal to $ A $ while $ B \subset A $ means
-        that $ B $ is a strict subset of $ A $.
+        that $ B $ is a \textit{strict} subset of $ A $.
 
         \item
         \textit{Examples.}
@@ -160,15 +174,15 @@
 
             \item
             \textit{Power set.} Denote $ \Omega \triangleq \{\text{H},
-            \text{T}\} $ as the coin flip sample space. The associated
-            \textit{power set}, or set of all possible non-strict subsets of
-            $ \Omega $ is denoted with $ 2^\Omega \triangleq \{\emptyset,
+            \text{T}\} $ as the coin flip sample space. The power set
+            associated with $ \Omega $, the set of all possible subsets of
+            $ \Omega $, is denoted with $ 2^\Omega \triangleq \{\emptyset,
             \{\text{H}\}, \{\text{T}\}, \{\text{H}, \text{T}\}\} $.
             \begin{itemize}
                 \item
                 Note that $ \mathbb{P}(\{\text{H}, \text{T}\}) = 0 $, as the
                 coin is not a quantum coin, and that $ \mathbb{P}(\emptyset)
-                = 0 $ obviously as \textit{something} must happen.
+                = 0 $ as clearly \textit{something} must happen.
             \end{itemize}
         \end{itemize}
 
@@ -181,6 +195,50 @@
         \textit{Definition.} For sets $ A, B $, $ A \cup B $ denotes the
         \textit{union} of $ A, B $, i.e. the set containing all the elements
         of $ A, B $.
+    \end{itemize}
+\end{frame}
+
+\subsection{Functions}
+
+\begin{frame}{Functions}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{Cartesian product} $ \mathcal{C} $ of
+        sets $ X_1, \ldots X_n $ is denoted as $ \mathcal{C} \triangleq
+        X_1 \times \ldots X_n $ and is the set of all $ n $-tuples whose
+        $ i $th element is an element of $ X_i $. A common example is
+        $\mathbb{R}^n $, $ n $-dimensional Euclidean space, special notation
+        for $ \mathbb{R} \times \ldots \mathbb{R} $.
+
+        \item
+        \textit{Definition.} A \textit{function} $ f : X \rightarrow Y $ is a
+        mapping from a set $ X $ to a set $ Y $. We may also write
+        $ f \triangleq \{(x, y) \in X \times Y : y = f(x)\} $, calling $ f $
+        the set of ordered pairs $ (x, y) \in X \times Y $ where $ y = f(x) $.
+
+        \item
+        \textit{Definition.} The \textit{domain} of $ f $ is $ X $, also
+        denoted as $ \operatorname{dom} f $, while the \textit{codomain} of
+        $ f $ is $ Y $. The \textit{image} or \textit{range} of $ f $, denoted
+        as $ \operatorname{im} f $, is defined such that
+        $ \operatorname{im} f = \{f(x) \in Y : x \in X\} $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Functions}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A function $ f : X \rightarrow Y $ is
+        \textit{injective}, or \textit{one-to-one}, if for $ x_1, x_2 \in X $,
+        $ x_1 \ne x_2 \Rightarrow f(x_1) \ne f(x_2) $. $ \Rightarrow $ means
+        ``implies''.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            $ f : \mathbb{Z} \rightarrow \mathbb{Z} $
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
