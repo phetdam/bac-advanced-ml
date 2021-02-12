@@ -139,7 +139,7 @@ npy_sigmoid(PyObject *self, PyObject *args) {
         return NULL;
     }
     if (PyArray_TYPE(ar) != NPY_DOUBLE) {
-        PyErr_SetString(PyExc_TypeError, "ndarray must be of NPY_DOUBLE");
+        PyErr_SetString(PyExc_TypeError, "ndarray type not NPY_DOUBLE");
         return NULL;
     }
     double *data = (double *) PyArray_DATA(ar);
