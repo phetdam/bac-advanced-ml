@@ -1,0 +1,156 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add text in left of header
+\fancyhead[R]{\includegraphics[scale = 0.15]{./bac_logo1.png}}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author, date
+\title{Exercise -1}
+\author{Derek Huang}
+\date{February 12, 2020}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+\section{PCA whitening}
+
+Suppose we have centered data matrix $ \mathbf{X} \in
+\mathbb{R}^{N \times d} $, where each of the $ N $ rows is a transposed
+$ \mathbb{R}^d $ data sample. In principal components analysis we want to find
+matrices $ \mathbf{W} \in \mathbb{R}^{d \times d},
+\mathbf{Z} \in \mathbb{R}^{N \times d} $, such that
+\begin{enumerate}
+    \item
+    $ \mathbf{W}^\top\mathbf{W} = \mathbf{WW}^\top = \mathbf{I} $, i.e.
+    $ \mathbf{W} $ is an orthonormal matrix.
+
+    \item
+    The columns of $ \mathbf{W} $ are eigenvectors of the sample covariance
+    matrix $ \mathbf{C}_\mathbf{X} \triangleq \frac{1}{N}\mathbf{X}^\top\mathbf{X} $
+    ordered in descending order by the magnitude of their corresponding
+    eigenvalue.
+
+    \item
+    $ \mathbf{X} = \mathbf{ZW}^\top $, i.e. for each data point
+    $ \mathbf{x}_k $, we want $ \mathbf{W}, \mathbf{Z} $ such that
+    $ \mathbf{x}_k = \mathbf{Wz}_k $, $ \mathbf{z}_k $ the $ k $th row of
+    $ \mathbf{Z} $.
+\end{enumerate}
+
+Suppose we find the solution by performing [compact] singular value
+decomposition on $ \mathbf{X} $. That is, we find $ \mathbf{U} \in
+\mathbb{R}^{N \times d} $, $ \mathbf{\Sigma} \in \mathbb{R}^{d \times d} $,
+$ \mathbf{V}^\top \in \mathbb{R}^{d \times d} $ where $ \mathbf{U} $ has
+orthonormal columns, $ \mathbf{\Sigma} $ is the diagonal matrix of singular
+values\footnotemark\footnotetext{
+    Recall that the singular values of $ \mathbf{X} $ are the square roots of
+    the eigenvalues of $ N\mathbf{C}_\mathbf{X} = \mathbf{X}^\top\mathbf{X} $.
+} ordered in descending order, and $ \mathbf{V} $ is an orthonormal matrix
+such that $ \mathbf{X} = \mathbf{U\Sigma V}^\top $. Recall that
+$ \mathbf{X} = \mathbf{ZV}^\top $, which implies that
+$ \mathbf{Z} = \mathbf{XV} $, where $ \mathbf{C}_\mathbf{Z} $ is diagonal.
+
+\medskip
+
+What $ \tilde{\mathbf{V}} \in \mathbb{R}^{d \times d} $ can we derive from
+$ \mathbf{V} $ such that $ \tilde{\mathbf{Z}} \triangleq
+\mathbf{X}\tilde{\mathbf{V}}^\top $ has
+$ \mathbf{C}_{\tilde{\mathbf{Z}}} = \mathbf{I} $?
+
+\medskip
+
+\textit{Hint.} $ \mathbf{C}_\mathbf{Z} $ is a rescaling of a particular
+diagonal matrix we already computed.
+
+\section{Flag checking}
+
+Consider the C function using the \href{
+    https://numpy.org/devdocs/reference/c-api/array.html
+}{NumPy C array API} shown on the next page. Assume it is part of a C
+extension module and therefore has all necessary module initialization code
+as well as the required includes.
+
+\begin{lstlisting}[language = C]
+static PyObject *
+npy_sigmoid(PyObject *self, PyObject *args) {
+    PyArrayObject *ar;
+    if (!PyArg_ParseTuple("O!", &PyArray_Type, (PyObject **) &ar)) {
+        return NULL;
+    }
+    if (PyArray_TYPE(ar) != NPY_DOUBLE) {
+        PyErr_SetString(PyExc_TypeError, "ndarray must be of NPY_DOUBLE");
+        return NULL;
+    }
+    double *data = (double *) PyArray_DATA(ar);
+    npy_intp ar_size = PyArray_SIZE(ar);
+    for (npy_intp i = 0; i < ar_size; i++) {
+        data[i] = 1 / (1 + exp(-data[i]));
+    }
+    Py_RETURN_NONE;
+}
+\end{lstlisting}
+
+Why is this code dangerous? What flags must \texttt{ar} satisfy in particular?
+
+\end{document}
