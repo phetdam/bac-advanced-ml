@@ -107,13 +107,11 @@
 
         \item
         It goes without mentioning that an elementary understanding of set
-        theory is necessary. Knowing some real analysis can be helpful.
+        theory is necessary. Knowing some real analysis is helpful.
     \end{itemize}
 \end{frame}
 
-\section{Discrete math}
-
-\subsection{Set theory}
+\section{Set theory}
 
 \begin{frame}{Set theory}
     \begin{itemize}
@@ -131,9 +129,9 @@
 
             \item
             \textit{Natural numbers.} A special set, denoted with
-            $ \mathbb{N} $. Basically the set containing numbers
-            $ 1, 2, $ etc. This is a \textit{countably infinite} set, as it
-            has an infinite number of elements but they can be ``counted out''.
+            $ \mathbb{N} $. The set of numbers $ 1, 2, $ etc. This is a
+            \textit{countably infinite} set, as it has an infinite number of
+            elements, but the elements can be ``counted out''.
 
             \item
             \textit{Real numbers.} A special set, denoted with $ \mathbb{R} $.
@@ -142,9 +140,9 @@
 
             \item
             \textit{Open Euclidean ball}. $ B(\mathbf{x}, r) \triangleq
-            \{\mathbf{x}' \in \mathbb{R}^n : \Vert\mathbf{x}'\Vert_2 < r\} $.
-            The set of points in $ \mathbb{R}^n $ centered around
-            $ \mathbf{x} $ whose 2-norm is strictly less than
+            \{\mathbf{x}' \in \mathbb{R}^n : \Vert\mathbf{x}'\Vert_2 < r\} $,
+            where $ \in $ means ``in''. The set of points in $ \mathbb{R}^n $
+            centered around $ \mathbf{x} $ whose 2-norm is strictly less than
             $ r \in (0, \infty) $. A \textit{closed ball} replaces $ < $ with
             $ \le $.
         \end{itemize}
@@ -178,12 +176,6 @@
             associated with $ \Omega $, the set of all possible subsets of
             $ \Omega $, is denoted with $ 2^\Omega \triangleq \{\emptyset,
             \{\text{H}\}, \{\text{T}\}, \{\text{H}, \text{T}\}\} $.
-            \begin{itemize}
-                \item
-                Note that $ \mathbb{P}(\{\text{H}, \text{T}\}) = 0 $, as the
-                coin is not a quantum coin, and that $ \mathbb{P}(\emptyset)
-                = 0 $ as clearly \textit{something} must happen.
-            \end{itemize}
         \end{itemize}
 
         \item
@@ -198,17 +190,82 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Functions}
-
-\begin{frame}{Functions}
+\begin{frame}{Set theory}
     \begin{itemize}
         \item
-        \textit{Definition.} The \textit{Cartesian product} $ \mathcal{C} $ of
-        sets $ X_1, \ldots X_n $ is denoted as $ \mathcal{C} \triangleq
-        X_1 \times \ldots X_n $ and is the set of all $ n $-tuples whose
-        $ i $th element is an element of $ X_i $. A common example is
-        $\mathbb{R}^n $, $ n $-dimensional Euclidean space, special notation
-        for $ \mathbb{R} \times \ldots \mathbb{R} $.
+        \textit{Definition.} Two sets $ A, B $ are \textit{disjoint} if
+        $ A \cap B = \emptyset $.
+
+        \item
+        \textit{Definition.} Sets $ A_1, A_2 \ldots $ are
+        \textit{mutually disjoint} if $ \bigcap_{k = 1}^\infty A_k =
+        \emptyset $.
+
+        \item
+        \textit{Definition.} For sets $ A, B $, the \textit{set difference}
+        $ A \setminus B $ is the set containing all elements in $ A $ that are
+        not in $ B $.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            $ \mathbb{R} \setminus [0, \infty) = (-\infty, 0) $, the set of
+            negative real numbers. 
+
+            \item
+            $ [0, \infty) \setminus \mathbb{R} = \emptyset $. Set difference
+            is \textit{not} a symmetric relation.
+
+            \item
+            Denote $ \mathbb{Q} $ as the set of rationals.
+            $ \mathbb{R} \setminus \mathbb{Q} $ is the set of irrationals.
+        \end{itemize}
+
+        \item
+        \textit{Definition.} Denote $ \Omega $ as the \textit{universal set}
+        and define $ A \subseteq \Omega $. The \textit{complement} of $ A $
+        with respect to $ \Omega $ is $ A^\mathsf{c} \triangleq \Omega
+        \setminus A $.
+
+        \item
+        \textit{Definition.} The \textit{Cartesian product} of sets
+        $ X_1, \ldots X_n $, $ \mathcal{C} \triangleq
+        X_1 \times \ldots X_n $, is the set of all $ n $-tuples whose
+        $ i $th element is an element of $ X_i $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Set theory}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A  $ \sigma $\textit{-algebra}, or
+        $ \sigma $\textit{-field}, on a set $ \Omega $ is a collection
+        $ \mathcal{F} $ of subsets of $ \Omega $ that has the following
+        properties \cite{tamuz_prob}:
+        \begin{enumerate}
+            \item
+            $ \Omega \in \mathcal{F} $.
+
+            \item
+            \textit{Closure under complement.} $ A \in \mathcal{F} \Rightarrow
+            A^\mathsf{c} \in \mathcal{F} $.
+            \begin{itemize}
+                \item
+                Note that since $ \Omega \in \mathcal{F} $, then clearly
+                $ \emptyset \in \mathcal{F} $.
+            \end{itemize}
+
+            \item
+            \textit{Closure under countable unions.} $ A_1, A_2, \ldots
+            \mathcal{F} \Rightarrow \bigcup_{k = 1}^\infty
+            A_k \in \mathcal{F} $.
+
+            \item
+            \textit{Closure under countable intersections.} $ A_1, A_2,
+            \ldots \mathcal{F} \Rightarrow \bigcap_{k = 1}^\infty A_k
+            \mathcal{F} $.
+        \end{enumerate}
 
         \item
         \textit{Definition.} A \textit{function} $ f : X \rightarrow Y $ is a
@@ -220,40 +277,63 @@
         \textit{Definition.} The \textit{domain} of $ f $ is $ X $, also
         denoted as $ \operatorname{dom} f $, while the \textit{codomain} of
         $ f $ is $ Y $. The \textit{image} or \textit{range} of $ f $, denoted
-        as $ \operatorname{im} f $, is defined such that
-        $ \operatorname{im} f = \{f(x) \in Y : x \in X\} $.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Functions}
-    \begin{itemize}
-        \item
-        \textit{Definition.} A function $ f : X \rightarrow Y $ is
-        \textit{injective}, or \textit{one-to-one}, if for $ x_1, x_2 \in X $,
-        $ x_1 \ne x_2 \Rightarrow f(x_1) \ne f(x_2) $. $ \Rightarrow $ means
-        ``implies''.
-
-        \item
-        \textit{Examples.}
-        \begin{itemize}
-            \item
-            $ f : \mathbb{Z} \rightarrow \mathbb{Z} $
-        \end{itemize}
+        as $ \operatorname{im} f $ or $ f(X) $, is defined such that
+        $ \operatorname{im} f \triangleq f(X) = \{f(x) \in Y : x \in X\} $.
     \end{itemize}
 \end{frame}
 
 \section{Probability}
 
-\subsection{Axioms}
+\subsection{Preliminaries}
 
-\begin{frame}{Axioms}
+\begin{frame}{Preliminaries}
     \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{sample space} is the universal set
+        $ \Omega $ of outcomes.
+
+        \item
+        \textit{Definition.} A set $ A \subseteq \Omega $, $ \Omega $ a sample
+        space, is an \textit{event}.
+
         \item
         \textit{Definition.} A \textit{probability measure} $ \mathbb{P} $
         defined on a sample space $ \Omega $ is a function from a
-        \textit{sigma-algebra} $ \mathcal{F} \subseteq 2^\Omega $ to the unit
-        interval.
+        $ \sigma $\textit{-algebra} $ \mathcal{F} \subseteq 2^\Omega $ to the
+        unit interval.
 
+        \item
+        \textit{Definition.} A \textit{probability space} is the 3-tuple
+        $ (\Omega, \mathcal{F}, \mathbb{P}) $. $ \Omega $ is the universal set,
+        $ \mathcal{F} $ is a $ \sigma $-algebra, and $ \mathbb{P} $ is a
+        probability measure.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Probability space of a fair coin.}
+            $ (\Omega, \mathcal{F}, \mathbb{P}) $, where $ \Omega \triangleq
+            \{\text{H}, \text{T}\} $, $ \mathcal{F} \triangleq \{\emptyset,
+            \{\text{H}\}, \{\text{T}\}, \Omega\} = 2^\Omega $.
+            $ \mathbb{P}(\{\text{H}\}) = \mathbb{P}(\{T\}) = 1 / 2 $ since the
+            coin is fair. Note that $ \mathbb{P}(\emptyset) = 0 $,
+            $ \mathbb{P}(\Omega) = 1 $. Why?
+
+            \item
+            \textit{Probability space of 3-sided die.} $ (\Omega, \mathcal{F},
+            \mathbb{P}) $, where $ \Omega \triangleq \{1, 2, 3\} $,
+            $ \mathcal{F} \triangleq \{\emptyset, \{1\}, \{2\}, \{3\},
+            \{1, 2\}, \{1, 3\}, \{2, 3\}, \Omega\} $. If $ A \triangleq $
+            ``roll an odd number'', $ A = \{1, 3\} $ and
+            $ \mathbb{P}(A) = \mathbb{P}(\{1\}) + \mathbb{P}(\{3\}) = 2 / 3 $.
+            Makes intuitive sense, but why is this formally true?
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminaries}
+    \begin{itemize}
         \item
         \textit{Kolmogorov axioms} \cite{all_of_stats}.
         \begin{enumerate}
@@ -266,7 +346,7 @@
             happens is 1.
 
             \item
-            For countable infinite, disjoint $ A_1, A_2, \ldots $, then
+            For countably infinite, disjoint $ A_1, A_2, \ldots $, then
             \begin{equation*}
                 \mathbb{P}\left(\bigcup_{k = 1}^\infty A_k\right) =
                 \sum_{k = 1}^\infty\mathbb{P}(A_k)
@@ -274,32 +354,65 @@
             The probability of the union of mutually disjoint events is equal
             to the sum of the individual events' probabilities.
         \end{enumerate}
+
+        \item
+        \textit{Consequences of the axioms.}
+        \begin{enumerate}
+            \item
+            $ \mathbb{P}(\emptyset) = 1 - \mathbb{P}(\Omega) = 0 $.
+
+            \item
+            $ \forall A, B \subseteq \Omega $, $ \mathbb{P}(A \cup B) =
+            \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B) $. $ \forall $
+            means ``for all''.
+        \end{enumerate}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Axioms}
+\begin{frame}{Preliminaries}
     \begin{itemize}
         \item
-        \textit{Example. Proving} $ \mathbb{P}(A \cup B) = \mathbb{P}(A) +
-        \mathbb{P}(B) - \mathbb{P}(A \cap B) $.
+        \textit{Definition.} Events $ A, B \subseteq \Omega $
+        \textit{independent} $ \Leftrightarrow \mathbb{P}(A \cap B) =
+        \mathbb{P}(A)\mathbb{P}(B) $. A common notation for independent
+        $ A, B $ is $ A \perp B $.
 
         \item
-        \textit{Proof.} Write $ A, B, A \cup B $ as unions of mutually disjoint
-        events. $ A = (A \cap B) \cup (A \cap B^\mathsf{c}) $,
-        $ B = (A \cap B) \cup (A^\mathsf{c} \cap B) $, $ A \cup B = (A \cap B)
-        \cup (A \cap B^\mathsf{c}) \cup (A^\mathsf{c} \cap B) $. By Axiom 3,
+        \textit{Remark.} Mutual exclusion \textbf{does not} imply independence,
+        and vice versa. Suppose $ \Omega = \{\text{H}, \text{T}\} $. Note that
+        $ \{\text{H}\} \cap \{\text{T}\} = \emptyset $, as the coin is not a
+        quantum coin, and that $ \mathbb{P}(\emptyset) = 0 \ne 1 / 4 =
+        \mathbb{P}(\{\text{H}\})\mathbb{P}(\{\text{T}\}) $.
+
+        \item
+        \textit{Definition.} For $ A, B \subseteq \Omega $,
+        $ \mathbb{P}(B) \ne 0 $, define
         \begin{equation*}
-            \begin{split}
-                \mathbb{P}(A \cup B) & = \mathbb{P}(A \cap B) +
-                \mathbb{P}(A \cap B^\mathsf{c}) +
-                \mathbb{P}(A^\mathsf{c} \cap B) \\
-                & = \mathbb{P}(A \cap B) + \mathbb{P}(A \cap B^\mathsf{c}) +
-                \mathbb{P}(A \cap B) \\
-                & \quad + \mathbb{P}(A^\mathsf{c} \cap B) -
-                \mathbb{P}(A \cap B) \\
-                & = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)
-            \end{split}
+            \mathbb{P}(A \mid B) \triangleq \frac{\mathbb{P}(A \cap B)}{
+                \mathbb{P}(B)            
+            }
         \end{equation*}
+        $ \mathbb{P}(A \mid B) $ is the \textit{conditional probability} of
+        $ A $ given $ B $.
+
+        \item
+        \textit{Remark.} Conditional probabilities are \textbf{not}
+        well-defined when $ \mathbb{P}(B) = 0 $. Suppose $ B = \emptyset $.
+        Then, $ \mathbb{P}(B) = 0 $, and $ \forall A \in \mathcal{F} $,
+        $ \mathbb{P}(A \cap B) = 0 $. Intuitively
+        $ \mathbb{P}(A \mid B) = 0 $, but the definition breaks.
+    \end{itemize}
+\end{frame}
+
+\subsection{Random variables}
+
+\begin{frame}{Random variables}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{random variable} is a function
+        $ X : \Omega \rightarrow \mathbb{F} $, $ \mathbb{F} $ a
+        set. Usually $ \mathbb{F} $ is either $ \mathbb{R} $,
+        $ \mathbb{R}^n $, or a subset of either.
     \end{itemize}
 \end{frame}
 
@@ -310,6 +423,16 @@
         \bibitem{all_of_stats}
         Wasserman, L. (2004). \textit{All of Statistics: A Concise Course in
         Statistical Inference}. Springer Science \& Business Media.
+
+        \bibitem{algebra}
+        Judson, T. W. (2020). \textit{Abstract Algebra: Theory and
+        Applications}. \url{http://abstract.ups.edu/download.html}.
+
+        \bibitem{tamuz_prob}
+        Tamuz, Omer. (2018). \textit{Lecture Notes on Probability}. Personal
+        collection of O. Tamuz, California Institute of Technology, Pasadena,
+        California.
+        \url{http://tamuz.caltech.edu/teaching/ma144a/lectures.pdf}/        
     \end{thebibliography}
 \end{frame}
 
