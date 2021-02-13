@@ -133,7 +133,8 @@ as well as the required includes.
 
 \begin{lstlisting}[language = C]
 static PyObject *
-npy_sigmoid(PyObject *self, PyObject *args) {
+npy_sigmoid(PyObject *self, PyObject *args)
+{
     PyArrayObject *ar;
     if (!PyArg_ParseTuple("O!", &PyArray_Type, (PyObject **) &ar)) {
         return NULL;
@@ -151,6 +152,7 @@ npy_sigmoid(PyObject *self, PyObject *args) {
 }
 \end{lstlisting}
 
-Why is this code dangerous? What flags must \texttt{ar} satisfy in particular?
+Why is this code dangerous? What flags must \texttt{ar} satisfy in particular
+for it to be safe?
 
 \end{document}
