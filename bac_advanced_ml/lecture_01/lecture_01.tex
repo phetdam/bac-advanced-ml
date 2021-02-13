@@ -11,6 +11,9 @@
 \useoutertheme{split}
 \useinnertheme{circles}
 
+% allow section.equation numbering
+\numberwithin{equation}{section}
+
 % title page stuff
 \title[Math for Data Science]{Math for Data Science}
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
@@ -69,15 +72,15 @@
         per-component variances.
 
         \item
-        Since PCA is scaling sensitive, one often ends up with a couple massive
-        and many small eigenvalues/singular values \footnotemark\footnotetext{
+        Since PCA is scaling sensitive, one might get a couple massive
+        and many small eigenvalues/singular values\footnotemark\footnotetext{
             Define $ \mathbf{X} \in \mathbb{R}^{N \times d} $ as the data
             matrix with sample covariance matrix $ \mathbf{C} \triangleq
             \frac{1}{N}\mathbf{X}^\top\mathbf{X} $. Eigendecomposition is used
             on $ \mathbf{C} $ while singular value decomposition is used on
             $ \mathbf{X} $.
-        }. This may result in the incorrect conclusion that the data may be
-        well approximated by a lower-dimensional orthogonal eigenbasis.
+        } and incorrectly conclude that data is well approximated by a
+        low-dimension orthogonal eigenbasis.
 
         % provide some extra space before footnotes
         \medskip
@@ -113,7 +116,9 @@
 
 \section{Set theory}
 
-\begin{frame}{Set theory}
+\subsection{Set basics}
+
+\begin{frame}{Set basics}
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{set} is a collection of non-duplicate
@@ -140,9 +145,8 @@
 
             \item
             \textit{Open Euclidean ball}. $ B(\mathbf{x}, r) \triangleq
-            \{\mathbf{x}' \in \mathbb{R}^n : \Vert\mathbf{x}'\Vert_2 < r\} $,
-            where $ \in $ means ``in''. The set of points in $ \mathbb{R}^n $
-            centered around $ \mathbf{x} $ whose 2-norm is strictly less than
+            \{\mathbf{x}' \in \mathbb{R}^n : \Vert\mathbf{x}' - \mathbf{x}
+            \Vert_2 < r\} $, where $ \in $ means ``in'' and
             $ r \in (0, \infty) $. A \textit{closed ball} replaces $ < $ with
             $ \le $.
         \end{itemize}
@@ -155,7 +159,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Set theory}
+\begin{frame}{Set basics}
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{subset} $ B $ of a set $ A $ is a set
@@ -190,7 +194,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Set theory}
+\begin{frame}{Set basics}
     \begin{itemize}
         \item
         \textit{Definition.} Two sets $ A, B $ are \textit{disjoint} if
@@ -236,7 +240,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Set theory}
+\begin{frame}{Set basics}
     \begin{itemize}
         \item
         \textit{Definition.} A  $ \sigma $\textit{-algebra}, or
@@ -284,9 +288,9 @@
 
 \section{Probability}
 
-\subsection{Preliminaries}
+\subsection{Probability basics}
 
-\begin{frame}{Preliminaries}
+\begin{frame}{Probability basics}
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{sample space} is the universal set
@@ -327,12 +331,12 @@
             \{1, 2\}, \{1, 3\}, \{2, 3\}, \Omega\} $. If $ A \triangleq $
             ``roll an odd number'', $ A = \{1, 3\} $ and
             $ \mathbb{P}(A) = \mathbb{P}(\{1\}) + \mathbb{P}(\{3\}) = 2 / 3 $.
-            Makes intuitive sense, but why is this formally true?
+            Why?
         \end{itemize}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Preliminaries}
+\begin{frame}{Probability basics}
     \begin{itemize}
         \item
         \textit{Kolmogorov axioms} \cite{all_of_stats}.
@@ -369,7 +373,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Preliminaries}
+\begin{frame}{Probability basics}
     \begin{itemize}
         \item
         \textit{Definition.} Events $ A, B \subseteq \Omega $
@@ -411,9 +415,197 @@
         \item
         \textit{Definition.} A \textit{random variable} is a function
         $ X : \Omega \rightarrow \mathbb{F} $, $ \mathbb{F} $ a
-        set. Usually $ \mathbb{F} $ is either $ \mathbb{R} $,
+        set\footnotemark\footnotetext{
+            This set should be a \textit{field}, hence the $ \mathbb{F} $
+            notation, but this is beyond our scope.        
+        }. Usually $ \mathbb{F} $ is either $ \mathbb{R} $,
         $ \mathbb{R}^n $, or a subset of either.
+
+        \item
+        \textit{Definition.} The \textit{cumulative distribution function},
+        or \textit{cdf}, of a random variable $ X $, is the function
+        $ F_X : \mathbb{F} \rightarrow [0, 1] $ such that for
+        $ x \in \mathbb{F} $,
+        \begin{equation*}
+            F_X(x) \triangleq \mathbb{P}\{X \preceq x\}
+        \end{equation*}
+        Here $ \preceq $ is a \textit{generalized inequality} inducing a
+        partial order on $ \mathbb{F} $.
+
+        \item
+        \textit{Definition.} A random variable $ X $ is \textit{discrete} if
+        $ X(\Omega) $ countable. Its associated \textit{probability mass
+        function}, or \textit{pmf}, is the function
+        $ p_X : \mathbb{F} \rightarrow [0, 1] $ such that
+        $ \forall x \in \mathbb{F}, p_X(x) \triangleq \mathbb{P}\{X = x\} $.
+
+        \item
+        \textit{Example.}
+        \begin{itemize}
+            \item
+            \textit{Coin flip payoff.} Suppose $ \Omega
+            \triangleq \{\text{H}, \text{T}\} $ and the coin is fair. Define
+            $ X \triangleq q_1\mathbb{I}\{\omega = \text{H}\} - q_2
+            \mathbb{I}\{\omega = \text{T}\} $, $ q_1, q_2 > 0 $.
+            $ \mathbb{I} $ is the indicator function, yielding $ 1 $ when
+            the event is true and $ 0 $ otherwise.
+            $ X(\Omega) = \{-q_2, q_1\} $.
+        \end{itemize}
     \end{itemize}
+
+    % adjust spacing to we don't overlap footnote
+    \medskip
+
+\end{frame}
+
+\begin{frame}{Random variables}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A random variable $ X $ is \textit{continuous} if
+        $ \exists f_X : \mathbb{F} \rightarrow [0, \infty) $ with
+        $ \int_\mathbb{F}f_X(x)\,dx = 1 $ such that $ \forall A \subseteq
+        \mathbb{F} $,
+        \begin{equation*}
+            \mathbb{P}\{X \in A\} \triangleq \int_Af_X(x)\,dx
+        \end{equation*}
+
+        % adjust vertical spacing a bit
+        \vspace{-5 pt}
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Exponential distribution.}
+            $ X : \Omega \rightarrow \mathbb{R} $ has density
+            $ f_X : \mathbb{R} \rightarrow [0, \infty) $ \\ such that
+            $ \forall x \in \mathbb{R} $, $ \lambda \in (0, \infty) $,
+            $ f_X(x) \triangleq \mathbb{I}\{x \ge 0\}\lambda e^{-\lambda x} $.
+
+            \item
+            \textit{Multivariate Gaussian distribution.}
+            $ X : \Omega \rightarrow \mathbb{R}^n $, $ X $ has density
+            $ f_X : \mathbb{R}^n \rightarrow [0, \infty) $ such that
+            $ \forall \mathbf{x} \in \mathbb{R}^n $, $ \mu \in \mathbb{R}^n $,
+            $ \mathbf{\Sigma} \succ \mathbf{0} \in \mathbb{R}^{n \times n} $,
+            \begin{equation*}
+                f_X(\mathbf{x}) \triangleq
+                \frac{1}{(2\pi)^{n / 2}|\mathbf{\Sigma}|^{1 / 2}}
+                e^{
+                    -\frac{1}{2}(\mathbf{x} - \mu)^\top\mathbf{\Sigma}^{-1}
+                    (\mathbf{x} - \mu)
+                }
+            \end{equation*}
+            $ \succ $ means ``positive definite'', $ |\cdot| $ the matrix
+            determinant.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Random variables}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A finite collection of random variables
+        $ X_1, \ldots X_n $ is \textit{mutually independent}
+        $ \Leftrightarrow \forall A_1, \ldots A_n \subseteq \Omega $,
+        \begin{equation*}
+            \mathbb{P}\{X_1 \in A_1, \ldots X_n \in A_n\} =
+            \prod_{k = 1}^n\mathbb{P}\{X_k \in A_k\}
+        \end{equation*}
+        The above definition holds if we replace $ \mathbb{P} $ with density
+        functions \cite{all_of_stats}.
+
+        \item
+        \textit{Example.}
+        \begin{itemize}
+            \item
+            \textit{Independent uniforms.} Suppose we have $ U_1, \ldots U_n $
+            i.i.d. where $ U_k \sim \operatorname{Uniform}(0, 1) $. The
+            density $ f_{U_k} $ for each $ U_k $ is such that
+            \begin{equation*}
+                f_{U_k}(u) = \mathbb{I}\{u \in [0, 1]\}
+            \end{equation*}
+            Note $ f_{U_1, \ldots U_n}(u_1, \ldots u_n) =
+            \mathbb{I}\{(u_1, \ldots u_n) \in [0, 1]^n\} =
+            \prod_{k = 1}^nf_{U_k}(u_k) $.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Random variables}
+	\begin{itemize}
+	    \item
+        \textit{Definition.} A collection of random variables
+        $ X_1, X_2, \ldots $ is \textit{independent and identically
+        distributed}, or \textit{i.i.d.}, if $ X_1, X_2 \ldots $ are mutually
+        independent and $ \forall k, X_k \sim Q $, $ Q $ representing some
+        distribution.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Number of 6s rolled.} Suppose $ \Omega \triangleq
+            \{1, 2, 3, 4, 5, 6\}^n $, $ n \in \mathbb{N} $, i.e. the set of
+            all finite sequences of $ n $ fair die rolls. Let
+            $ Y_n \triangleq \sum_{k = 1}^nX_k $, where $ X_k $ i.i.d. and
+            $ X_k $ is $ 1 $ if the $ k $th roll is a $ 6 $, $ 0 $ otherwise.
+            Note that $ \mathbb{P}\{X_k = 6\} = 1 / 6 $, so
+            $ X_k \sim \operatorname{Bernoulli}(1 / 6) $,
+            $ Y_n \sim \operatorname{Binomial}(n, 1 / 6) $.
+
+            \item
+            \textit{i.i.d. Gaussians.} Let $ Z_1, \ldots Z_n $ i.i.d.,
+            $ Z_k \sim \mathcal{N}(0, 1) $. If we let
+            $ X \triangleq [ \ Z_1 \ \ldots \ Z_n \ ]^\top $, then
+            $ f_X : \mathbb{R}^n \rightarrow [0, \infty) $ is such that
+            $ \forall \mathbf{x} \in \mathbb{R}^n $,
+            \begin{equation*}
+                f_X(\mathbf{x}) \triangleq \frac{1}{(2\pi)^{n / 2}}
+                e^{-\frac{1}{2}\mathbf{x}^\top\mathbf{x}} =
+                \prod_{k = 1}^n\frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}x_k^2} =
+                \prod_{k = 1}^nf_{Z_k}(x_1)
+            \end{equation*}
+            Note that $ X $ has mean $ \mathbf{0} \in \mathbb{R}^n $ and
+            covariance matrix $ \mathbf{I} \in \mathbb{R}^{n \times n} $.
+        \end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{Moments}
+
+\begin{frame}{Moments}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Given a random variable
+        $ X : \Omega \rightarrow \mathbb{F} $, the \textit{expectation} or
+        \textit{mean} of $ X $ is denoted as $ \mathbb{E}[X] $. If $ X $
+        discrete with pmf $ p_X : \mathbb{F} \rightarrow [0, 1] $,
+        \begin{equation*}
+            \mathbb{E}[X] \triangleq \sum_{x \in \mathbb{F}}xp_X(x) =
+            \sum_{x \in \mathbb{F}}x\mathbb{P}\{X = x\}
+        \end{equation*}
+        If $ X $ continuous with pdf
+        $ f_X : \mathbb{F} \rightarrow [0, \infty) $, then
+        \begin{equation*}
+            \mathbb{E}[X] \triangleq \int_\mathbb{F}xf_X(x)\,dx
+        \end{equation*}
+
+        \item
+        \textit{Theorem. Law of the unconscious statistician.} Let
+        $ X : \Omega \rightarrow \mathbb{F} $ with
+        density\footnotemark\footnotetext{
+            Also true if $ X $ discrete with pmf $ p_X $.        
+        } $ f_X $ and let
+        $ Y \triangleq h(X) $, $ h : \mathbb{F} \rightarrow \mathbb{F} $. Then,
+        \begin{equation*}
+            \mathbb{E}[Y] = \mathbb{E}[h(X)] = \int_\mathbb{F}h(x)f_X(x)\,dx
+        \end{equation*}
+    \end{itemize}
+
+    % adjust spacing for footnote
+    \medskip
+
 \end{frame}
 
 \section{Linear algebra}
