@@ -1,5 +1,7 @@
-# ignore pdflatex output and PDF output
+# ignore pdflatex, bibtex output and PDF output
 **/*.aux
+**/*.bbl
+**/*.blg
 **/*.dvi
 **/*.gz
 **/*.log
