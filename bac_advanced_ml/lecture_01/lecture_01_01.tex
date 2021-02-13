@@ -15,10 +15,10 @@
 \numberwithin{equation}{section}
 
 % title page stuff
-\title[Math for Data Science]{Math for Data Science}
+\title[Math for Data Science, Part 1]{Math for Data Science, Part 1}
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
-\institute[BAC Advanced Team]{BAC Advanced Team}
-\date[December 26, 2020]{December 26, 2020}
+\institute{BAC Advanced Team}
+\date{February 13, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -59,9 +59,8 @@
         Short answer: so that we can be \textit{informed} model users.
         
         \item
-        Being an informed user is important! It's not so simple as just taking
-        data and chucking it into a model--doing exactly that can give
-        \textit{seriously misleading} modeling results.
+        Uninformed use often gives \textit{seriously misleading} modeling
+        results.
 
         \item
         \textit{Example}. Principal components analysis (PCA). A typical
@@ -81,9 +80,6 @@
             $ \mathbf{X} $.
         } and incorrectly conclude that data is well approximated by a
         low-dimension orthogonal eigenbasis.
-
-        % provide some extra space before footnotes
-        \medskip
     \end{itemize}
 \end{frame}
 
@@ -630,6 +626,21 @@
         \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] $.
 
         \item
+        \textit{Definition.} Given random variables $ X : \Omega \rightarrow
+        \mathbb{R} $, $ Y : \Omega \rightarrow \mathbb{R} $, their
+        \textit{Pearson correlation} is $ \rho_{X, Y} \in [-1, 1] $ such that
+        \begin{equation*}
+            \rho_{X, Y} \triangleq \mathbb{E}\left[
+                \left(\frac{X - \mu_X}{\sigma_X}\right)
+                \left(\frac{Y - \mu_Y}{\sigma_Y}\right)
+            \right] = \frac{\operatorname{cov}(X, Y)}{\sigma_X\sigma_Y}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Moments}
+    \begin{itemize}
+        \item
         \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
         \mathbb{R}^n $, the \textit{covariance matrix} of $ X $ is
         $ \mathbf{C}_X \triangleq \mathbb{E}\left[(X - \mu_X)
@@ -641,6 +652,26 @@
                 \ \sigma_{X_1}^2 & \ldots & \operatorname{cov}(X_1, X_n) \ \\
                 \ \vdots & \ddots & \vdots \ \\
                 \ \operatorname{cov}(X_n, X_1) & \ldots & \sigma_{X_n}^2 \
+            \end{bmatrix}
+        \end{equation*}
+
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R}^n $, the \textit{correlation matrix} of $ X $ is
+        $ \mathbf{R}_X \triangleq \mathbf{\Sigma}^{-1}\mathbf{C}_X
+        \mathbf{\Sigma}^{-1} \in \mathbb{R}^{m \times n} $, $ \mathbf{R}_X
+        \succeq \mathbf{0} $, $ \mathbf{R}_X = \mathbf{R}^\top $.
+        $ \mathbf{\Sigma} \in \mathbb{R}^{n \times n} $ is a diagonal matrix
+        with $ \sigma_{X_1}, \ldots \sigma_{X_n} $ on the diagonal.
+        \begin{equation*}
+            \mathbf{R}_X = \begin{bmatrix}
+                \ \sigma_{X_1}^{-1} & \ldots & 0 \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ 0 & \ldots & \sigma_{X_n}^{-1} \
+            \end{bmatrix} \mathbf{C}_X \begin{bmatrix}
+                \ \sigma_{X_1}^{-1} & \ldots & 0 \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ 0 & \ldots & \sigma_{X_n}^{-1} \
             \end{bmatrix}
         \end{equation*}
     \end{itemize}
@@ -659,20 +690,6 @@
         \mathbb{R} $, the $ k $\textit{th central moment} of $ X $ is
         $ \mathbb{E}\left[(X - \mu_X)^k\right] $, $ k \in \mathbb{N} $.
 
-        \item
-        \textit{Examples.}
-        \begin{itemize}
-            \item
-            \textit{Expectation.} For random variable $ X $, $ \mathbb{E}[X] $
-            is the first raw moment.
-
-            \item
-            \textit{Variance.} For random variable $ X : \Omega \rightarrow
-            \mathbb{R} $, $ \mathbb{E}\left[(X - \mu_X)^2\right] $ is the
-            second central moment. $ \nexists \mu_X \Rightarrow \nexists
-            \operatorname{Var}(X) $.
-        \end{itemize}
-
          \item
          \textit{Properties.}
          \begin{itemize}
@@ -682,6 +699,12 @@
              $ a_0, a_1, \ldots a_n \in \mathbb{R} $,
              $ \mathbb{E}\left[a_0 + \sum_{k = 1}^na_kX_k\right] =
              a_0 + \sum_{k = 1}^na_k\mathbb{E}[X_k] $.
+
+            \item
+            \textit{Expectation and independence.} For scalar and mutually
+            independent random variables $ X_1, \ldots X_n $,
+            $ \mathbb{E}\left[\prod_{k = 1}^nX_k\right] =
+            \prod_{k = 1}^n\mathbb{E}[X_k] $.
 
             \item
             \textit{Variance of translated sum of random variables.} For scalar random
@@ -695,8 +718,6 @@
          \end{itemize}
     \end{itemize}
 \end{frame}
-
-\section{Linear algebra}
 
 \begin{frame}{References}
     \bibliographystyle{acm}
