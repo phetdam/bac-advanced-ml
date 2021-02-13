@@ -660,7 +660,7 @@
         \mathbb{R}^n $, the \textit{correlation matrix} of $ X $ is
         $ \mathbf{R}_X \triangleq \mathbf{\Sigma}^{-1}\mathbf{C}_X
         \mathbf{\Sigma}^{-1} \in \mathbb{R}^{m \times n} $, $ \mathbf{R}_X
-        \succeq \mathbf{0} $, $ \mathbf{R}_X = \mathbf{R}^\top $.
+        \succeq \mathbf{0} $, $ \mathbf{R}_X = \mathbf{R}_X^\top $.
         $ \mathbf{\Sigma} \in \mathbb{R}^{n \times n} $ is a diagonal matrix
         with $ \sigma_{X_1}, \ldots \sigma_{X_n} $ on the diagonal.
         \begin{equation*}
@@ -716,6 +716,28 @@
                 2\sum_{i = 1}^n\sum_{j = 1}^{i - 1}\operatorname{cov}(X_i, X_j)
             \end{equation*}
          \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Moments}
+    \begin{itemize}
+        \item
+        \textit{Useful identities.} For $ X : \Omega \rightarrow \mathbb{R} $,
+        $ Y : \Omega \rightarrow \mathbb{R} $, $ A \subseteq \Omega $,
+        \begin{equation*}
+            \begin{aligned}
+                \operatorname{Var}(X) & = \mathbb{E}\big[X^2\big] - \mu_X^2 \\
+                \operatorname{cov}(X, Y) & = \mathbb{E}[XY] - \mu_X\mu_Y \\
+                \mathbb{E}[\mathbb{I}\{X \in A\}] & = \mathbb{P}\{X \in A\}
+            \end{aligned}
+        \end{equation*}
+
+        \item
+        \textit{Useful identities (cont.).} For $ X : \Omega \rightarrow
+        \mathbb{R}^n $,
+        \begin{equation*}
+            \mathbf{C}_X = \mathbb{E}\left[XX^\top\right] - \mu_X\mu_X^\top
+        \end{equation*}
     \end{itemize}
 \end{frame}
 
