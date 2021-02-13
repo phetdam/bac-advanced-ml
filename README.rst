@@ -54,4 +54,10 @@ to have `TeX Live`__ installed on your system. For Ubuntu users this can be
 downloaded using ``apt-get`` while it can take a bit more legwork for Windows
 and Mac users.
 
+If one is interested in viewing only a particular ``.tex`` file, call
+``compile_tex.sh`` with the name of the ``.tex`` file as an argument or use a
+graphical editor like `Texmaker`__ to view source and PDF side-by-side.
+
 .. __: https://tug.org/texlive/
+
+.. __: https://www.xm1math.net/texmaker/index.html
