@@ -578,9 +578,9 @@
     \begin{itemize}
         \item
         \textit{Definition.} Given a random variable
-        $ X : \Omega \rightarrow \mathbb{F} $, the \textit{expectation} or
-        \textit{mean} of $ X $ is denoted as $ \mathbb{E}[X] $. If $ X $
-        discrete with pmf $ p_X : \mathbb{F} \rightarrow [0, 1] $,
+        $ X : \Omega \rightarrow \mathbb{F} $, its \textit{expectation} is
+        denoted as $ \mathbb{E}[X] $ or $ \mu_X $. If $ X $ discrete with pmf
+        $ p_X : \mathbb{F} \rightarrow [0, 1] $,
         \begin{equation*}
             \mathbb{E}[X] \triangleq \sum_{x \in \mathbb{F}}xp_X(x) =
             \sum_{x \in \mathbb{F}}x\mathbb{P}\{X = x\}
@@ -590,6 +590,7 @@
         \begin{equation*}
             \mathbb{E}[X] \triangleq \int_\mathbb{F}xf_X(x)\,dx
         \end{equation*}
+        For $ \mathbb{E}[X] $ to exist, $ \mathbb{E}|X| < \infty $ is required.
 
         \item
         \textit{Theorem. Law of the unconscious statistician.} Let
@@ -606,6 +607,93 @@
     % adjust spacing for footnote
     \medskip
 
+\end{frame}
+
+\begin{frame}{Moments}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R} $, the \textit{variance} of $ X $ is denoted as
+        $ \operatorname{Var}(X) $, where $ \operatorname{Var}(X) \triangleq
+        \mathbb{E}\left[(X - \mu_X)^2\right] $.
+
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R} $, the \textit{standard deviation} of $ X $ is
+        $ \sigma_X \triangleq \sqrt{\operatorname{Var}(X)} $.
+
+        \item
+        \textit{Definition.} Given random variables
+        $ X : \Omega \rightarrow \mathbb{R} $,
+        $ Y : \Omega \rightarrow \mathbb{R} $, their \textit{covariance} is
+        $ \operatorname{cov}(X, Y) \triangleq
+        \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] $.
+
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R}^n $, the \textit{covariance matrix} of $ X $ is
+        $ \mathbf{C}_X \triangleq \mathbb{E}\left[(X - \mu_X)
+        (X - \mu_X)^\top\right] \in \mathbb{R}^{n \times n} $, where
+        $ \mathbf{C}_X \succeq \mathbf{0} $ (positive semidefinite),
+        $ \mathbf{C}_X = \mathbf{C}_X^\top $ (symmetric).
+        \begin{equation*}
+            \mathbf{C}_X = \begin{bmatrix}
+                \ \sigma_{X_1}^2 & \ldots & \operatorname{cov}(X_1, X_n) \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ \operatorname{cov}(X_n, X_1) & \ldots & \sigma_{X_n}^2 \
+            \end{bmatrix}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Moments}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R} $, if $ \mathbb{E}\big|X^k\big| < \infty $,
+        $ k \in \mathbb{N} $, the $ k $\textit{th raw moment} of $ X $ exists
+        \cite{wasserman_stats} and is $ \mathbb{E}\big[X^k\big] $.
+
+        \item
+        \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
+        \mathbb{R} $, the $ k $\textit{th central moment} of $ X $ is
+        $ \mathbb{E}\left[(X - \mu_X)^k\right] $, $ k \in \mathbb{N} $.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Expectation.} For random variable $ X $, $ \mathbb{E}[X] $
+            is the first raw moment.
+
+            \item
+            \textit{Variance.} For random variable $ X : \Omega \rightarrow
+            \mathbb{R} $, $ \mathbb{E}\left[(X - \mu_X)^2\right] $ is the
+            second central moment. $ \nexists \mu_X \Rightarrow \nexists
+            \operatorname{Var}(X) $.
+        \end{itemize}
+
+         \item
+         \textit{Properties.}
+         \begin{itemize}
+             \item
+             \textit{Linearity of expectation.} For random variables
+             $ X_1, \ldots X_n $, constants
+             $ a_0, a_1, \ldots a_n \in \mathbb{R} $,
+             $ \mathbb{E}\left[a_0 + \sum_{k = 1}^na_kX_k\right] =
+             a_0 + \sum_{k = 1}^na_k\mathbb{E}[X_k] $.
+
+            \item
+            \textit{Variance of translated sum of random variables.} For scalar random
+            variables $ X_1, \ldots X_n $, constants
+            $ a_0, a_1, \ldots a_n \in \mathbb{R} $,
+            \begin{equation*}
+                \operatorname{Var}\left(a_0 + \sum_{k = 1}^na_kX_k\right) =
+                \sum_{k = 1}^n\operatorname{Var}(X_k) +
+                2\sum_{i = 1}^n\sum_{j = 1}^{i - 1}\operatorname{cov}(X_i, X_j)
+            \end{equation*}
+         \end{itemize}
+    \end{itemize}
 \end{frame}
 
 \section{Linear algebra}
