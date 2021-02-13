@@ -3,6 +3,8 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
 % use boadilla theme
 \usetheme{Boadilla}
 % remove navigation symbols
@@ -13,12 +15,12 @@
 \useoutertheme{split}
 \useinnertheme{circles}
 
-% title page stuff
+% title page stuff. brackets content displayed in footer bar
 \title[Adaptive SGD: Adam]{Adaptive SGD: Adam}
-% content in brackets is displayed in footer bar
+% metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute[BAC Advanced Team]{BAC Advanced Team}
-\date[February 8, 2020]{February 8, 2021}
+\date{February 13, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
