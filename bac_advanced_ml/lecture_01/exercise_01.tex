@@ -1,0 +1,189 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author, date
+\title{Exercise 1}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+\date{February 12, 2020}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+\section{Set theory}
+
+\subsection{Partition of $ \mathbb{R} $}
+
+A \textit{partition} $ P $ of a non-empty set $ A $ is a set of non-empty,
+disjoint sets $ A_1, A_2, \ldots \subset A $ such that
+$ \bigcup_{k = 1}^\infty A_k = A $. Give a partition of $ \mathbb{R} $ into
+half-open intervals whose endpoints are elements of $ 2\mathbb{Z} $, i.e. zero
+or even integers.
+
+\subsection{Slicing the unit circle}
+
+The unit circle on $ \mathbb{R}^2 $ is the set
+$ U \triangleq \{\mathbf{x} \in \mathbb{R}^2 :
+\Vert\mathbf{x}\Vert_2 \le 1\} $. Define
+$ \tilde{U} \triangleq U \setminus A $ as the ``sliced'' unit circle, i.e. the
+subset of $ U $ where no points that lie on the $ x_1 $ or $ x_2 $ axes are
+included. Define $ A $.
+
+\subsection{Countably infinite intersection}
+
+Suppose we have a sequence of sets $ \{A_k\}_{k \in \mathbb{N}} $ where
+$ A_k \triangleq \left(-e^{-k}, 1 + e^{-k}\right) $. What is
+$ \bigcap_{k = 1}^\infty A_k $?
+
+\medskip
+
+\textit{Remark.} $ \bigcap_{k = 1}^\infty A_k $ is \textit{closed} interval
+on $ \mathbb{R} $. Try to convince yourself why this is true.
+
+\subsection{$ \ell_p $-norm balls}
+
+Define $ \bar{B}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in \mathbb{R}^n :
+\Vert\mathbf{x}' - \mathbf{x}\Vert_2 \le r\} $ as the closed Euclidean ball
+with radius $ r \in (0, \infty) $ centered at $ \mathbf{x} \in \mathbb{R}^n $.
+Define $ \bar{B}_{\ell_{p, 2}}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
+\mathbb{R}^2 : \Vert\mathbf{x}' - \mathbf{x}\Vert_p \le r\} $ as the closed
+$ \ell_p $-norm ball in $ \mathbb{R}^2 $ centered at $ \mathbf{x}
+\in \mathbb{R}^2 $ with radius $ r \in (0, \infty) $. Recall that for
+$ \mathbf{x} \triangleq [ \ x_1 \ \ldots \ x_n ]^\top \in \mathbb{R}^n $, its
+$ \ell_p $-norm $ \Vert\mathbf{x}\Vert_p $ is defined such that
+\begin{equation*}
+    \Vert\mathbf{x}\Vert_p \triangleq
+    \left(\sum_{k = 1}^n|x_k|^p\right)^{1 / p}
+\end{equation*}
+
+Consider the $ \ell_1 $-norm and the $ \ell_\infty $-norm, where
+$ \Vert\mathbf{x}\Vert_\infty = \max\{x_1, \ldots x_n\} $, and define
+$ B_{\ell_{1, 2}}(\mathbf{0}, 1) $, $ B_{\ell_{\infty, 2}}(\mathbf{0}, 1) $.
+Which of these two sets includes the other and
+$ B_{\ell_{2, 2}}(\mathbf{0}, 1) $?
+
+\medskip
+
+\textit{Hint.} Drawing a picture might help since these norm balls are
+defined on $ \mathbb{R}^2 $.
+
+\subsection{Complex numbers}
+
+The complex numbers $ \mathbb{C} $ are numbers of the form $ a + bi $, where
+$ a, b \in \mathbb{R} $ and $ i^2 = -1 $. Prove that
+$ \mathbb{R} \subset \mathbb{C} $.
+
+\section{Probability}
+
+\subsection{Sequences of coin flips}
+
+Consider sequences of $ n \in \mathbb{N} $ independent flips of a fair coin
+and note that the sample space $ \Omega \triangleq \{\text{H}, \text{T}\}^n $.
+\begin{enumerate}[label = \alph*.]
+    \item
+    $ \forall \omega \in \Omega $, what is the probability of
+    $ \mathbb{P}\{\omega\} $?
+
+    \item
+    $ \Omega $ is finite. What is $ |\Omega| $?
+
+    \item
+    Define $ H_n : \Omega \rightarrow \mathbb{N} \cup \{0\} $ as the random
+    variable where $ \forall \omega \in \Omega $, $ H_n(\omega) $ is the
+    number of heads seen during the sequence of coin flips $ \omega $. What
+    is $ \mathbb{E}[H_n] $ and $ \operatorname{Var}(H_n) $?
+
+    \medskip
+    
+    \textit{Hint.} Note that $ H_n \sim \operatorname{Binomial}(n, 1 / 2) $
+    and that $ H_n = \sum_{k = 1}^nX_k $, where i.i.d.
+    $ X_k \sim \operatorname{Bernoulli}(1 / 2) $.
+\end{enumerate}
+
+\subsection{More sequences of coin flips}
+
+Consider sequences of $ n \in \mathbb{N} $ independent flips of an
+\textit{unfair} coin, where the probability of getting heads is
+$ p \in (0, 1) $. Note the sample space $ \Omega $ is the same as the
+$ \Omega $ in the previous question.
+\begin{enumerate}[label = \alph*.]
+    \item
+    Prove that $ \exists \omega_1, \omega_2 \in \Omega $,
+    $ \omega_1 \ne \omega_2 $, that $ \mathbb{P}\{\omega_1\} \ne
+    \mathbb{P}\{\omega_2\} $.
+
+    \item
+    Define $ U_n \triangleq \sum_{k = 1}^nX_k $, where i.i.d.
+    $ X_k $ pays off $ M_1 \in (0, \infty) $ units of cash if the $ k $th
+    flip is heads and pays off $ -M_2 \in (-\infty, 0) $ of cash if the
+    $ k $th flip is tails. What is $ \mathbb{E}[H_n] $?
+
+    \item
+    Suppose for a given value of $ p \in (0, 1) $ we have
+    $ \mathbb{E}[H_n] = 0 $. Write $ M_1 $ as a function of $ M_2, p $.
+\end{enumerate}
+
+\end{document}
