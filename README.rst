@@ -49,6 +49,13 @@ future concern, however, and won't be available for this semester.
 Compiling TeX source
 ====================
 
+   Note:
+
+   BibTeX is used for bibliography management, so the current version of
+   ``compile_tex.sh`` will not build references correctly. You can correctly
+   compile an individual ``foo.tex`` file to PDF by running the commands
+   ``pdflatex foo``, ``bibtex foo``, ``pdflatex foo``, ``pdflatex foo``.
+
 To compile the ``.tex`` files using the ``compile_tex.sh`` file, you will need
 to have `TeX Live`__ installed on your system. For Ubuntu users this can be
 downloaded using ``apt-get`` while it can take a bit more legwork for Windows
