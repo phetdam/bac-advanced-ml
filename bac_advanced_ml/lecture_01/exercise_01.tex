@@ -25,6 +25,8 @@
 \pagestyle{fancy}
 % add logo in right of header. note that you will have to adjust logo path!
 \fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
 % give enough space for logo by reducing top margin height, head separator,
 % increasing headerheight. see Figure 1 in the fancyhdr documentation. if
 % \topmargin + \headheight + \headsep = 0, original text margins unchanged.
@@ -103,27 +105,27 @@ $ \bigcap_{k = 1}^\infty A_k $?
 \textit{Remark.} $ \bigcap_{k = 1}^\infty A_k $ is \textit{closed} interval
 on $ \mathbb{R} $. Try to convince yourself why this is true.
 
-\subsection{$ \ell_p $-norm balls}
+\subsection{$ \ell^p $-norm balls}
 
 Define $ \bar{B}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in \mathbb{R}^n :
 \Vert\mathbf{x}' - \mathbf{x}\Vert_2 \le r\} $ as the closed Euclidean ball
 with radius $ r \in (0, \infty) $ centered at $ \mathbf{x} \in \mathbb{R}^n $.
-Define $ \bar{B}_{\ell_{p, 2}}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
+Define $ \bar{B}_{\ell^{p, 2}}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
 \mathbb{R}^2 : \Vert\mathbf{x}' - \mathbf{x}\Vert_p \le r\} $ as the closed
-$ \ell_p $-norm ball in $ \mathbb{R}^2 $ centered at $ \mathbf{x}
+$ \ell^p $-norm ball in $ \mathbb{R}^2 $ centered at $ \mathbf{x}
 \in \mathbb{R}^2 $ with radius $ r \in (0, \infty) $. Recall that for
 $ \mathbf{x} \triangleq [ \ x_1 \ \ldots \ x_n ]^\top \in \mathbb{R}^n $, its
-$ \ell_p $-norm $ \Vert\mathbf{x}\Vert_p $ is defined such that
+$ \ell^p $-norm $ \Vert\mathbf{x}\Vert_p $ is defined such that
 \begin{equation*}
     \Vert\mathbf{x}\Vert_p \triangleq
     \left(\sum_{k = 1}^n|x_k|^p\right)^{1 / p}
 \end{equation*}
 
-Consider the $ \ell_1 $-norm and the $ \ell_\infty $-norm, where
+Consider the $ \ell^1 $-norm and the $ \ell^\infty $-norm, where
 $ \Vert\mathbf{x}\Vert_\infty = \max\{x_1, \ldots x_n\} $, and define
-$ B_{\ell_{1, 2}}(\mathbf{0}, 1) $, $ B_{\ell_{\infty, 2}}(\mathbf{0}, 1) $.
+$ B_{\ell^{1, 2}}(\mathbf{0}, 1) $, $ B_{\ell^{\infty, 2}}(\mathbf{0}, 1) $.
 Which of these two sets includes the other and
-$ B_{\ell_{2, 2}}(\mathbf{0}, 1) $?
+$ B_{\ell^{2, 2}}(\mathbf{0}, 1) $?
 
 \medskip
 
