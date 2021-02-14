@@ -52,8 +52,8 @@ Compiling TeX source
    Note:
 
    BibTeX is used for bibliography management, so the current version of
-   ``compile_tex.sh`` will not build references correctly. You can correctly
-   compile an individual ``foo.tex`` file to PDF by running the commands
+   ``compile_tex.sh`` will not resolve citations correctly. You can correctly
+   compile an individual ``foo.tex`` source file to PDF by running the commands
    ``pdflatex foo``, ``bibtex foo``, ``pdflatex foo``, ``pdflatex foo``.
 
 To compile the ``.tex`` files using the ``compile_tex.sh`` file, you will need
