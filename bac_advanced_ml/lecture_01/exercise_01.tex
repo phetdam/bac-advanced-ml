@@ -66,7 +66,7 @@
 % title, author, date
 \title{Exercise 1}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{February 12, 2020}
+\date{February 15, 2021}
 
 \begin{document}
 
@@ -107,10 +107,7 @@ on $ \mathbb{R} $. Try to convince yourself why this is true.
 
 \subsection{$ \ell^p $-norm balls}
 
-Define $ \bar{B}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in \mathbb{R}^n :
-\Vert\mathbf{x}' - \mathbf{x}\Vert_2 \le r\} $ as the closed Euclidean ball
-with radius $ r \in (0, \infty) $ centered at $ \mathbf{x} \in \mathbb{R}^n $.
-Define $ \bar{B}_{\ell^{p, 2}}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
+Define $ \bar{B}_{2, \ell^p}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
 \mathbb{R}^2 : \Vert\mathbf{x}' - \mathbf{x}\Vert_p \le r\} $ as the closed
 $ \ell^p $-norm ball in $ \mathbb{R}^2 $ centered at $ \mathbf{x}
 \in \mathbb{R}^2 $ with radius $ r \in (0, \infty) $. Recall that for
@@ -123,9 +120,9 @@ $ \ell^p $-norm $ \Vert\mathbf{x}\Vert_p $ is defined such that
 
 Consider the $ \ell^1 $-norm and the $ \ell^\infty $-norm, where
 $ \Vert\mathbf{x}\Vert_\infty = \max\{x_1, \ldots x_n\} $, and define
-$ B_{\ell^{1, 2}}(\mathbf{0}, 1) $, $ B_{\ell^{\infty, 2}}(\mathbf{0}, 1) $.
+$ B_{2, \ell^1}(\mathbf{0}, 1) $, $ B_{2, \ell^\infty}(\mathbf{0}, 1) $.
 Which of these two sets includes the other and
-$ B_{\ell^{2, 2}}(\mathbf{0}, 1) $?
+$ B_{2, \ell^2}(\mathbf{0}, 1) $?
 
 \medskip
 
@@ -157,8 +154,7 @@ Consider sequences of $ n \in \mathbb{N} $ independent flips of a fair coin
 and note that the sample space $ \Omega \triangleq \{\text{H}, \text{T}\}^n $.
 \begin{enumerate}[label = \alph*.]
     \item
-    $ \forall \omega \in \Omega $, what is the probability of
-    $ \mathbb{P}\{\omega\} $?
+    $ \forall \omega \in \Omega $, what is $ \mathbb{P}\{\omega\} $?
 
     \item
     $ \Omega $ is finite. What is $ |\Omega| $?
@@ -184,19 +180,65 @@ $ p \in (0, 1) $. Note the sample space $ \Omega $ is the same as the
 $ \Omega $ in the previous question.
 \begin{enumerate}[label = \alph*.]
     \item
-    Prove that $ \exists \omega_1, \omega_2 \in \Omega $,
-    $ \omega_1 \ne \omega_2 $, that $ \mathbb{P}\{\omega_1\} \ne
+    Prove that when $ p \ne 1 / 2 $, $ \exists \omega_1, \omega_2 \in
+    \Omega $, $ \omega_1 \ne \omega_2 $, that $ \mathbb{P}\{\omega_1\} \ne
     \mathbb{P}\{\omega_2\} $.
 
     \item
     Define $ U_n \triangleq \sum_{k = 1}^nX_k $, where i.i.d.
     $ X_k $ pays off $ M_1 \in (0, \infty) $ units of cash if the $ k $th
     flip is heads and pays off $ -M_2 \in (-\infty, 0) $ of cash if the
-    $ k $th flip is tails. What is $ \mathbb{E}[H_n] $?
+    $ k $th flip is tails. Write $ \mathbb{E}[U_n] $ as a function of $ p $.
 
     \item
     Suppose for a given value of $ p \in (0, 1) $ we have
-    $ \mathbb{E}[H_n] = 0 $. Write $ M_1 $ as a function of $ M_2, p $.
+    $ \mathbb{E}[U_n] = 0 $. Write $ M_1 $ as a function of $ M_2, p $.
+\end{enumerate}
+
+\subsection{The Black-Scholes underlying}
+
+Under the Black-Scholes model, the terminal price $ S_T : \Omega \rightarrow
+\mathbb{R} $ of the underlying conditional on its current price $ S_t \in
+(0, \infty) $, denoted as $ S_T \mid S_t $ can be written such that for
+$ Z \sim \mathcal{N}(0, 1) $, $ T > t $,
+\begin{equation*}
+    S_T \mid S_t \triangleq S_te^{
+        \left(r - \frac{1}{2}\sigma^2\right)(T - t) + \sigma\sqrt{T - t}Z
+    }
+\end{equation*}
+$ r, \sigma \in (0, \infty) $ are the drift and diffusion terms of the
+model under $ \mathbb{Q} $, the \textit{risk-neutral probability
+measure}\footnotemark\footnotetext{
+    If $ \mathbb{P} $ is the real-world probability measure, one can think of
+    $ \mathbb{Q} $ as the probability measure corresponding to a world where
+    all prices are risk-neutral. In more technical terms, it is a probability
+    measure such that the discounted price processes of all risky assets are
+    local martingales. For this problem, just replace any uses of
+    $ \mathbb{P} $ with $ \mathbb{Q} $.
+}.
+\begin{enumerate}[label = \alph*.]
+    \item
+    Compute $ \mathbb{E}[S_T \mid S_t] $, which gives the risk-neutral
+    expectation of $ S_T $ conditional on $ S_t $.
+
+    \medskip
+    
+    \textit{Hint.} You don't need to derive $ f_{S_T \mid S_t} $, the density
+    of $ S_T \mid S_t $, to compute $ \mathbb{E}[S_T \mid  S_t] $.
+
+    \item
+    Let $ P_1, P_2 \in (0, \infty) $, $ P_1 < P_2 $, be two price thresholds.
+    What is $ \mathbb{Q}\{S_T \in (P_1, P_2) \mid S_t\} $? Write your answer
+    as the difference of two terms involving $ \Phi $, the normal cdf.
+
+    \medskip
+
+    \textit{Hint.} Note that $ \mathbb{Q}\{S_T \in (P_1, P_2)\} =
+    \mathbb{Q}\{S_T < P_1\} - \mathbb{Q}\{S_T \le P_2\} $. Use the fact that
+    inequalities are preserved under monotone and affine transforms. Your
+    answer should be of the form $ \Phi(\zeta_1) - \Phi(\zeta_2) $, where
+    $ \zeta_k $, $ k \in \{1, 2\} $, is a quantity involving $ S_t $, $ P_k $,
+    and constants.
 \end{enumerate}
 
 \end{document}
