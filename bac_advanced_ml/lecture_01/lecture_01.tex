@@ -18,7 +18,7 @@
 \title[Math for Data Science, Part 1]{Math for Data Science, Part 1}
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 13, 2021}
+\date{February 15, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -167,8 +167,8 @@
         \textit{Examples.}
         \begin{itemize}
             \item
-            \textit{Empty set.} A set containing nothing. For any set $ A $,
-            $ \emptyset \subseteq A $.
+            \textit{Empty set.} $ \emptyset $, a set containing nothing. For
+            any set $ A $, $ \emptyset \subseteq A $.
 
             \item
             \textit{Power set.} Denote $ \Omega \triangleq \{\text{H},
@@ -249,7 +249,7 @@
 
             \item
             \textit{Closure under complement.} $ A \in \mathcal{F} \Rightarrow
-            A^\mathsf{c} \in \mathcal{F} $.
+            A^\mathsf{c} \in \mathcal{F} $. $ \Rightarrow $ means ``implies''.
             \begin{itemize}
                 \item
                 Note that since $ \Omega \in \mathcal{F} $, then clearly
@@ -257,14 +257,14 @@
             \end{itemize}
 
             \item
-            \textit{Closure under countable unions.} $ A_1, A_2, \ldots
+            \textit{Closed under countable unions.} $ A_1, A_2, \ldots \in
             \mathcal{F} \Rightarrow \bigcup_{k = 1}^\infty
             A_k \in \mathcal{F} $.
 
             \item
-            \textit{Closure under countable intersections.} $ A_1, A_2,
-            \ldots \mathcal{F} \Rightarrow \bigcap_{k = 1}^\infty A_k
-            \mathcal{F} $.
+            \textit{Closed under countable intersections.} $ A_1, A_2,
+            \ldots \in \mathcal{F} \Rightarrow \bigcap_{k = 1}^\infty A_k
+            \in \mathcal{F} $.
         \end{enumerate}
 
         \item
@@ -299,8 +299,8 @@
         \item
         \textit{Definition.} A \textit{probability measure} $ \mathbb{P} $
         defined on a sample space $ \Omega $ is a function from a
-        $ \sigma $\textit{-algebra} $ \mathcal{F} \subseteq 2^\Omega $ to the
-        unit interval.
+        $ \sigma $-algebra $ \mathcal{F} \subseteq 2^\Omega $ to the unit
+        interval.
 
         \item
         \textit{Definition.} A \textit{probability space} is the 3-tuple
@@ -374,8 +374,8 @@
         \item
         \textit{Definition.} Events $ A, B \subseteq \Omega $
         \textit{independent} $ \Leftrightarrow \mathbb{P}(A \cap B) =
-        \mathbb{P}(A)\mathbb{P}(B) $. A common notation for independent
-        $ A, B $ is $ A \perp B $.
+        \mathbb{P}(A)\mathbb{P}(B) $. $ \Leftrightarrow $ means ``if and only
+        if''. Independent $ A, B $ often denoted as $ A \perp B $.
 
         \item
         \textit{Remark.} Mutual exclusion \textbf{does not} imply independence,
@@ -439,13 +439,13 @@
         \textit{Example.}
         \begin{itemize}
             \item
-            \textit{Coin flip payoff.} Suppose $ \Omega
-            \triangleq \{\text{H}, \text{T}\} $ and the coin is fair. Define
-            $ X \triangleq q_1\mathbb{I}\{\omega = \text{H}\} - q_2
-            \mathbb{I}\{\omega = \text{T}\} $, $ q_1, q_2 > 0 $.
-            $ \mathbb{I} $ is the indicator function, yielding $ 1 $ when
-            the event is true and $ 0 $ otherwise.
-            $ X(\Omega) = \{-q_2, q_1\} $.
+            \textit{Coin flip payoff.} $ \Omega \triangleq \{\text{H},
+            \text{T}\} $. Define $ X : \Omega \rightarrow \mathbb{R} $ where
+            for $ q_1, q_2 > 0 $, $ X(\omega) \triangleq q_1
+            \mathbb{I}\{\omega = \text{H}\} - q_2
+            \mathbb{I}\{\omega = \text{T}\} $. $ \mathbb{I} $ is the indicator
+            function, yielding $ 1 $ when its argument is true and $ 0 $
+            otherwise. $ X(\Omega) = \{-q_2, q_1\} $.
         \end{itemize}
     \end{itemize}
 
@@ -515,9 +515,9 @@
         \textit{Example.}
         \begin{itemize}
             \item
-            \textit{Independent uniforms.} Suppose we have $ U_1, \ldots U_n $
-            i.i.d. where $ U_k \sim \operatorname{Uniform}(0, 1) $. The
-            density $ f_{U_k} $ for each $ U_k $ is such that
+            \textit{Independent uniforms.} Suppose $ U_1, \ldots U_n $
+            mutually independent, $ U_k \sim \operatorname{Uniform}(0, 1) $.
+            The density $ f_{U_k} $ for each $ U_k $ is such that
             \begin{equation*}
                 f_{U_k}(u) = \mathbb{I}\{u \in [0, 1]\}
             \end{equation*}
@@ -586,7 +586,7 @@
         \begin{equation*}
             \mathbb{E}[X] \triangleq \int_\mathbb{F}xf_X(x)\,dx
         \end{equation*}
-        For $ \mathbb{E}[X] $ to exist, $ \mathbb{E}|X| < \infty $ is required.
+        For $ \mathbb{E}[X] $ to exist, finite $ \mathbb{E}|X| $ is required.
 
         \item
         \textit{Theorem. Law of the unconscious statistician.} Let
@@ -594,7 +594,7 @@
         density\footnotemark\footnotetext{
             Also true if $ X $ discrete with pmf $ p_X $.        
         } $ f_X $ and let
-        $ Y \triangleq h(X) $, $ h : \mathbb{F} \rightarrow \mathbb{F} $. Then,
+        $ Y \triangleq h(X) $, $ h : \mathbb{F} \rightarrow \mathbb{F}' $. Then,
         \begin{equation*}
             \mathbb{E}[Y] = \mathbb{E}[h(X)] = \int_\mathbb{F}h(x)f_X(x)\,dx
         \end{equation*}
@@ -658,10 +658,10 @@
         \item
         \textit{Definition.} Given a random variable $ X : \Omega \rightarrow
         \mathbb{R}^n $, the \textit{correlation matrix} of $ X $ is
-        $ \mathbf{R}_X \triangleq \mathbf{\Sigma}^{-1}\mathbf{C}_X
-        \mathbf{\Sigma}^{-1} \in \mathbb{R}^{m \times n} $, $ \mathbf{R}_X
+        $ \mathbf{R}_X \triangleq \mathbf{\Sigma}_X^{-1}\mathbf{C}_X
+        \mathbf{\Sigma}_X^{-1} \in \mathbb{R}^{m \times n} $, $ \mathbf{R}_X
         \succeq \mathbf{0} $, $ \mathbf{R}_X = \mathbf{R}_X^\top $.
-        $ \mathbf{\Sigma} \in \mathbb{R}^{n \times n} $ is a diagonal matrix
+        $ \mathbf{\Sigma}_X \in \mathbb{R}^{n \times n} $ is a diagonal matrix
         with $ \sigma_{X_1}, \ldots \sigma_{X_n} $ on the diagonal.
         \begin{equation*}
             \mathbf{R}_X = \begin{bmatrix}
@@ -733,10 +733,17 @@
         \end{equation*}
 
         \item
-        \textit{Useful identities (cont.).} For $ X : \Omega \rightarrow
-        \mathbb{R}^n $,
+        \textit{Useful identities (cont.)}. For $ X : \Omega \rightarrow
+        \mathbb{R}^n $, $ \mathbf{a} \in \mathbb{R}^n $,
         \begin{equation*}
-            \mathbf{C}_X = \mathbb{E}\left[XX^\top\right] - \mu_X\mu_X^\top
+            \begin{aligned}
+                \mathbf{C}_X & = \mathbb{E}\left[XX^\top\right] -
+                    \mu_X\mu_X^\top \\
+                \mathbb{E}\left[\mathbf{a}^\top X\right] & =
+                    \mathbf{a}^\top\mu_X \\
+                \operatorname{Var}\left(\mathbf{a}^\top X\right) & =
+                    \mathbf{a}^\top\mathbf{C}_X\mathbf{a}
+            \end{aligned}
         \end{equation*}
     \end{itemize}
 \end{frame}
