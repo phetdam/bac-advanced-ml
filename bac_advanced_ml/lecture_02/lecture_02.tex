@@ -371,7 +371,29 @@
 \end{frame}
 
 \begin{frame}{Gradient, Jacobian, Hessian}
-    
+    \begin{itemize}
+        \item
+        Gradient is linear approximation of function change along axes.
+
+        \item
+        \textit{Definition.} For $ f : \mathbb{R}^n \rightarrow \mathbb{R} $,
+        the \textit{Hessian} $ \nabla^2f : \mathbb{R}^n \rightarrow
+        \mathbb{R}^{n \times n} $ is s.t.
+        \begin{equation*}
+            \nabla^2 f(\mathbf{x}) \triangleq \begin{bmatrix}
+                \ \frac{\partial^2 f}{\partial x_1^2}(\mathbf{x}) & \ldots &
+                    \frac{\partial^2 f}{\partial x_1x_n}(\mathbf{x}) \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ \frac{\partial^2 f}{\partial x_nx_1}(\mathbf{x}) & \ldots &
+                    \frac{\partial^2 f}{\partial x_n^2}(\mathbf{x}) \
+            \end{bmatrix}
+        \end{equation*}
+        $ \forall \mathbf{x}^\top \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x})
+        = \nabla^2f(\mathbf{x})^\top $ ($ \nabla^2f $ symmetric).
+
+        \item
+        The Hessian approximates the local curvature of $ f $ at a point.
+    \end{itemize}
 \end{frame}
 
 \section{Convex optimization}
