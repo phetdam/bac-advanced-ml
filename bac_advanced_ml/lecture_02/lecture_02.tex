@@ -1,0 +1,385 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% title page stuff. brackets content displayed in footer bar
+\title[Math for Data Science, Part 2]{Math for Data Science, Part 2}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{February 15, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+\section{Linear algebra}
+
+\subsection{Matrix essentials}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{matrix} $ \mathbf{A} $ of shape
+        $ m \times n $ over a field\footnotemark\footnotetext{
+            It turns out that it doesn't matter if $ \mathbb{F} = \mathbb{R} $
+            or $ \mathbb{F} = \mathbb{C} $, $ \mathbb{C} $ the complex numbers
+            \cite{jacob_linalg}.
+        } $ \mathbb{F} $ is a function with domain $ \{(i, j) \in \mathbb{N}^2
+        : 1 \le i \le m, 1 \le j \le n\} $ and codomain $ \mathbb{F} $
+        \cite{jacob_linalg}. Evaluation at $ (i, j) $ is denoted as $ A_{ij} $
+        or $ a_{ij} $ and is the $ i, j $th entry of $ \mathbf{A} $.
+        \begin{equation*}
+            \mathbf{A} = \begin{bmatrix}
+                \ a_{11} & \ldots & a_{1n} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ a_{m1} & \ldots & a_{mn} \
+            \end{bmatrix}
+        \end{equation*}
+
+        \item
+        \textit{Definition.} A \textit{column vector} $ \mathbf{a} $ with
+        $ n $ elements is a $ n \times 1 $ matrix over a field $ \mathbb{F} $
+        with elements denoted as $ a_1, \ldots a_n $.
+        \begin{equation*}
+            \mathbf{a} = \begin{bmatrix}
+                \ a_1 \ \\ \ \vdots \ \\ \ a_n \
+            \end{bmatrix}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The $ n \times n $ \textit{identity matrix}
+        $ \mathbf{I} $ is such that
+        \begin{equation*}
+            \mathbf{I} \triangleq \begin{bmatrix}
+                \ 1 & \ldots & 0 \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ 0 & \ldots & 1 \
+            \end{bmatrix}
+        \end{equation*}
+        If context is not clear, we write $ n \times n $ identity as
+        $ \mathbf{I}_n $.
+
+	    \item
+        \textit{Definition.} The \textit{transpose} of a matrix
+        $ \mathbf{A} \in \mathbb{R}^{m \times n } $ is $ \mathbf{A}^\top
+        \in \mathbb{R}^{n \times m} $, where the $ i, j $th element of
+        $ \mathbf{A}^\top $ is the $ j, i $th element of $ \mathbf{A} $.
+        \begin{equation*}
+            \mathbf{A}^\top \triangleq \begin{bmatrix}
+                \ a_{11} & \ldots & a_{m1} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ a_{1n} & \ldots & a_{mn} \
+            \end{bmatrix}        
+        \end{equation*}
+
+        \item
+        \textit{Theorem.} For $ \mathbf{A} \in \mathbb{F}^{m \times p} $,
+        $ \mathbf{B} \in \mathbb{F}^{p \times n} $,
+        $ (\mathbf{AB})^\top = \mathbf{B}^\top\mathbf{A}^\top $
+        \cite{jacob_linalg}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{sum} of matrices 
+        $ \mathbf{A}_1, \ldots \mathbf{A}_q \in \mathbb{F}^{m \times n }$ is
+        such that
+        \begin{equation*}
+            \sum_{k = 1}^q\mathbf{A}_k = \begin{bmatrix}
+                \ \sum_{k = 1}^qa_{k, 11} & \ldots &
+                    \sum_{k = 1}^qa_{k, 1n} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ \sum_{k = 1}^qa_{k, m1} & \ldots & \sum_{k = 1}^qa_{k, mn} \
+            \end{bmatrix}
+        \end{equation*}
+        Here $ a_{k, ij} $ is the $ i, j $-th element of $ \mathbf{A}_k $.
+
+        \item
+        \textit{Properties of matrix addition} \cite{jacob_linalg}. For
+        $ \mathbf{A}, \mathbf{B}, \mathbf{C} \in \mathbb{F}^{m \times n} $,
+        $ a, b \in \mathbb{F} $
+        \begin{enumerate}
+            \item
+            $ \mathbf{A} + \mathbf{B} = \mathbf{B} + \mathbf{A} $
+            (commutative).
+
+            \item
+            $ (\mathbf{A} + \mathbf{B}) + \mathbf{C} = \mathbf{A} +
+            (\mathbf{B} + \mathbf{C}) $ (associative).
+
+            \item
+            $ a(\mathbf{A} + \mathbf{B}) = a\mathbf{A} + a\mathbf{B} $ (scalar
+            distribution).
+
+            \item
+            $ (a + b)\mathbf{A} = a\mathbf{A} + b\mathbf{A} $ (scalar
+            distribution).
+
+            \item
+            $ a(b\mathbf{A}) = (ab)\mathbf{A} $ (scalar associativity).
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{product} of $ \mathbf{A} \in
+        \mathbb{F}^{m \times d} $, $ \mathbf{B} \in \mathbb{F}^{d \times n} $
+        is such that
+        \begin{equation*}
+            \mathbf{AB} = \begin{bmatrix}
+                \ \sum_{k = 1}^da_{1k}b_{k1} & \ldots &
+                    \sum_{k = 1}^da_{1k}b_{kn} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ \sum_{k = 1}^da_{mk}b_{k1} & \ldots &
+                    \sum_{k = 1}^da_{mk}b_{kn} \
+            \end{bmatrix} \in \mathbb{F}^{m \times n}
+        \end{equation*}
+
+        \item
+	    \textit{Properties of matrix multiplication} \cite{jacob_linalg}. For
+	    matrices $ \mathbf{A}, \mathbf{B} \in \mathbb{F}^{m \times d} $,
+	    $ \mathbf{C}, \mathbf{D} \in \mathbb{F}^{d \times n} $, and a scalar
+	    $ a \in \mathbb{F} $,
+	    \begin{enumerate}
+	        \item
+            $ a(\mathbf{AC}) = (a\mathbf{A})\mathbf{C} $ (scalar
+            associativity).
+
+            \item
+            $ a(\mathbf{AC}) = \mathbf{A}(a\mathbf{C}) $ (scalar
+            commutativity + associativity).
+
+            \item
+            $ (\mathbf{A} + \mathbf{B})\mathbf{C} =
+            \mathbf{AC} + \mathbf{BC} $ (matrix distribution).
+
+            \item
+            If $ \mathbf{I} \in \mathbb{F}^{d \times d} $,
+            $ \mathbf{AI} = \mathbf{A} $, $ \mathbf{IC} = \mathbf{C} $
+            (identity).
+	    \end{enumerate}
+
+        \item
+        \textit{Theorem.} For $ \mathbf{A} \in \mathbb{F}^{m \times p} $,
+        $ \mathbf{B} \in \mathbb{F}^{p \times q} $, $ \mathbf{C} \in
+        \mathbb{F}^{q \times n} $, $ (\mathbf{AB})\mathbf{C} = 
+        \mathbf{A}(\mathbf{BC}) $ \cite{jacob_linalg}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
+        \mathbb{F}^{m \times n} $, their \textit{Hadamard product} is
+        \begin{equation*}
+            \mathbf{A} \odot \mathbf{B} \triangleq \begin{bmatrix}
+                \ a_{11}b_{11} & \ldots & a_{1n}b_{1n} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ a_{m1}b_{m1} & \ldots & a_{mn}b_{mn} \
+            \end{bmatrix}
+        \end{equation*}
+
+        \item
+        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
+        \mathbb{F}^{m \times n} $, \textit{Hadamard division} is
+        \begin{equation*}
+            \mathbf{A} \oslash \mathbf{B} \triangleq \begin{bmatrix}
+                \ a_{11} / b_{11} & \ldots & a_{1n} / b_{1n} \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ a_{m1} / b_{m1} & \ldots & a_{mn} / b_{mn} \
+            \end{bmatrix}
+        \end{equation*}
+
+        \item
+        \textit{Definition.} Given matrix $ \mathbf{A} \in
+        \mathbb{F}^{m \times n} $, $ b \in \mathbb{R} $, the
+        \textit{Hadamard power} is
+        \begin{equation*}
+            \mathbf{A}^{\odot b} \triangleq \begin{bmatrix}
+                \ a_{11}^b & \ldots & a_{1n}^b \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \ a_{m1}^n & \ldots & a_{mn}^b \
+            \end{bmatrix}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        \textit{Definition.} If $ \mathbf{A} \in \mathbb{F}^{n \times n} $ is
+        \textit{invertible}, $ \exists! \mathbf{A}^{-1} \in
+        \mathbb{F}^{n \times n} $ such that
+        \begin{equation*}
+            \mathbf{A}^{-1}\mathbf{A} = \mathbf{AA}^{-1} = \mathbf{I}
+        \end{equation*}
+        The $ \exists! $ notation means ``uniquely exists''.
+
+        \item
+        \textit{
+            Some properties of invertible matrices\footnotemark\footnotetext{
+                We'll discuss rank and eigenvalues later in the slides.                
+            }.
+        } If $ \mathbf{A} \in
+        \mathbb{F}^{n \times n} $ invertible,
+        \begin{itemize}
+            \item
+            $ |\mathbf{A}| \ne 0 $ (nonzero determinant).
+
+            \item
+            $ \forall \mathbf{b} \in \mathbb{F}^{n \times 1} $,
+            $ \exists! \mathbf{x} \in \mathbb{F}^{n \times 1} $ s.t.
+            $ \mathbf{Ax} = \mathbf{b} $ (unique solution to linear system).
+
+            \item
+            $ \operatorname{rk}(\mathbf{A}) = n $ (full rank).
+
+            \item
+            All eigenvalues of $ \mathbf{A} $ are nonzero.
+        \end{itemize}
+
+        \item
+        \textit{Theorem.} For invertible $ \mathbf{A}, \mathbf{B} \in
+        \mathbb{F}^{n \times n} $, $ (\mathbf{AB})^{-1} =
+        \mathbf{B}^{-1}\mathbf{A}^{-1} $ \cite{jacob_linalg}.
+    \end{itemize}
+
+    % adjust spacing for footnote
+    \bigskip
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        Matrices and vectors have intuitive interpretations.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Representing data.} Given data points $ \mathbf{x}_1,
+            \ldots \mathbf{x}_N \in \mathbb{R}^d $, we can define the matrix
+            $ \mathbf{X} \in \mathbb{R}^{N \times d} $ where each $ k $th row
+            is $ \mathbf{x}_k^\top $.
+
+            \item
+            \textit{System state.} Suppose $ \mathbf{x} \in \mathbb{R}^n $
+            represents the
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Vector spaces}
+
+\subsection{Eigenpairs}
+
+\section{Vector calculus}
+
+\subsection{Gradient, Jacobian, Hessian}
+
+\begin{frame}{Gradient, Jacobian, Hessian}
+    \begin{itemize}
+        \item
+        \textit{Definition.} For $ f : \mathbb{R}^n \rightarrow \mathbb{R} $,
+        the \textit{gradient} $ \nabla f : \mathbb{R}^n \rightarrow
+        \mathbb{R}^n $ is such that
+        \begin{equation*}
+            \nabla f(\mathbf{x}') \triangleq \begin{bmatrix}
+                \ \frac{\partial f}{\partial x_1}(\mathbf{x}') \ \\
+                \ \vdots \ \\
+                \ \frac{\partial f}{\partial x_n}(\mathbf{x}') \
+            \end{bmatrix} \triangleq \left[
+                \frac{\partial f}{\partial \mathbf{x}}(\mathbf{x}')
+            \right]^\top
+        \end{equation*}
+        Here $ \mathbf{x}' \in \mathbb{R}^n $ and
+        $ \frac{\partial f}{\partial \mathbf{x}} : \mathbb{R}^n \rightarrow
+        \mathbb{R}^{1 \times n} $ is the \textit{vector
+        derivative}\footnotemark\footnotetext{
+            The fact that this is a \textbf{row} vector is important in matrix
+            calculus.        
+        }.
+
+        \item
+        \textit{Definition.} For $ \mathbf{f} : \mathbb{R}^n \rightarrow
+        \mathbb{R}^m $, its \textit{Jacobian} is
+        \begin{equation*}
+            \nabla\mathbf{f}(\mathbf{x}') \triangleq \begin{bmatrix}
+                \ \frac{\partial f_1}{\partial x_1}(\mathbf{x}') \ & \ldots &
+                    \frac{\partial f_1}{\partial x_n}(\mathbf{x}') \ \\
+                \ \vdots & \ddots & \vdots \ \\
+                \frac{\partial f_m}{\partial x_1}(\mathbf{x}') \ & \ldots &
+                    \frac{\partial f_m}{\partial x_n}(\mathbf{x}') \
+            \end{bmatrix} \triangleq \begin{bmatrix}
+                \ \frac{\partial f_1}{\partial\mathbf{x}}(\mathbf{x}') \ \\
+                \ \vdots \ \\
+                \ \frac{\partial f_m}{\partial\mathbf{x}}(\mathbf{x}') \
+            \end{bmatrix} \in \mathbb{R}^{m \times n}
+        \end{equation*}
+        Here $ \mathbf{x}' \in \mathbb{R}^n $, $ \mathbf{f} \triangleq
+        [ \ f_1 \ \ldots \ f_ m \ ]^\top $, $ f_k : \mathbb{R}^n
+        \rightarrow \mathbb{R} $, $ \forall k \in \{1, \ldots n\} $.
+    \end{itemize}
+    
+    % adjust spacing for footnote
+    \medskip
+\end{frame}
+
+\begin{frame}{Gradient, Jacobian, Hessian}
+    
+\end{frame}
+
+\section{Convex optimization}
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    \bibliography{../master_bib}
+\end{frame}
+
+\end{document}
