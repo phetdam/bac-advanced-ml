@@ -18,7 +18,7 @@
 \title[Math for Data Science, Part 1]{Math for Data Science, Part 1}
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 15, 2021}
+\date{February 18, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -502,8 +502,9 @@
     \begin{itemize}
         \item
         \textit{Definition.} A finite collection of random variables
-        $ X_1, \ldots X_n $ is \textit{mutually independent}
-        $ \Leftrightarrow \forall A_1, \ldots A_n \subseteq \Omega $,
+        $ X_1, \ldots X_n $, $ X_k : \Omega \rightarrow \mathbb{F} $, is
+        \textit{mutually independent} $ \Leftrightarrow \forall A_1, \ldots
+        A_n \subseteq \mathbb{F} $,
         \begin{equation*}
             \mathbb{P}\{X_1 \in A_1, \ldots X_n \in A_n\} =
             \prod_{k = 1}^n\mathbb{P}\{X_k \in A_k\}
