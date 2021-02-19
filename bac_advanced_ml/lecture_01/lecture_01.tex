@@ -18,7 +18,7 @@
 \title[Math for Data Science, Part 1]{Math for Data Science, Part 1}
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 18, 2021}
+\date{February 19, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -442,10 +442,11 @@
             \textit{Coin flip payoff.} $ \Omega \triangleq \{\text{H},
             \text{T}\} $. Define $ X : \Omega \rightarrow \mathbb{R} $ where
             for $ q_1, q_2 > 0 $, $ X(\omega) \triangleq q_1
-            \mathbb{I}\{\omega = \text{H}\} - q_2
-            \mathbb{I}\{\omega = \text{T}\} $. $ \mathbb{I} $ is the indicator
-            function, yielding $ 1 $ when its argument is true and $ 0 $
-            otherwise. $ X(\Omega) = \{-q_2, q_1\} $.
+            \mathbb{I}_{\{\text{H}\}}(\omega) - 
+            q_2\mathbb{I}_{\{\text{T}\}}(\omega) $. $ \mathbb{I}_A $ is the
+            indicator function of a set $ A $, where $ \mathbb{I}_A(x) = 1 $
+            if $ x \in A $, $ \mathbb{I}_A(x) = 0 $ if $ x \notin A $.
+            $ X(\Omega) = \{-q_2, q_1\} $.
         \end{itemize}
     \end{itemize}
 
@@ -476,7 +477,8 @@
             $ X : \Omega \rightarrow \mathbb{R} $ has density
             $ f_X : \mathbb{R} \rightarrow [0, \infty) $ \\ such that
             $ \forall x \in \mathbb{R} $, $ \lambda \in (0, \infty) $,
-            $ f_X(x) \triangleq \mathbb{I}\{x \ge 0\}\lambda e^{-\lambda x} $.
+            $ f_X(x) \triangleq \mathbb{I}_{[0, \infty)}(x)
+            \lambda e^{-\lambda x} $.
 
             \item
             \textit{Multivariate Gaussian distribution.}
@@ -520,10 +522,10 @@
             mutually independent, $ U_k \sim \operatorname{Uniform}(0, 1) $.
             The density $ f_{U_k} $ for each $ U_k $ is such that
             \begin{equation*}
-                f_{U_k}(u) = \mathbb{I}\{u \in [0, 1]\}
+                f_{U_k}(u) = \mathbb{I}_{[0, 1]}(u)
             \end{equation*}
             Note $ f_{U_1, \ldots U_n}(u_1, \ldots u_n) =
-            \mathbb{I}\{(u_1, \ldots u_n) \in [0, 1]^n\} =
+            \mathbb{I}_{[0, 1]^n}(u_1, \ldots u_n) =
             \prod_{k = 1}^nf_{U_k}(u_k) $.
         \end{itemize}
     \end{itemize}
@@ -624,7 +626,7 @@
         $ X : \Omega \rightarrow \mathbb{R} $,
         $ Y : \Omega \rightarrow \mathbb{R} $, their \textit{covariance} is
         $ \operatorname{cov}(X, Y) \triangleq
-        \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] $.
+        \mathbb{E}[(X - \mu_X)(Y - \mu_Y)] $.
 
         \item
         \textit{Definition.} Given random variables $ X : \Omega \rightarrow
@@ -729,7 +731,7 @@
             \begin{aligned}
                 \operatorname{Var}(X) & = \mathbb{E}\big[X^2\big] - \mu_X^2 \\
                 \operatorname{cov}(X, Y) & = \mathbb{E}[XY] - \mu_X\mu_Y \\
-                \mathbb{E}[\mathbb{I}\{X \in A\}] & = \mathbb{P}\{X \in A\}
+                \mathbb{E}[\mathbb{I}_A(X)] & = \mathbb{P}\{X \in A\}
             \end{aligned}
         \end{equation*}
 
