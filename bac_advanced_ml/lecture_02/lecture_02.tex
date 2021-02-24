@@ -60,10 +60,9 @@
             It turns out that it doesn't matter if $ \mathbb{F} = \mathbb{R} $
             or $ \mathbb{F} = \mathbb{C} $, $ \mathbb{C} $ the complex numbers
             \cite{jacob_linalg}.
-        } $ \mathbb{F} $ is a function with domain $ \{(i, j) \in \mathbb{N}^2
-        : 1 \le i \le m, 1 \le j \le n\} $ and codomain $ \mathbb{F} $
-        \cite{jacob_linalg}. Evaluation at $ (i, j) $ is denoted as $ A_{ij} $
-        or $ a_{ij} $ and is the $ i, j $th entry of $ \mathbf{A} $.
+        } $ \mathbb{F} $ is a collection of indexed elements of $ \mathbb{F} $
+        arranged in a rectangular array.
+        as $ A_{ij} $ or $ a_{ij} $.
         \begin{equation*}
             \mathbf{A} = \begin{bmatrix}
                 \ a_{11} & \ldots & a_{1n} \ \\
@@ -272,9 +271,9 @@
             $ |\mathbf{A}| \ne 0 $ (nonzero determinant).
 
             \item
-            $ \forall \mathbf{b} \in \mathbb{F}^{n \times 1} $,
-            $ \exists! \mathbf{x} \in \mathbb{F}^{n \times 1} $ s.t.
-            $ \mathbf{Ax} = \mathbf{b} $ (unique solution to linear system).
+            $ \forall \mathbf{b} \in \mathbb{F}^n $, $ \exists! \mathbf{x} \in
+            \mathbb{F}^n $ s.t. $ \mathbf{Ax} = \mathbf{b} $ (unique solution
+            to linear system).
 
             \item
             $ \operatorname{rk}(\mathbf{A}) = n $ (full rank).
@@ -293,7 +292,62 @@
 \begin{frame}{Matrix essentials}
     \begin{itemize}
         \item
-        Matrices and vectors have intuitive interpretations.
+        \textit{Definition.} $ \mathbf{A} \in \mathbb{R}^{n \times n} $ is
+        \textit{symmetric} if $ \mathbf{A} = \mathbf{A}^\top $.
+
+        \item
+        \textit{Definition.} Symmetric $ \mathbf{A} \in
+        \mathbb{R}^{n \times n} $ is \textit{positive definite} if
+        $ \forall \mathbf{x} \in \mathbb{R}^n $, $ \mathbf{x}^\top
+        \mathbf{Ax} > 0 $. $ \mathbf{A} $ is \textit{positive semidefinite}
+        if $ \forall \mathbf{x} \in \mathbb{R}^n,
+        \mathbf{x}^\top\mathbf{Ax} \ge 0 $. $ \mathbf{A} \succ \mathbf{0} $
+        means $ \mathbf{A} $ positive definite, while $ \mathbf{A}
+        \succeq \mathbf{0} $ means $ \mathbf{A} $ positive semidefinite.
+
+        \item
+        \textit{Some properties of positive definite matrices.} For
+        $ \mathbf{A} \succ \mathbf{0} $,
+        \begin{enumerate}
+            \item
+            $ \exists \mathbf{A}^{-1} \succ \mathbf{0} $ (positive definite
+            inverse).
+
+            \item
+            All eigenvalues are real and positive.
+
+            \item
+            $ |\mathbf{A}| > 0 $ (positive determinant).
+        \end{enumerate}
+
+        \item
+        \textit{Remark.} For $ \mathbf{A} \in \mathbb{R}^{n \times n} $,
+        $ \mathbf{A} \succeq \mathbf{0} $ does \textbf{not} mean that all
+        elements of $ \mathbf{A} $ are nonnegative. For example,
+        $ \mathbf{Q} \triangleq \mathbf{I}_n - \frac{1}{n^2}\mathbf{11}^\top
+        \succ \mathbf{0} $, as $ |\mathbf{Q}| > 0 $.
+
+        \item
+        \textit{Some properties of positive semidefinite matrices.} For
+        $ \mathbf{A} \succeq \mathbf{0} $,
+        \begin{enumerate}
+            \item
+            $ \exists \mathbf{A}^{-1} \succ \mathbf{0} \Leftrightarrow $ all
+            eigenvalues positive.
+
+            \item
+            All eigenvalues are real and nonnegative.
+
+            \item
+            $ |\mathbf{A}| \ge 0 $ (nonnegative determinant).
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Matrix essentials}
+    \begin{itemize}
+        \item
+        Matrices and vectors are very useful for applied modeling.
 
         \item
         \textit{Examples.}
@@ -305,8 +359,28 @@
             is $ \mathbf{x}_k^\top $.
 
             \item
-            \textit{System state.} Suppose $ \mathbf{x} \in \mathbb{R}^n $
-            represents the
+            \textit{Linear dynamical system.} Suppose $ \mathbf{x}_k \in
+            \mathbb{R}^n $ represents the state of a system at time step
+            $ k \in \mathbb{N} $. Suppose system state evolution depends only
+            on fixed linear transformation of $ \mathbf{x}_k $ and
+            independent noise. Then,
+            \begin{equation*}
+                \mathbf{x}_{k + 1} = \mathbf{Qx}_k + \mathbf{z}_k
+            \end{equation*}
+            Here $ \mathbf{Q} \in \mathbb{R}^{n \times n} $, $ \mathbf{z}_k $
+            i.i.d. where $ \mathbb{E}[\mathbf{z}_k] = \mathbf{0} $.
+
+            \item
+            \textit{Multivariate quadratic function.} Given symmetric
+            $ \mathbf{Q} \in \mathbb{R}^{n \times n} $, $ \mathbf{a} \in
+            \mathbb{R}^n $, $ b \in \mathbb{R} $, a quadratic function $ f : \mathbb{R}^n
+            \rightarrow \mathbb{R} $ can be represented such that
+            \begin{equation*}
+                f(\mathbf{x}) \triangleq \mathbf{x}^\top\mathbf{Qx} +
+                \mathbf{a}^\top\mathbf{x} + b
+            \end{equation*}
+            $ \mathbf{Q} $ gives the quadratic coefficients, $ \mathbf{a} $
+            the linear coefficients.
         \end{itemize}
     \end{itemize}
 \end{frame}
@@ -456,6 +530,14 @@
 \end{frame}
 
 \section{Convex optimization}
+
+\subsection{The optimization problem}
+
+\begin{frame}{The optimization problem}
+
+\end{frame}
+
+\subsection{Convex functions}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
