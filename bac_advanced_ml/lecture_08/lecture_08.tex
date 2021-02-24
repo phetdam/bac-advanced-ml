@@ -1,0 +1,154 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% title page stuff. brackets content displayed in footer bar
+\title[Intro to Optimization]{Intro to Optimization}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{February 24, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+\section{Convex optimization}
+
+\subsection{Convex functions}
+
+\begin{frame}{Convex functions}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A function $ f : \mathbb{R}^n \rightarrow \mathbb{R} $
+    \end{itemize}
+\end{frame}
+
+\subsection{Optimization problems}
+
+\begin{frame}{Optimization problems}
+    \begin{itemize}
+        \item
+        Maximization/minimization of a function subject to constraints.
+
+        \item
+        \textit{Definition.} For $ f: \mathbb{R}^n \rightarrow \mathbb{R} $,
+        $ \mathbf{u} : \mathbb{R}^n \rightarrow \mathbb{R}^p $,
+        $ \mathbf{v} : \mathbb{R}^n \rightarrow \mathbb{R}^q $, an
+        optimization problem is in \textit{standard form} if it can be written
+        as
+        \begin{equation*}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{x} & f(\mathbf{x}) \\
+                \text{s.t.} & \mathbf{u}(\mathbf{x}) \preceq \mathbf{0} \\
+                & \mathbf{v}(\mathbf{x}) = \mathbf{0}
+            \end{array}
+        \end{equation*}
+        $ \mathbf{x} \in \mathbb{R}^n $ is the \textit{optimization
+        variable} \cite{bv_convex_opt}. $ \mathbf{u} \triangleq
+        [ \ u_1 \ \ldots \ u_p \ ]^\top $ gives the $ p $ \textit{inequality
+        constraints},$ \mathbf{v} \triangleq [ \ v_1 \ \ldots \ v_q \ ]^\top $
+        gives the $ q $ \textit{equality constraints}. A point $ \mathbf{x}' $
+        is \textit{feasible} if $ \mathbf{u}(\mathbf{x}') \preceq
+        \mathbf{0} $, $ \mathbf{v}(\mathbf{x}') = \mathbf{0} $.
+
+        \item
+        If there are no constraints, the problem is \textit{unconstrained}.
+
+        \item
+        Maximization is equivalent to minimization of $ -f $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Optimization problems}
+    \begin{itemize}
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Weighted linear least squares.} Denote $ \mathbf{X} \in
+            \mathbb{R}^{N \times d} $ as the data matrix, each transposed
+            observation $ \mathbf{x}_k^\top $ a row, $ \mathbf{y} \in
+            \mathbb{R}^N $ the response vector, and diagonal weight matrix
+            $ \mathbf{\Gamma} \triangleq \operatorname{diag}(w_1, \ldots w_N)
+            \in \mathbb{R}^{N \times N} $, $ w_k \ge 0 $,
+            $ \forall k \in \{1, \ldots N\} $. The unconstrained problem in
+            standard form is
+            \begin{equation*}
+                \begin{array}{ll}
+                    \displaystyle\min_\mathbf{w} &
+                    (\mathbf{y} - \mathbf{Xw})^\top\mathbf{\Gamma}
+                    (\mathbf{y} - \mathbf{Xw})                
+                \end{array}
+            \end{equation*}
+            $ \mathbf{w} \in \mathbb{R}^d $ is the weight vector. Note
+            $ \mathbf{\Gamma} = \mathbf{I} $ in ordinary least squares.
+
+            \item
+            \textit{SVM dual problem.} Using $ \mathbf{X}, \mathbf{y} $ from
+            above, the problem is
+            \begin{equation*}
+                \begin{array}{ll}
+                    \displaystyle\max_\alpha & \mathbf{1}^\top\alpha -
+                    \frac{1}{2}\alpha^\top\mathbf{H}\alpha \\
+                    \text{s.t.} & \alpha^\top\mathbf{y} = 0 \\
+                    & \mathbf{0} \preceq \alpha \preceq C\mathbf{1}
+                \end{array}
+            \end{equation*}
+            Here $ \mathbf{H} \in \mathbb{R}^{N \times N} $ is such that
+            $ h_{ij} = y_iy_j\mathbf{x}_i^\top\mathbf{x}_j $ and $ C > 0 $.
+
+            \item
+            Both problems are quadratic problems, i.e. objective is
+            quadratic.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{../master_bib}
+\end{frame}
+
+% only sections with slides are shown in the table of contents
+\section{This section is empty}
+
+\end{document}
