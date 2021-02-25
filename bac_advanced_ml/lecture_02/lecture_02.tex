@@ -754,15 +754,16 @@
         \sqrt{\langle v, v\rangle} $, is a norm on $ V $ \cite{jacob_linalg}.
 
         \item
+        \textit{Definition.} $ u \in V $ is a \textit{unit vector} if
+        $ \Vert u\Vert = 1 $.        
+
+        \item
 	    \textit{Definition.} $ u, v \in V $ are \textit{orthogonal} if 
 	    $ \langle u, v\rangle = 0 $, denoted as $ u \perp v $.
 
         \item
         \textit{Definition.} $ u, v \in V $ are \textit{orthonormal} if
-        $ \mathbf{u}^\top\mathbf{v} = 0 $ and $ \Vert u\Vert =
-        \Vert v\Vert = 1 $, where $ \Vert u'\Vert \triangleq
-        \sqrt{\langle u', u'\rangle} $, $ \forall u' \in V $. $ u $ is a
-        \textit{unit vector} if $ \Vert u\Vert = 1 $.
+        $ \langle u, v\rangle = 0 $, $ \Vert u\Vert = \Vert v\Vert = 1 $.
 
         \item
         \textit{Theorem.} $ \forall \mathbf{u}, \mathbf{v} \in \mathbb{R}^n $,
@@ -786,7 +787,7 @@
     \begin{itemize}
         \item
         \textit{Definition.} A basis $ B \triangleq \{v_1, \ldots v_n\} \subset
-        V $ is called \textit{orthonormal}
+        V $ is called \textit{orthogonal}
         if $ \forall v_i, v_j $, $ i \ne j $, $ i, j \in \{1, \ldots n\} $,
         $ \langle v_i, v_j\rangle = 0 $.
 
