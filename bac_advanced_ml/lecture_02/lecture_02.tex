@@ -20,7 +20,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 15, 2021}
+\date{February 24, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -61,8 +61,8 @@
             or $ \mathbb{F} = \mathbb{C} $, $ \mathbb{C} $ the complex numbers
             \cite{jacob_linalg}.
         } $ \mathbb{F} $ is a collection of indexed elements of $ \mathbb{F} $
-        arranged in a rectangular array.
-        as $ A_{ij} $ or $ a_{ij} $.
+        arranged in a rectangular array. The $ i, j$th element of
+        $ \mathbf{A} $ is denoted as $ A_{ij} $ or $ a_{ij} $.
         \begin{equation*}
             \mathbf{A} = \begin{bmatrix}
                 \ a_{11} & \ldots & a_{1n} \ \\
@@ -123,14 +123,12 @@
     \begin{itemize}
         \item
         \textit{Definition.} The \textit{sum} of matrices 
-        $ \mathbf{A}_1, \ldots \mathbf{A}_q \in \mathbb{F}^{m \times n }$ is
-        such that
+        $ \mathbf{A}, \mathbf{B} \in \mathbb{F}^{m \times n }$ is such that
         \begin{equation*}
-            \sum_{k = 1}^q\mathbf{A}_k = \begin{bmatrix}
-                \ \sum_{k = 1}^qa_{k, 11} & \ldots &
-                    \sum_{k = 1}^qa_{k, 1n} \ \\
+            \mathbf{A} + \mathbf{B} = \begin{bmatrix}
+                \ a_{11} + b_{11} & \ldots & a_{1n} + b_{1n} \ \\
                 \ \vdots & \ddots & \vdots \ \\
-                \ \sum_{k = 1}^qa_{k, m1} & \ldots & \sum_{k = 1}^qa_{k, mn} \
+                \ a_{m1} + b_{m1} & \ldots & a_{mn} + b_{mn} \
             \end{bmatrix}
         \end{equation*}
         Here $ a_{k, ij} $ is the $ i, j $-th element of $ \mathbf{A}_k $.
@@ -197,9 +195,8 @@
             \mathbf{AC} + \mathbf{BC} $ (matrix distribution).
 
             \item
-            If $ \mathbf{I} \in \mathbb{F}^{d \times d} $,
-            $ \mathbf{AI} = \mathbf{A} $, $ \mathbf{IC} = \mathbf{C} $
-            (identity).
+            $ \mathbf{AI}_d = \mathbf{A} $, $ \mathbf{I}_d\mathbf{C} =
+            \mathbf{C} $ (identity).
 	    \end{enumerate}
 
         \item
@@ -210,46 +207,54 @@
     \end{itemize}
 \end{frame}
 
+%\begin{frame}{Matrix essentials}
+%    \begin{itemize}
+%        \item
+%        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
+%        \mathbb{F}^{m \times n} $, their \textit{Hadamard product} is
+%        \begin{equation*}
+%            \mathbf{A} \odot \mathbf{B} \triangleq \begin{bmatrix}
+%                \ a_{11}b_{11} & \ldots & a_{1n}b_{1n} \ \\
+%                \ \vdots & \ddots & \vdots \ \\
+%                \ a_{m1}b_{m1} & \ldots & a_{mn}b_{mn} \
+%            \end{bmatrix}
+%        \end{equation*}
+%
+%        \item
+%        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
+%        \mathbb{F}^{m \times n} $, \textit{Hadamard division} is
+%        \begin{equation*}
+%            \mathbf{A} \oslash \mathbf{B} \triangleq \begin{bmatrix}
+%                \ a_{11} / b_{11} & \ldots & a_{1n} / b_{1n} \ \\
+%                \ \vdots & \ddots & \vdots \ \\
+%                \ a_{m1} / b_{m1} & \ldots & a_{mn} / b_{mn} \
+%            \end{bmatrix}
+%        \end{equation*}
+%
+%        \item
+%        \textit{Definition.} Given matrix $ \mathbf{A} \in
+%        \mathbb{F}^{m \times n} $, $ b \in \mathbb{R} $, the
+%        \textit{Hadamard power} is
+%        \begin{equation*}
+%            \mathbf{A}^{\odot b} \triangleq \begin{bmatrix}
+%                \ a_{11}^b & \ldots & a_{1n}^b \ \\
+%                \ \vdots & \ddots & \vdots \ \\
+%                \ a_{m1}^n & \ldots & a_{mn}^b \
+%            \end{bmatrix}
+%        \end{equation*}
+%    \end{itemize}
+%\end{frame}
+
 \begin{frame}{Matrix essentials}
     \begin{itemize}
         \item
-        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
-        \mathbb{F}^{m \times n} $, their \textit{Hadamard product} is
-        \begin{equation*}
-            \mathbf{A} \odot \mathbf{B} \triangleq \begin{bmatrix}
-                \ a_{11}b_{11} & \ldots & a_{1n}b_{1n} \ \\
-                \ \vdots & \ddots & \vdots \ \\
-                \ a_{m1}b_{m1} & \ldots & a_{mn}b_{mn} \
-            \end{bmatrix}
-        \end{equation*}
-
-        \item
-        \textit{Definition.} Given matrices $ \mathbf{A}, \mathbf{B} \in
-        \mathbb{F}^{m \times n} $, \textit{Hadamard division} is
-        \begin{equation*}
-            \mathbf{A} \oslash \mathbf{B} \triangleq \begin{bmatrix}
-                \ a_{11} / b_{11} & \ldots & a_{1n} / b_{1n} \ \\
-                \ \vdots & \ddots & \vdots \ \\
-                \ a_{m1} / b_{m1} & \ldots & a_{mn} / b_{mn} \
-            \end{bmatrix}
-        \end{equation*}
-
-        \item
-        \textit{Definition.} Given matrix $ \mathbf{A} \in
-        \mathbb{F}^{m \times n} $, $ b \in \mathbb{R} $, the
-        \textit{Hadamard power} is
-        \begin{equation*}
-            \mathbf{A}^{\odot b} \triangleq \begin{bmatrix}
-                \ a_{11}^b & \ldots & a_{1n}^b \ \\
-                \ \vdots & \ddots & \vdots \ \\
-                \ a_{m1}^n & \ldots & a_{mn}^b \
-            \end{bmatrix}
-        \end{equation*}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Matrix essentials}
-    \begin{itemize}
+        \textit{Definition.} $ \mathbf{A} \in \mathbb{F}^{m \times n} $
+        is \textit{diagonal} if $ a_{11}, \ldots a_{qq}  \in \mathbb{F} $,
+        $ q \triangleq \min\{m, n\} $ are the only nonzero elements in
+        $ \mathbf{A} $. If $ \mathbf{A} \in \mathbb{F}^{n \times n} $, i.e.
+        square, for $ a_1, \ldots a_n \in \mathbb{F} $, $ \mathbf{A} $ can
+        be written as $ \operatorname{diag}(a_1, \ldots a_n) $.
+        
         \item
         \textit{Definition.} If $ \mathbf{A} \in \mathbb{F}^{n \times n} $ is
         \textit{invertible}, $ \exists! \mathbf{A}^{-1} \in
@@ -262,7 +267,8 @@
         \item
         \textit{
             Some properties of invertible matrices\footnotemark\footnotetext{
-                We'll discuss rank and eigenvalues later in the slides.                
+                We'll discuss rank later in the slides. Don't worry about
+                eigenvalues for now.
             }.
         } If $ \mathbf{A} \in
         \mathbb{F}^{n \times n} $ invertible,
@@ -286,7 +292,15 @@
         \textit{Theorem.} For invertible $ \mathbf{A}, \mathbf{B} \in
         \mathbb{F}^{n \times n} $, $ (\mathbf{AB})^{-1} =
         \mathbf{B}^{-1}\mathbf{A}^{-1} $ \cite{jacob_linalg}.
+
+        \item
+        \textit{Theorem.} For $ \mathbf{A} \triangleq
+        \operatorname{diag}(a_1, \ldots a_n) $, $ \mathbf{A}^{-1} \triangleq
+        \operatorname{diag}\left(a_1^{-1}, \ldots a_n^{-1}\right) $.
     \end{itemize}
+
+    % skip for footnote spacing
+    \medskip
 \end{frame}
 
 \begin{frame}{Matrix essentials}
@@ -368,13 +382,16 @@
                 \mathbf{x}_{k + 1} = \mathbf{Qx}_k + \mathbf{z}_k
             \end{equation*}
             Here $ \mathbf{Q} \in \mathbb{R}^{n \times n} $, $ \mathbf{z}_k $
-            i.i.d. where $ \mathbb{E}[\mathbf{z}_k] = \mathbf{0} $.
+            i.i.d. where $ \mathbb{E}[\mathbf{z}_k] = \mathbf{0} $,
+            $ \mathbf{C}_\mathbf{z} = \operatorname{diag}(\sigma_1, \ldots
+            \sigma_n) \succ \mathbf{0} $.
 
             \item
             \textit{Multivariate quadratic function.} Given symmetric
             $ \mathbf{Q} \in \mathbb{R}^{n \times n} $, $ \mathbf{a} \in
-            \mathbb{R}^n $, $ b \in \mathbb{R} $, a quadratic function $ f : \mathbb{R}^n
-            \rightarrow \mathbb{R} $ can be represented such that
+            \mathbb{R}^n $, $ b \in \mathbb{R} $, a quadratic function
+            $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ can be represented
+            such that
             \begin{equation*}
                 f(\mathbf{x}) \triangleq \mathbf{x}^\top\mathbf{Qx} +
                 \mathbf{a}^\top\mathbf{x} + b
@@ -398,7 +415,7 @@
             $ x + y \in \mathbb{F} $ (closure under addition).
 
             \item
-            $ x + y = y + x $ (symmetry of addition).
+            $ x + y = y + x $ (commutativity of addition).
 
             \item
             $ (x + y) + z = x + (y + z) $ (associativity of addition).
@@ -431,6 +448,9 @@
         \end{enumerate}
 
         \item
+        \textit{Remark.} We will use $ \mathbb{F} $ to denote arbitrary fields.
+
+        \item
         \textit{Examples.} $ \mathbb{Q} $, $ \mathbb{R} $, $ \mathbb{C} $. We
         focus mostly on $ \mathbb{R} $.
     \end{itemize}
@@ -440,13 +460,261 @@
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{vector space} $ V $ over a field
-        $ \mathbb{F} $ is a set 
+        $ \mathbb{F} $ is a set of \textit{vectors} containing the
+        \textit{zero vector} $ 0 \in V $ equipped with \textit{vector
+        addition} and \textit{scalar multiplication} of $ v \in V $ by
+        $ x \in \mathbb{F} $. $ \forall u, v, w \in V $, $ \forall \alpha,
+        \beta \in \mathbb{F} $ \cite{jacob_linalg},
+        \begin{enumerate}
+            \item
+            $ u + v \in V $ (closure under vector addition).
+
+            \item
+            $ u + v = v + u $ (commutativity of vector addition).
+
+            \item
+            $ 0 + u = u $ (contains vector addition identity).
+
+            \item
+            $ (u + v) + w = u + (v + w) $ (associativity of vector addition).
+
+            \item
+            $ \alpha u \in V $ (closure under scalar multiplication).
+
+            \item
+            $ 1u = u $, $ 1 \in \mathbb{F} $ ($ \mathbb{F} $ has scalar
+            multiplicative identity).
+
+            \item
+            $ \alpha(u + v) = \alpha u + \alpha v $ (distribution of scalar
+            multiplication).
+
+            \item
+            $ (\alpha + \beta)u  = \alpha u + \beta u $ (distribution of
+            scalar multiplication).
+
+            \item
+            $ (\alpha\beta)u = u(\alpha\beta) $ (commutativity of scalar
+            multiplication).
+        \end{enumerate}
+
+        \item
+        \textit{Remark.} These properties should be natural; no need to
+        memorize.
+
+        \item
+        \textit{Example.} $ \mathbb{R}^n $, i.e. $ n $\textit{-dimensional
+        Euclidean space}. For any field $ \mathbb{F} $, $ \mathbb{F}^n $ is
+        the $ n $\textit{-fold Cartesian product}, for example
+        $ \mathbb{C}^n $.
+
+        \item
+        \textit{Remark.} We will denote elements of $ \mathbb{R}^n $ in bold.
     \end{itemize}
 \end{frame}
 
-% must cover: basis, linear independence, vector space, field, norms
+\begin{frame}{Vector spaces}
+    \begin{itemize}
+        \item
+        \textit{Definition.} For $ v_1, \ldots v_n \in V $, $ V $ a vector
+        space over $ \mathbb{F} $, and $ a_1, \ldots a_n \in \mathbb{F} $,
+        $ w = \sum_{k = 1}^na_kv_k $ is a \textit{linear combination}.
 
-\subsection{Eigenpairs}
+        \item
+        \textit{Definition.} The \textit{span} of $ v_1, \ldots v_n \in V $,
+        denoted $ \operatorname{span}\{v_1, \ldots v_n\} $, is the set of all
+        linear combinations of $ v_1, \ldots v_n $ \cite{jacob_linalg}.
+
+        \item
+        \textit{Definition.} $ v_1, \ldots v_n \in V $ are \textit{linearly
+        independent} if $ \sum_{k = 1}^na_kv_k = 0 \in V \Leftrightarrow
+        a_1 = \ldots a_n = 0 \in \mathbb{F} $, else \textit{linearly
+        dependent}.
+
+        \item
+        \textit{Definition.} A set $ \{v_1, \ldots v_n\} \subset V $ is called
+        a \textit{basis} for $ V $ if \cite{jacob_linalg}
+        \begin{enumerate}
+            \item
+            $ v_1, \ldots v_n $ are linearly independent.
+
+            \item
+            $ V = \operatorname{span}\{v_1, \ldots v_n\} $.
+        \end{enumerate}
+
+        \item
+        \textit{Remark.} Although unordered, bases are often treated as
+        ordered.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{The standard Euclidean basis.} The standard basis for
+            $ \mathbb{R}^n $ is $ \{\mathbf{e}_1, \ldots \mathbf{e}_n\} $,
+            where the $ k $th element of $ \mathbf{e}_k $ is $ 1 $ and all
+            other elements are zero.
+
+            \item
+            \textit{Non-standard} $ \mathbb{R}^2 $ \textit{basis.}
+            $ \left\{[ \ -1 \ \ 1 \ ]^\top, [ \ 2 \ \ 0 \ ]^\top\right\} $ is
+            a basis for $ \mathbb{R}^2 $.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Vector spaces}
+    \begin{itemize}
+        \item
+        \textit{Lemma.} If $ \{v_1, \ldots v_n\} \subset V $,
+        $ \{w_1, \ldots w_m\} \subset V $ are both finite bases of a vector
+        space $ V $, then $ m = n $ \cite{jacob_linalg}.
+
+        \item
+        \textit{Definition.} If vector space $ V $ has a basis $ B \subset V $
+        where $ |B| = n $, $ n \in \mathbb{N} $, then $ V $ is said to be
+        $ n $\textit{-dimensional}.
+
+        \item
+        \textit{Remark.} $ \mathbb{F}^n $ is often referred to as
+        $ n $-dimensional, but in general, for a vector space $ V $ on field
+        $ \mathbb{F} $, dimension $ \ne $ number of elements of $ \mathbb{F} $
+        in a vector $ v \in V $. A vector \textit{subspace} $ U \subset
+        \mathbb{R}^n $ that has $ k < n $ elements in its basis has dimension
+        $ k $ although $ \mathbf{u} \in V $ contains $ n $ elements of
+        $ \mathbb{R} $.
+
+        \item
+        \textit{Definition.} Given ordered basis $ B \subset \mathbb{F}^n $,
+        denote $ \mathbf{B} \in \mathbb{F}^{n \times n} $ as the matrix whose
+        columns hold the elements of $ B $. For $ \mathbf{x} \in
+        \mathbb{R}^n $, its \textit{coordinates} in $ B $, denoted by
+        $ (\mathbf{x})_B $ are such that
+        $ \mathbf{x} = \mathbf{B}(\mathbf{x})_B $.
+
+        \item
+        \textit{Theorem.} $ \mathbf{B} $ is invertible and
+        $ \forall \mathbf{u} \in \mathbb{F}^n $,
+        $ (\mathbf{u})_B = \mathbf{B}^{-1}\mathbf{u} $ \cite{jacob_linalg}.
+
+        \item
+        \textit{Remark.} Bases and coordinates are important in the context of
+        principal components analysis, which performs a \textit{change of
+        basis}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Vector spaces}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{rank} of $ \mathbf{A} \in
+        \mathbb{F}^{m \times n} $ is the maximal number of linearly
+        independent columns/rows of $ \mathbf{A} $, denoted as
+        $ \operatorname{rk}(\mathbf{A}) $ or
+        $ \operatorname{rank}(\mathbf{A}) $.
+
+        \item
+        \textit{Definition.} $ \mathbf{A} \in \mathbb{R}^{m \times n} $ is
+        \textit{full rank} if $ \operatorname{rk}(\mathbf{A}) = \min\{m, n\} $.
+
+        \item
+        Rank can be thought of as a matrix's ``information content''.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Feature redundancy.} Suppose $ \mathbf{X} \in
+            \mathbb{R}^{N \times d} $, each $ k $th row a transposed data
+            example $ \mathbf{x}_k^\top $. Assuming $ N > d $, if
+            $ \operatorname{rk}(\mathbf{X}) < d $, at least one column is
+            linearly dependent and can be safely removed.
+
+            \item
+            \textit{Square linear system.} Suppose $ \mathbf{A} \in
+            \mathbb{R}^{n \times n} $, $ \mathbf{b} \in \mathbb{R}^n $. We
+            want to find $ \mathbf{x} \in \mathbb{R}^n $ s.t. $ \mathbf{Ax} =
+            \mathbf{b} $. If $ \operatorname{rk}(\mathbf{A}) = n $, each row
+            (linear equation) helps to determine one of the $ n $ unknown
+            elements of $ \mathbf{x} $. If
+            $ \operatorname{rk}(\mathbf{A}) < n $, there isn't enough
+            information $ \Rightarrow  $ no solution or infinitely many
+            solutions.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Norms and inner products}
+
+\begin{frame}{Norms and inner products}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{norm} on a vector space $ V $ over
+        $ \mathbb{F} \in \{\mathbb{R}, \mathbb{C}\} $ is a function
+        $ \Vert\cdot\Vert : V \rightarrow \mathbb{R} $ that satisfies the
+        following properties \cite{jacob_linalg}:
+        \begin{enumerate}
+            \item
+            $ \forall v \in V $, $ \Vert v\Vert \ge 0 $, where
+            $ \Vert v\Vert = 0 \Leftrightarrow v = 0 $.
+
+            \item
+            $ \forall k \in \mathbb{F} $, $ \forall v \in V $,
+            $ \Vert kv\Vert = |k|\Vert v\Vert $ (absolute homogeneity).
+
+            \item
+            $ \forall u, v \in V $, $ \Vert u + v\Vert \le
+            \Vert u\Vert\Vert v\Vert $ (triangle inequality).
+        \end{enumerate}
+
+        \item
+        A norm gives a sense of the ``size'' of a vector in a vector space.
+
+        \item
+        \textit{Definition.} $ \Vert\mathbf{x}\Vert_p $, the finite
+        $ \ell^p $\textit{-norm}, or $ p $\textit{-norm}, of
+        $ \mathbf{x} \in \mathbb{R}^n $ is s.t.
+        \begin{equation*}
+            \Vert\mathbf{x}\Vert_p \triangleq
+            \left(\sum_{k = 1}^n|x_k|^p\right)^{1 / p}
+        \end{equation*}
+        When $ p = 2 $, $ \Vert\cdot\Vert_2 $ called the \textit{Euclidean},
+        or $ \ell^2 $ norm. When $ p = 1 $, $ \Vert\cdot\Vert_1 $ called the
+        $ \ell^1 $, \textit{Manhattan}, or \textit{taxicab} norm. When
+        $ p = \infty $, $ \Vert\mathbf{x}\Vert_\infty \triangleq
+        \max\{|x_1|, \ldots |x_n|\} $, and $ \Vert\cdot\Vert_\infty $ called
+        the \textit{max norm}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Norms and inner products}
+    \begin{itemize}
+        \item
+        \textit{Definition.} An \textit{inner product} on a vector space $ V $
+        over $ \mathbb{R} $ is a function $ \langle\cdot, \cdot\rangle :
+        V \times V \rightarrow \mathbb{R} $ that satisfies the following
+        properties \cite{jacob_linalg}:
+        \begin{enumerate}
+            \item
+            $ \forall u, v \in V $, $ \langle u, v\rangle =
+            \langle v, u\rangle $ (symmetric).
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Norms and inner products}
+    \begin{itemize}
+        \item
+	    \textit{Definition.} $ \mathbf{u}, \mathbf{v} \in V $ are
+	    \textit{orthogonal} if $ \langle\mathbf{u}, \mathbf{v}\rangle = 0 $.
+
+        \item
+        \textit{Definition.} $ \mathbf{Q} \in \mathbb{R}^{m \times n} $ is
+        \textit{orthogonal}
+    \end{itemize}
+\end{frame}
+
+% must cover: basis, rank, norms, orthogonality
 
 \section{Vector calculus}
 
@@ -497,7 +765,7 @@
     \end{itemize}
     
     % adjust spacing for footnote
-    \medskip
+    \bigskip
 \end{frame}
 
 \begin{frame}{Gradient, Jacobian, Hessian}
@@ -519,25 +787,22 @@
             \end{bmatrix}
         \end{equation*}
         $ \forall \mathbf{x} \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x})
-        = \nabla^2f(\mathbf{x})^\top $ ($ \nabla^2f $ symmetric).
+        = \nabla^2f(\mathbf{x})^\top $ ($ \nabla^2f(\mathbf{x}) $ symmetric).
 
         \item
         The Hessian approximates the local curvature of $ f $ at a point.
 
         \item
-        Provides a way to check if $ f $ is locally \textit{convex} at a point.
+        Provides a way to check if $ f $ is locally \textit{convex} at a
+        point. If $ f $ is globally convex, then $ \forall \mathbf{x} \in
+        \operatorname{dom}f $, $ \nabla^2f(\mathbf{x}) \succeq \mathbf{0} $
+        \cite{bv_convex_opt}.
+
+        \item
+        For large $ n $, computing and storing the Hessian is expensive, so
+        in practice repeatedly computing the Hessian is not a good idea.
     \end{itemize}
 \end{frame}
-
-\section{Convex optimization}
-
-\subsection{The optimization problem}
-
-\begin{frame}{The optimization problem}
-
-\end{frame}
-
-\subsection{Convex functions}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
