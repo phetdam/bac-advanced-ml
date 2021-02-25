@@ -7,6 +7,8 @@
 PDF_TEX="pdflatex -interaction=nonstopmode -halt-on-error -shell-escape"
 # directory this file is located in, the repo root (relative path)
 REPO_ROOT=$(dirname $0)
+# base lesson directory
+LESSON_ROOT=$REPO_ROOT/lessons
 # script usage
 USAGE="usage: $0 [-h] [TEXFILE]
 
@@ -20,6 +22,10 @@ $PDF_TEX
 If an argument is passed to this script, assumed to be a .tex file, then only
 that file will be compiled with output written to the same directory that the
 provided .tex source file resides in.
+
+When using bibtex for bibliography management, you must run pdflatex -> bibtex
+-> pdflatex -> pdflatex for each .tex source file. Use the compile_tex_full.sh
+script instead,
 
 optional arguments:
  -h, --help  show this usage
@@ -45,13 +51,13 @@ compile_tex() {
 # if no arguments, then compile all lectures
 if [[ $# == 0 ]]
 then
-    # compile all .tex files in the top-level package directory
-    for INFILE in $REPO_ROOT/bac_advanced_ml/*.tex
+    # compile all .tex files in the top-level lessons directory
+    for INFILE in $LESSON_ROOT/*.tex
     do
         compile_tex $INFILE
     done
-    # for each lecture directory in the package directory
-    for LEC_DIR in $REPO_ROOT/bac_advanced_ml/lecture_{00..15}
+    # for each lecture directory in the lessons directory
+    for LEC_DIR in $LESSON_ROOT/lecture_{00..15}
     do
         # compile each .tex file in the directory
         for INFILE in $LEC_DIR/*.tex
