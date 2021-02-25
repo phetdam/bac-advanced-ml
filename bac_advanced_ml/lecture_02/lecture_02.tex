@@ -20,7 +20,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 24, 2021}
+\date{February 25, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -698,19 +698,129 @@
             \item
             $ \forall u, v \in V $, $ \langle u, v\rangle =
             \langle v, u\rangle $ (symmetric).
+
+            \item
+            $ \forall k \in \mathbb{R} $, $ \forall u, v \in V $,
+            $ \langle ku, v\rangle = k\langle u, v\rangle $ (bilinear).
+
+            \item
+            $ \forall u, v, w \in V $, $ \langle u + v, w\rangle =
+            \langle u, w\rangle + \langle v, w\rangle $ (bilinear).
+
+            \item
+            $ \forall v \in V $, $ \langle v, v\rangle \ge 0 $, where
+            $ \langle v, v\rangle = 0 \Leftrightarrow v = 0 $.
         \end{enumerate}
+
+        \item
+        \textit{Definition.} A vector space $ V $ over $ \mathbb{R} $ equipped
+        with an inner product $ \langle\cdot, \cdot\rangle $ is called a
+        \textit{real inner product space} \cite{jacob_linalg}.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            $ \mathbb{R}^n $. $ \mathbb{R}^n $ equipped with the dot product
+            $ \cdot $, where $ \forall \mathbf{u}, \mathbf{v} \in
+            \mathbb{R}^n $, $ \mathbf{u}\cdot\mathbf{v} =
+            \mathbf{u}^\top\mathbf{v} $, is a finite-dimensional inner product
+            space.
+
+            \item
+            $ L^2(\mathbb{R}) $. The $ L^2 $ function space on $ \mathbb{R} $,
+            i.e. the vector space of all functions $ f : \mathbb{R}
+            \rightarrow \mathbb{R} $ s.t.
+            $ \int_\mathbb{R}f(x)^2\,dx < \infty $ where $ \forall f, g
+            \in L^2(\mathbb{R}) $,
+            \begin{equation*}
+                \langle f, g\rangle \triangleq \int_\mathbb{R}f(x)g(x)\,dx
+            \end{equation*}
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Norms and inner products}
     \begin{itemize}
         \item
-	    \textit{Definition.} $ \mathbf{u}, \mathbf{v} \in V $ are
-	    \textit{orthogonal} if $ \langle\mathbf{u}, \mathbf{v}\rangle = 0 $.
+        Inner products can be thought of as measuring vector similarity.
 
         \item
-        \textit{Definition.} $ \mathbf{Q} \in \mathbb{R}^{m \times n} $ is
-        \textit{orthogonal}
+        \textit{Theorem.} If $ \langle\cdot, \cdot\rangle : V \times V
+        \rightarrow \mathbb{R} $ is an inner product on real vector $ V $
+        space, i.e. a vector space over $ \mathbb{R} $, then
+        $ \Vert\cdot\Vert : V \rightarrow \mathbb{R} $ where
+        $ \forall v \in V $, $ \Vert v\Vert \triangleq
+        \sqrt{\langle v, v\rangle} $, is a norm on $ V $ \cite{jacob_linalg}.
+
+        \item
+	    \textit{Definition.} $ u, v \in V $ are \textit{orthogonal} if 
+	    $ \langle u, v\rangle = 0 $, denoted as $ u \perp v $.
+
+        \item
+        \textit{Definition.} $ u, v \in V $ are \textit{orthonormal} if
+        $ \mathbf{u}^\top\mathbf{v} = 0 $ and $ \Vert u\Vert =
+        \Vert v\Vert = 1 $, where $ \Vert u'\Vert \triangleq
+        \sqrt{\langle u', u'\rangle} $, $ \forall u' \in V $. $ u $ is a
+        \textit{unit vector} if $ \Vert u\Vert = 1 $.
+
+        \item
+        \textit{Theorem.} $ \forall \mathbf{u}, \mathbf{v} \in \mathbb{R}^n $,
+        $ \mathbf{u}^\top\mathbf{v} = \Vert\mathbf{u}\Vert_2
+        \Vert\mathbf{v}\Vert_2\cos\theta $, $ \theta \in [0, \pi] $.
+        $ \theta $ is the angle between $ \mathbf{u}, \mathbf{v} $, giving the
+        similarity of $ \mathbf{u}, \mathbf{v} $ in direction.
+
+        \item
+        \textit{Corollary.} $ \theta = 0 \Leftrightarrow
+        \mathbf{u} = k\mathbf{v} $, $ k \in (0, \infty) $, and $ \mathbf{u} =
+        \mathbf{v} \Rightarrow \theta = 0 $.
+
+        \item
+        \textit{Corollary.} $ \mathbf{u}^\top\mathbf{v} = 0 \Leftrightarrow
+        \theta = \pi / 2 $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Norms and inner products}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A basis $ B \triangleq \{v_1, \ldots v_n\} \subset
+        V $ is called \textit{orthonormal}
+        if $ \forall v_i, v_j $, $ i \ne j $, $ i, j \in \{1, \ldots n\} $,
+        $ \langle v_i, v_j\rangle = 0 $.
+
+        \item
+        \textit{Definition.} An orthogonal basis $ B \triangleq
+        \{v_1, \ldots v_n\} \subset V $, where $ \Vert v\Vert = 1 $,
+        $ k \in \{1, \ldots n\} $, is called an \textit{orthonormal basis}.
+
+        \item
+        \textit{Definition.} $ \mathbf{Q} \in \mathbb{R}^{n \times n} $ is
+        \textit{orthogonal}\footnotemark\footnotetext{
+            Should really be called orthonormal; this is a misnomer.        
+        } if $ \mathbf{Q}^\top\mathbf{Q} = \mathbf{QQ}^\top
+        = \mathbf{I} $. That is, the rows and columns of $ \mathbf{Q} $ are
+        orthonormal.
+
+        \item
+        \textit{Definition.} $ \mathbf{Q} \in \mathbb{R}^{m \times n} $ has
+        \textit{orthonormal columns} if $ \mathbf{Q}^\top\mathbf{Q} =
+        \mathbf{I}_n $ and \textit{orthonormal rows} if $ \mathbf{QQ}^\top =
+        \mathbf{I}_m $.
+
+        \item
+        \textit{Remark.} Orthogonal matrices have appealing analytical and
+        numerical properties. For example, linear ordinary least squares
+        problems are often solved in practice using the singular value
+        decomposition\footnotemark\footnotetext{
+            \href{
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
+            }{\alert{\texttt{scipy.linalg.lstsq}}} wraps LAPACK's
+            \href{
+            http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
+            }{\alert{\texttt{gelsd}}} routine.
+        }.
     \end{itemize}
 \end{frame}
 
