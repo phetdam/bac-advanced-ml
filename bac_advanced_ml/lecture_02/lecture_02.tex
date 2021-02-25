@@ -912,6 +912,93 @@ https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
     \end{itemize}
 \end{frame}
 
+\subsection{Derivative cookbook}
+
+\begin{frame}{Derivative cookbook}
+    \begin{itemize}
+        \item
+	    Gradients, Jacobians, and Hessians of some common expressions.
+	
+	    \item
+	    \textit{Squared} $ \ell^2 $\textit{-norm.} For $ \mathbf{x} \in
+	    \mathbb{R}^n $, $ \nabla \Vert\mathbf{x}\Vert_2^2 =
+	    \nabla\mathbf{x}^\top\mathbf{x} = 2\mathbf{x} $.
+	    \begin{equation*}
+            \mathbf{x}^\top\mathbf{x} = \sum_{k = 1}^nx_k^2 \Rightarrow
+            \nabla \mathbf{x}^\top\mathbf{x} = \begin{bmatrix}
+                \ 2x_1 \ \\ \ \vdots \ \\ \ 2x_n \
+            \end{bmatrix} \triangleq 2\mathbf{x}
+	    \end{equation*}
+
+        \item
+        \textit{Linear transformation.} For $ \forall \mathbf{A} \in
+        \mathbb{R}^{m \times n} $, $ \nabla \mathbf{Ax} = \mathbf{A} $.
+        \begin{equation*}
+            \mathbf{Ax} = \begin{bmatrix}
+                \ \sum_{k = 1}^na_{1k}x_k \ \\ \ \vdots \ \\
+                \ \sum_{k = 1}^na_{mk}x_k \
+            \end{bmatrix} \in \mathbb{R}^m \Rightarrow
+            \nabla\mathbf{Ax} = \begin{bmatrix}
+                \ a_{11} & \ldots & a_{1n} \ \\ \ \vdots \ \\
+                \ a_{m1} & \ldots & a_{mn} \ 
+            \end{bmatrix} \triangleq \mathbf{A}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Derivative cookbook}
+    \begin{itemize} 
+        \item
+        \textit{Quadratic form.} $ \forall \mathbf{Q} \in
+        \mathbb{R}^{n \times n} $ symmetric,
+        \begin{equation*}
+            \begin{split}
+                \mathbf{x}^\top\mathbf{Qx} & = \sum_{j = 1}^n\sum_{k = 1}^n
+	                q_{jk}x_jx_k = \sum_{j = 1}^nq_{jj}x_j^2 +
+	                2\sum_{j = 1}^n\sum_{k = j + 1}^nq_{jk}x_jx_k \\      
+                & \Rightarrow \nabla \mathbf{x}^\top\mathbf{Qx} =
+                \begin{bmatrix}
+	                \ \sum_{k = 1}^n2q_{1k}x_k \ \\ \ \vdots \ \\
+	                \ \sum_{k = 1}^n2q_{nk}x_k \
+	            \end{bmatrix} \triangleq 2\mathbf{Qx} \\
+	            & \Rightarrow \nabla^2\mathbf{x}^\top\mathbf{Qx} =
+	            \nabla\left(\nabla\mathbf{x}^\top\mathbf{Qx}\right) =
+	            \begin{bmatrix}
+                    \ 2q_{11} & \ldots & 2q_{1n} \ \\
+                    \ \vdots & \ddots & \vdots \ \\
+                    \ 2q_{n1} & \ldots & 2q_{nn} \
+                \end{bmatrix} \triangleq 2\mathbf{Q}
+            \end{split}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Derivative cookbook}
+    \begin{itemize}
+        \item
+        \textit{Multivariate chain rule.} Suppose $ h : \mathbb{R}^n
+        \rightarrow \mathbb{R} $ is the \textit{composition} of $ f :
+        \mathbb{R}^m \rightarrow \mathbb{R} $, $ g : \mathbb{R}^n
+        \rightarrow \mathbb{R}^m $, i.e. $ h \triangleq f \circ g $. Then,
+        $ \forall \mathbf{x} \in D \subseteq \mathbb{R}^n $, $ D $ the set of
+        points where $ \nabla h : \mathbb{R}^n \rightarrow \mathbb{R}^n $ is
+        defined,
+        \begin{equation*}
+            \nabla h(\mathbf{x}) = [\nabla g(\mathbf{x})]^\top\nabla f(g(\mathbf{x}))
+        \end{equation*}
+        Here $ \nabla f(g(\mathbf{x})) \in \mathbb{R}^m $,
+        $ \nabla g(\mathbf{x}) \in \mathbb{R}^{m \times n} $.
+        In the special case that $ m = 1 $, we simply have
+        $ \nabla h(\mathbf{x}) = f'(g(\mathbf{x}))\nabla g(\mathbf{x}) $.
+
+        \item
+        \textit{Remark.} The fact that the $ n \times 1 $ gradient is a
+        transposed $ 1 \times n $ Jacobian can lead to some confusion,
+        especially with the overloading of the $ \nabla $ operator. Context
+        is important.
+    \end{itemize}
+\end{frame}
+
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
     \bibliographystyle{acm}
