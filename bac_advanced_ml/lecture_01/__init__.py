@@ -1,1 +1,0 @@
-__doc__ = "``lecture_01`` subpackage of ``bac_advanced_ml``."
