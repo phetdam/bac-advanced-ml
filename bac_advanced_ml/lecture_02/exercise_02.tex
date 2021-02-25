@@ -97,15 +97,6 @@ Show that
 The matrix $ \mathbf{I} - \frac{1}{N}\mathbf{11}^\top \in
 \mathbb{R}^{N \times N} $ is called the \textit{centering matrix}.
 
-\subsection{The $ \ell^0 $ ``norm''}
-
-The \textit{counting}, or $ \ell^0 $, ``norm'' of a vector $ \mathbf{x} \in
-\mathbb{R}^n $, denoted by $ \Vert\mathbf{x}\Vert_0 $, gives the number of
-nonzero elements of $ \mathbf{x} $. The $ \ell^0 $ ``norm'' is called a norm
-in quotations since it does not satisfy the requisite properties to be a norm,
-although it does satisfy the triangle inequality. Prove that the $ \ell^0 $
-``norm'' is not a norm.
-
 \subsection{Symmetric rank-1 matrices}
 
 The \textit{outer product} of $ \mathbf{x} \in \mathbb{R}^m $,
@@ -121,6 +112,15 @@ $ \mathbf{y} \in \mathbb{R}^n $, is $ \mathbf{xy}^\top \in
 Prove that $ \mathbf{xx}^\top $ is symmetric and that
 $ \operatorname{rk}\left(\mathbf{xx}^\top\right) = 1 $.
 
+\subsection{The $ \ell^0 $ ``norm''}
+
+The \textit{counting}, or $ \ell^0 $, ``norm'' of a vector $ \mathbf{x} \in
+\mathbb{R}^n $, denoted by $ \Vert\mathbf{x}\Vert_0 $, gives the number of
+nonzero elements of $ \mathbf{x} $. The $ \ell^0 $ ``norm'' is called a norm
+in quotations since it does not satisfy the requisite properties to be a norm,
+although it does satisfy the triangle inequality. Prove that the $ \ell^0 $
+``norm'' is not a norm.
+
 \subsection{Vector orthogonality}
 
 Recall that for $ \mathbf{u}, \mathbf{v} \in \mathbb{R}^n $,
@@ -134,8 +134,9 @@ $ \mathbf{u}^\top\mathbf{v} = \Vert\mathbf{u}\Vert_2\Vert\mathbf{v}\Vert_2
     $ \forall k \in (0, \infty) $, $ \mathbf{u} = k\mathbf{v} \Rightarrow
     \theta = 0 $.
 \end{enumerate}
-Use the properties of norms and relationship between the norm and inner
-product of a vector space.
+
+% pushes footnote down a bit
+\medskip
 
 \subsection{QR decomposition linear least squares}
 
@@ -152,12 +153,16 @@ Here $ \mathbf{Q}_1 \in \mathbb{R}^{m \times n} $, $ \mathbf{R} \in
 \mathbb{R}^{n \times n} $. $ \mathbf{Q}_1 $ has orthonormal columns, i.e.
 $ \mathbf{Q}_1^\top\mathbf{Q}_1 = \mathbf{I}_n $, and $ \mathbf{R} $ is
 \textit{upper triangular}, i.e. all nonzero elements are on the main diagonal
-and above, with nonzero diagonal elements. Given input data
+and above, with nonzero diagonal elements. Given centered input data
 $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
 $ \operatorname{rk}(\mathbf{A}) = d $, each row a transposed data example
-$ \mathbf{x}_k^\top $, and response vector $ \mathbf{y} \in \mathbb{R}^N $,
-the unconstrained linear least squares problem can be written in matrix-vector
-form as
+$ \mathbf{x}_k^\top $, and centered\footnotemark\footnotetext{
+    If $ \mathbf{X}, \mathbf{y} $ are already centered, i.e.
+    $ \mathbf{X}^\top\mathbf{1} = \mathbf{0} $,
+    $ \mathbf{y}^\top\mathbf{1} = 0 $, then we don't need to fit the bias
+    term.
+} response vector $ \mathbf{y} \in \mathbb{R}^N $, the linear least squares
+problem can be written in matrix-vector form as
 \begin{equation*}
     \begin{array}{ll}
         \displaystyle\min_\mathbf{w} &
@@ -173,11 +178,13 @@ $ \mathbf{X} $.
 
 \medskip
 
-\textit{Hint.} $ \mathbf{R} $ is invertible. Use the fact that
-$ \mathbf{Q}_1^\top\mathbf{Q}_1 = \mathbf{I}_d $ and properties of the matrix
-transpose. It may help to find an expression for $ \hat{\mathbf{w}} $ first
-without factoring $ \mathbf{X} $ and to then substitute
-$ \mathbf{Q}_1\mathbf{R} $ for $ \mathbf{X} $ at the end.
+\textit{Hints.} The objective is convex, so its gradient is $ \mathbf{0} $ at
+$ \hat{\mathbf{w}} $. $ \mathbf{R} $ and $ \mathbf{X}^\top\mathbf{X} $ are
+invertible. Use properties of the matrix transpose and the fact that
+$ \mathbf{Q}_1^\top\mathbf{Q}_1 = \mathbf{I}_d $. It may help to find an
+expression for $ \hat{\mathbf{w}} $ first without factoring $ \mathbf{X} $
+and to then substitute $ \mathbf{Q}_1\mathbf{R} $ for $ \mathbf{X} $ and
+perform any additional calculations at the end.
 
 \section{Vector calculus}
 
@@ -207,12 +214,7 @@ $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ such that $ \forall \mathbf{x} \in
 
 Given centered input data $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
 $ \operatorname{rk}(\mathbf{X}) = d $, where each row is a transposed data
-example $ \mathbf{x}_k^\top $, centered\footnotemark\footnotetext{
-    If $ \mathbf{X}, \mathbf{y} $ are already centered, i.e.
-    $ \mathbf{X}^\top\mathbf{1} = \mathbf{0} $,
-    $ \mathbf{y}^\top\mathbf{1} = 0 $, then we don't need to fit the bias
-    term.
-} response vector
+example $ \mathbf{x}_k^\top $, centered response vector
 $ \mathbf{y} \in \mathbb{R}^N $, $ \lambda > 0 $, the ridge regression problem
 can be written in matrix-vector form as
 \begin{equation*}
@@ -228,7 +230,7 @@ Find an analytical expression for $ \tilde{\mathbf{w}} \in \mathbb{R}^d $, the
 
 \medskip
 
-\textit{Hint.} The objective is convex, so the gradient is $ \mathbf{0} $ at
+\textit{Hints.} The objective is convex, so its gradient is $ \mathbf{0} $ at
 $ \tilde{\mathbf{w}} $. $ \mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I} $ is
 invertible.
 
