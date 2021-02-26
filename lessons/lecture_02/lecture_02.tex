@@ -131,7 +131,6 @@
                 \ a_{m1} + b_{m1} & \ldots & a_{mn} + b_{mn} \
             \end{bmatrix}
         \end{equation*}
-        Here $ a_{k, ij} $ is the $ i, j $-th element of $ \mathbf{A}_k $.
 
         \item
         \textit{Properties of matrix addition} \cite{jacob_linalg}. For
@@ -581,14 +580,14 @@
         $ \mathbb{F} $, dimension $ \ne $ number of elements of $ \mathbb{F} $
         in a vector $ v \in V $. A vector \textit{subspace} $ U \subset
         \mathbb{R}^n $ that has $ k < n $ elements in its basis has dimension
-        $ k $ although $ \mathbf{u} \in V $ contains $ n $ elements of
+        $ k $ although $ \mathbf{u} \in U $ contains $ n $ elements of
         $ \mathbb{R} $.
 
         \item
         \textit{Definition.} Given ordered basis $ B \subset \mathbb{F}^n $,
         denote $ \mathbf{B} \in \mathbb{F}^{n \times n} $ as the matrix whose
         columns hold the elements of $ B $. For $ \mathbf{x} \in
-        \mathbb{R}^n $, its \textit{coordinates} in $ B $, denoted by
+        \mathbb{F}^n $, its \textit{coordinates} in $ B $, denoted by
         $ (\mathbf{x})_B $ are such that
         $ \mathbf{x} = \mathbf{B}(\mathbf{x})_B $.
 
@@ -664,7 +663,7 @@
 
             \item
             $ \forall u, v \in V $, $ \Vert u + v\Vert \le
-            \Vert u\Vert\Vert v\Vert $ (triangle inequality).
+            \Vert u\Vert + \Vert v\Vert $ (triangle inequality).
         \end{enumerate}
 
         \item
