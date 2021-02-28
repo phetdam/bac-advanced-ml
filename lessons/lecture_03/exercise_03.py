@@ -135,7 +135,7 @@ def linreg():
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_regression(
         n_samples = 600, n_features = 10, n_informative = 10, bias = 7,
-        noise = 0.1, random_state = _seed
+        noise = 1, random_state = _seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return it
@@ -157,11 +157,13 @@ def test_r2_matmul(linreg):
     X_train, X_test, y_train, y_test = linreg
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
-    # fit our model and check that our R^2 is not far from sklearn's
+    # fit our model, compute R^2, check that ours is not far from sklearn's
     lr = RidgeRegression(solver = "matmul").fit(X_train, y_train)
     # pylint: disable=no-member
-    assert abs(_lr.score(X_test, y_test) - lr.score(X_test, y_test)) <= 1e-4
+    _score, score = _lr.score(X_test, y_test), lr.score(X_test, y_test)
+    assert abs(_score - score) <= 1e-4
     # pylint: enable=no-member
+    print(f"scikit-learn R^2: {_score:.6f}\nhand-coded R^2:   {score:.6f}")
 
 
 def test_r2_lsqr(linreg):
@@ -176,8 +178,9 @@ def test_r2_lsqr(linreg):
     X_train, X_test, y_train, y_test = linreg
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
-    # fit our model and check that our R^2 is not far from sklearn's
+    # fit our model, compute R^2, check that ours is not far from sklearn's
     lr = RidgeRegression(solver = "lsqr").fit(X_train, y_train)
     # pylint: disable=no-member
-    assert abs(_lr.score(X_test, y_test) - lr.score(X_test, y_test)) <= 1e-4
+    _score, score = _lr.score(X_test, y_test), lr.score(X_test, y_test)
     # pylint: enable=no-member
+    print(f"scikit-learn R^2: {_score:.6f}\nhand-coded R^2:   {score:.6f}")

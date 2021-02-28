@@ -22,7 +22,7 @@ def linreg(global_seed):
 
     Uses sklearn.datasets.make_regression. The returned data consists of 600
     samples, 10 features (all informative), and has Gaussian noise with a
-    standard deviation of 0.1 applied to it. The bias of the model is 7.
+    standard deviation of 1 applied to it. The bias of the model is 7.
 
     Parameters
     ----------
@@ -42,7 +42,7 @@ def linreg(global_seed):
     # generate noisy regression problem
     X, y, coef = make_regression(
         n_samples = 600, n_features = 10, n_informative = 10, bias = bias,
-        noise = 0.1, coef = True, random_state = global_seed
+        noise = 1, coef = True, random_state = global_seed
     )
     # split the data with train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
