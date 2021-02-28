@@ -22,9 +22,7 @@ Installing
 From source
 -----------
 
-Installing the Python package from source is relatively straightforward. After
-cloning the repository, ``cd`` into the repository root, and then simply run
-in your shell
+After cloning the repository, ``cd`` into the repository root and run
 
 .. code:: bash
 
@@ -36,7 +34,7 @@ modules on your platform requires that you use the same compiler that your
 Python interpreter was compiled with. On Linux the compiler is usually ``gcc``,
 on Windows it is usually Microsoft Visual C++, and on Mac ``clang``. However,
 the ``setup.py`` file will take care of all the details for you and you can
-trust that it gets the sometimes magical compiler invocations correct.
+trust that it gets the rather complicated compiler invocations correct.
 
 From PyPI
 ---------
