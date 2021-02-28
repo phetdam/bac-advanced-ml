@@ -1,7 +1,7 @@
 # setup.py to build/install the bac_advanced_ml supporting code. note that the
 # "legacy" setup.py is still used; i might want to build a C extension
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 # package name
 _PACKAGE_NAME = "bac_advanced_ml"
@@ -40,10 +40,12 @@ def _setup():
             "Source": "https://github.com/phetdam/bac_advanced_ml"
         },
         python_requires = ">=3.6",
-        install_requires = ["numpy>=1.19"],
-        packages = [_PACKAGE_NAME]
+        install_requires = [
+            "numpy>=1.19", "scikit-learn>=0.23.2", "scipy>=1.5.2"
+        ],
+        packages = find_packages()
     )
 
 
 if __name__ == "__main__":
-    pass
+    _setup()

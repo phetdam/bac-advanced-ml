@@ -1,17 +1,18 @@
-__doc__ = """Reference implementations of supervised learning models.
-
-Students are expected to have similar implementations.
-"""
+__doc__ = "Week 3 exercise: implementation of ridge regression model"
 
 import math
 import numpy as np
+import pytest
 import scipy.sparse.linalg
 from sklearn.base import BaseEstimator
+from sklearn.datasets import make_regression
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import train_test_split
 from sklearn.utils import check_array, check_X_y
 
 
 class RidgeRegression(BaseEstimator):
-    """Reference implementation for a ridge linear regression model.
+    """Implementation for a ridge linear regression model.
 
     Parameters
     ----------
@@ -65,19 +66,11 @@ class RidgeRegression(BaseEstimator):
         """
         # validate input
         X, y = check_X_y(X, y)
-        # delegate coefficient computation to different solving methods
-        if self.solver == "matmul":
-            # compute coefficients using matrix inversion
-            self.coef_ = np.linalg.inv(
-                X.T @ X + self.alpha * np.eye(X.shape[1])
-            ) @ X.T @ y
-        elif self.solver == "lsqr":
-            # use scipy.sparse.linalg.lsqr to get augmented weights
-            self.coef_ = scipy.sparse.linalg.lsqr(
-                X, y, damp = math.sqrt(self.alpha)
-            )[0]
-        # compute intercept
-        self.intercept_ = y.mean() - X.mean(axis = 0) @ self.coef_
+
+        ###########################
+        ### your code goes here ###
+        ###########################
+
         # returning self allows for method chaining
         return self
 
@@ -98,9 +91,14 @@ class RidgeRegression(BaseEstimator):
             raise RuntimeError("cannot predict with unfitted model")
         # validate input matrix
         X = check_array(X)
+        # pylint: disable=no-member
         if X.shape[1] != self.coef_.shape[0]:
             raise ValueError("n_features must match length of coef_ vector")
-        return X @ self.coef_ + self.intercept_
+        # pylint: enable=no-member
+
+        ###########################
+        ### your code goes here ###
+        ###########################
 
     def score(self, X, y):
         """Return the :math:`R^2` of the predictions.
@@ -117,9 +115,69 @@ class RidgeRegression(BaseEstimator):
         float
             :math:`R^2` coefficient of determination.
         """
-        # get predictions (also validates input)
-        y_pred = self.predict(X)
-        # return R^2
-        return (
-            1 - np.power(y - y_pred, 2).sum() / np.power(y - y.mean(), 2).sum()
-        )
+        ###########################    
+        ### your code goes here ###
+        ###########################
+
+
+@pytest.fixture(scope = "session")
+def linreg():
+    """Regression data returned by sklearn.datasets.make_regression.
+
+    Returns
+    -------
+    tuple
+        X_train, X_test, y_train, y_test
+    """
+    # seed value for reproducible results
+    _seed = 7
+    # generate noisy regression problem
+    # pylint: disable=unbalanced-tuple-unpacking
+    X, y = make_regression(
+        n_samples = 600, n_features = 10, n_informative = 10, bias = 7,
+        noise = 0.1, random_state = _seed
+    )
+    # pylint: enable=unbalanced-tuple-unpacking
+    # split the data with train_test_split and return it
+    return train_test_split(X, y, test_size = 0.2, random_state = 7)
+
+
+def test_r2_matmul(linreg):
+    """Check RidgeRegression R^2 is close to sklearn's when using matmul.
+
+    We aren't directly checking the solutions because I found that sklearn's
+    results are slightly different from these hand-done results.
+
+    Parameters
+    ----------
+    linreg : tuple
+        pytest fixture. See conftest.py.
+    """
+    # get data and true parameters
+    X_train, X_test, y_train, y_test = linreg
+    # fit sklearn model
+    _lr = Ridge().fit(X_train, y_train)
+    # fit our model and check that our R^2 is not far from sklearn's
+    lr = RidgeRegression(solver = "matmul").fit(X_train, y_train)
+    # pylint: disable=no-member
+    assert abs(_lr.score(X_test, y_test) - lr.score(X_test, y_test)) <= 1e-4
+    # pylint: enable=no-member
+
+
+def test_r2_lsqr(linreg):
+    """Check RidgeRegression R^2 is close to sklearn's when using lsqr.
+
+    Parameters
+    ----------
+    linreg : tuple
+        pytest fixture. See conftest.py.
+    """
+    # get data and true parameters
+    X_train, X_test, y_train, y_test = linreg
+    # fit sklearn model
+    _lr = Ridge().fit(X_train, y_train)
+    # fit our model and check that our R^2 is not far from sklearn's
+    lr = RidgeRegression(solver = "lsqr").fit(X_train, y_train)
+    # pylint: disable=no-member
+    assert abs(_lr.score(X_test, y_test) - lr.score(X_test, y_test)) <= 1e-4
+    # pylint: enable=no-member
