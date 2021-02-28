@@ -7,6 +7,15 @@ from setuptools import find_packages, setup
 _PACKAGE_NAME = "bac_advanced_ml"
 
 
+# reads requirements.txt and returns list for install_requires. usually not the
+# best idea is the requirements are complex but ours are pretty simple.
+def _read_reqs():
+    # read requirements and split out newlines for return
+    with open("requirements.txt") as f:
+        reqs = f.read()
+    return reqs.split("\n")
+
+
 def _setup():
     # get version
     with open("VERSION") as vf:
@@ -40,9 +49,8 @@ def _setup():
             "Source": "https://github.com/phetdam/bac_advanced_ml"
         },
         python_requires = ">=3.6",
-        install_requires = [
-            "numpy>=1.19", "scikit-learn>=0.23.2", "scipy>=1.5.2"
-        ],
+        # read from rqeuirements.txt
+        install_requires = _read_reqs(),
         packages = find_packages()
     )
 
