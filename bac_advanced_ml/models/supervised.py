@@ -3,19 +3,24 @@ __doc__ = """Reference implementations of supervised learning models.
 Students are expected to have similar implementations.
 """
 
+import math
 import numpy as np
-import scipy.linalg
+import scipy.sparse.linalg
 from sklearn.base import BaseEstimator
+from sklearn.utils import check_X_y
 
 
-class LinearRegression(BaseEstimator):
-    """Reference implementation for a linear regression model.
-
-    "gelsd" uses scipy.linalg.lstsq with "gelsd" passed to lapack_driver.
+class RidgeRegression(BaseEstimator):
+    """Reference implementation for a ridge linear regression model.
 
     Parameters
     ----------
-    solver : {"matmul", "gelsd",}
+    alpha : float, default=1.0
+        Regularization parameter. Increasing it increases regularization.
+    solver : {"matmul", "lsqr"}
+        Solver to use to compute the ridge coefficient solution. "matmul" uses
+        direct inversion of the penalized moment matrix while "lsqr" uses
+        scipy.sparse.linalg.lsqr to solve the damped least squares problem.
 
     Attributes
     ----------
@@ -34,11 +39,14 @@ class LinearRegression(BaseEstimator):
         Return the :math:`R^2` of the predictions.
     """
     # allowable solvers
-    _solvers = ("matmul", "gelsd")
+    _solvers = ("matmul", "lsqr")
 
-    def __init__(self, solver = "matmul"):
+    def __init__(self, alpha = 1., solver = "lsqr"):
+        if alpha < 0:
+            raise ValueError("alpha must be nonnegative")
         if solver not in self._solvers:
             raise ValueError(f"solver must be one of {self._solvers}")
+        self.alpha = alpha
         self.solver = solver
 
     def fit(self, X, y):
@@ -55,21 +63,22 @@ class LinearRegression(BaseEstimator):
         -------
         self
         """
-        # add column of 1s to X
-        X_aug = np.concatenate(
-            (X, np.ones(X.shape[0]).reshape(-1, 1)), axis = 1
-        )
+        # validate input
+        X, y = check_X_y(X, y)
+        # delegate coefficient computation to different solving methods
         if self.solver == "matmul":
-            # compute augmented weighted vector
-            theta = np.linalg.inv(X_aug.T @ X_aug) @ X_aug.T @ y
-        elif self.solver == "gelsd":
-            # use scipy.linalg.lstsq to get augmented weights
-            theta, _, _, _ = scipy.linalg.lstsq(
-                X_aug, y, lapack_driver = "gelsd"
-            )
-        # set intercept and weights from augmented weight vector
-        self.coef_ = theta[:-1]
-        self.intercept_ = theta[-1]
+            # compute coefficients using matrix inversion
+            self.coef_ = np.linalg.inv(
+                X.T @ X + self.alpha * np.eye(X.shape[1])
+            ) @ X.T @ y
+        elif self.solver == "lsqr":
+            # use scipy.sparse.linalg.lsqr to get augmented weights
+            self.coef_ = scipy.sparse.linalg.lsqr(
+                X, y, damp = math.sqrt(self.alpha)
+            )[0]
+        # compute intercept
+        self.intercept_ = y.mean() - X.mean(axis = 0) @ self.coef_
+        # returning self allows for method chaining
         return self
 
     def predict(self, X):
