@@ -267,14 +267,12 @@
             \item
             $ f $ convex $ \Rightarrow \hat{\mathbf{w}}_{\hat{b}} $ optimal
             $ \Leftrightarrow \nabla f(\hat{\mathbf{w}}_{\hat{b}}) =
-            \mathbf{0} $ ($ \exists $ global minimum).
+            \mathbf{0} $ ($ \exists $ global minimum) \cite{bv_convex_opt}.
         \end{enumerate}
     \end{itemize}
 \end{frame}
 
-\subsection{Solution derivation}
-
-\begin{frame}{Solution derivation}
+\begin{frame}{Fundamentals}
     \begin{itemize}
         \item
         At optimal $ \hat{\mathbf{w}}_{\hat{b}} \in \mathbb{R}^{d + 1} $,
@@ -303,14 +301,29 @@ https://math.stackexchange.com/questions/349738/prove-operatornamerankata-operat
                 \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1}
             \big)^{-1}\mathbf{X}_\mathbf{1}^\top\mathbf{y}
         \end{equation}
+        Or, written in terms of the original $ \hat{\mathbf{w}}, \hat{b} $,
+        \begin{equation} \label{lr_ols_block}
+            \begin{bmatrix}
+                \ \hat{\mathbf{w}} \ \\ \ \hat{b} \
+            \end{bmatrix} =
+            \left(
+                \begin{bmatrix}
+                    \ \mathbf{X}^\top \ \\ \ \mathbf{1}^\top \
+                \end{bmatrix}
+                \begin{bmatrix}
+                    \ \mathbf{X} & \mathbf{1} \
+                \end{bmatrix}
+            \right)^{-1}
+            \begin{bmatrix}
+                \ \mathbf{X} & \mathbf{1} \
+            \end{bmatrix}^\top\mathbf{y}
+        \end{equation}
     \end{itemize}
 \end{frame}
 
-\subsection{Fitting the intercept}
+\section{Generalizations}
 
-\section{Generalization}
-
-\subsection{Ridge regression}
+\section{Ridge regression}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
