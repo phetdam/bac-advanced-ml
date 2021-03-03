@@ -229,7 +229,8 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
                 \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1}
             \big)^{-1}\mathbf{X}_\mathbf{1}^\top\mathbf{y}
         \end{equation}
-        Or, written in terms of the original $ \hat{\mathbf{w}}, \hat{b} $,
+        Or, written in terms of the original $ \mathbf{X}, \hat{\mathbf{w}},
+        \hat{b} $,
         \begin{equation} \label{lr_ols_block}
             \begin{bmatrix}
                 \ \hat{\mathbf{w}} \ \\ \ \hat{b} \
@@ -267,12 +268,12 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
         \mathbf{w}^\top\mu_X $.
 
         \item
-        \textit{Proof.} Taking expectations, $ \mu_Y = \mathbf{w}^\top\mu_X +
-        b \Leftrightarrow b = \mu_Y - \mathbf{w}^\top\mu_X $.
-
-        \item
         \textit{Remark.} For any model $ Y = f(X) + b + \varepsilon $,
         $ b = \mu_Y - \mu_{f(X)} $.
+
+        \item
+        \textit{Proof.} Taking expectations, $ \mu_Y = \mathbf{w}^\top\mu_X +
+        b \Leftrightarrow b = \mu_Y - \mathbf{w}^\top\mu_X $.
 
         \item
         \textit{Corollary.} $ Y - \mu_Y = \mathbf{w}^\top(X - \mu_X) +
@@ -323,7 +324,8 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
 	            \hat{b} & = \bar{y} - \hat{\mathbf{w}}^\top\bar{\mathbf{x}}
             \end{split}
         \end{equation}
-        This will also be true for \textit{ridge regression}.
+        We will estimate \textit{ridge regression} $ \hat{\mathbf{w}}_\lambda,
+        \hat{b} $ in a similar fashion.
     \end{itemize}
 \end{frame}
 
