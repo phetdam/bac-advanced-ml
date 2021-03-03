@@ -1,0 +1,322 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% command for the title string. change for each lecture
+\newcommand{\lecturetitle}{Linear Regression}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
+% title page stuff. brackets content displayed in footer bar
+\title[\lecturetitle]{\lecturetitle}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{February 27, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+\section{Preliminaries}
+
+\subsection{Notation}
+
+\begin{frame}{Notation}
+    \begin{itemize}
+        \item
+        $ \mathcal{X} $ is the \textit{input space}, $ \mathcal{Y} $ is the 
+        \textit{output space}.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Continuous inputs.} $ \mathcal{X} = \mathbb{R}^d $.
+
+            \item
+            \textit{Mixed inputs.} $ \mathcal{X} = \mathbb{R}^{d'} \times
+            \mathcal{C}_1 \times \ldots \mathcal{C}_c $. $ d' \in \mathbb{N} $
+            continuous inputs and $ c \in \mathbb{N} $ categorical inputs,
+            where $ |\mathcal{C}_i| < \infty $, $ \forall i \in
+            \{1, \ldots c\} $. 
+
+            \item
+            \textit{Continuous output.} $ \mathcal{Y} = \mathbb{R} $.
+
+            \item
+            \textit{Categorical output.} $ \mathcal{Y} = \mathcal{G} $,
+            $ \mathcal{G} $ a finite set of items (e.g. classes).
+        \end{itemize}
+
+        \item
+        \textit{Remark.} We will typically just set $ \mathcal{X} =
+        \mathbb{R}^d $ for simplicity. Usually $ \mathcal{Y} = \mathbb{R} $
+        can be assumed for regression problems.
+
+        \item
+        $ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots
+        (\mathbf{x}_N, y_N)\} \subset \mathcal{X} \times \mathcal{Y} $ denotes
+        the \textit{training data}.
+
+        \item
+        $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \ \ldots \
+        \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $ is the
+        \textit{input matrix},
+
+        \item
+        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
+        \mathbb{R}^N $ is the \textit{response vector}.
+
+        \item
+        \textit{Remark.} Sometimes we may also write $ \mathcal{D} \triangleq
+        (\mathbf{X}, \mathbf{y}) $.
+    \end{itemize}
+\end{frame}
+
+\subsection{Supervised learning}
+
+\begin{frame}{Supervised learning}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{loss function} $ L : \mathbb{R}^2
+        \rightarrow [0, \infty) $ penalizes prediction error.
+
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Squared error loss.} $ L(y, \hat{y}) \triangleq
+            (y - \hat{y})^2 $ (regression).
+
+            \item
+            \textit{Exponential loss.} $ L(y, \hat{y}) \triangleq
+            e^{y\hat{y}} $ (classification).
+        \end{itemize}
+        \item
+        \textit{Definition.} A \textit{supervised learning problem} given
+        training data $ \mathcal{D} \subset \mathcal{X} \times \mathcal{Y} $
+    \end{itemize}
+\end{frame}
+
+\subsection{Loss functions}
+
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        The simplest\footnotemark\footnotetext{
+            Later lectures will reveal many more interesting characteristics
+            of the model.
+        } regression method that one should understand.
+
+        \item
+        \textit{Remark.} Simple $ \ne $ not effective.
+
+        \item
+        The fundamental basis for understanding more ``interesting'' models.
+
+        \item
+        Methods used to fit the model in practice are less expensive in both
+        CPU time and memory usage compared to other models.
+
+        \item
+        How much about the model do you \textit{really} understand?
+    \end{itemize}
+\end{frame}
+
+\section{Linear regression}
+
+\subsection{Fundamentals}
+
+\begin{frame}{Fundamentals}
+    \begin{itemize}
+        \item
+        Suppose on the real-world $ (\Omega, \mathcal{F}, \mathbb{P}) $ we
+        have random variables $ X : \Omega \rightarrow \mathbb{R}^d $,
+        $ Y : \Omega \rightarrow \mathbb{R} $. The \textit{linear regression
+        model}\footnote{
+            Technically, it should be called \textit{affine} regression since
+            $ b $ provides a shift.
+        } posits that
+        \begin{equation*}
+            Y = \mathbf{w}^\top X + b + \varepsilon
+        \end{equation*}
+        Here $ \mathbf{w} \in \mathbb{R}^d $, $ b \in \mathbb{R} $, and
+        independent $ \varepsilon \sim \mathcal{N}(0, \sigma^2) $\footnote{
+            The assumption on homoscedastic Gaussian errors will be discussed
+            next lecture.
+        }, $ \sigma \in (0, \infty) $.
+
+        \item
+        Interpretation is that $ Y $ can be written as a translated linear
+        combination of the $ X $ components plus an independent noise term.
+
+        \item
+        The perennial question: Assuming true $ \mathbf{w}, b $ exists, how do
+        we estimate $ \mathbf{w}, b $ sufficiently well given training data
+        $ \mathcal{D} $?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Fundamentals}
+    \begin{itemize}
+        \item
+        Suppose $ \mathcal{D} \triangleq (\mathbf{X}, \mathbf{y}) $, where
+        $ \mathbf{X} \in \mathbb{R}^{N \times d} $ is the input matrix, each
+        row a transposed data example, $ \mathbf{y} \in \mathbb{R}^N $ the
+        response vector. Clearly the problem we have is that of finding
+        $ \hat{\mathbf{w}} \in \mathbb{R}^d , \hat{b} \in \mathbb{R} $
+        such that
+        \begin{equation*}
+            \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}} \triangleq
+            \begin{bmatrix}
+                \ \mathbf{X} & \mathbf{1} \
+            \end{bmatrix}
+            \begin{bmatrix}
+                \ \hat{\mathbf{w}} \ \\ \ \hat{b} \
+            \end{bmatrix} \approx \mathbf{y}
+        \end{equation*}
+        Here $ \mathbf{X}_\mathbf{1} \in \mathbb{R}^{N \times (d + 1)} $,
+        $ \hat{\mathbf{w}}_{\hat{b}} \in \mathbb{R}^{d + 1} $. Assume
+        $ \operatorname{rk}(\mathbf{X}_\mathbf{1}) = \min\{N, d + 1\} $.
+
+        \item
+        Problem: often $ N \ne d + 1 $, so $ \mathbf{X}_\mathbf{1} $ is
+        \textbf{not} invertible, and therefore $ \nexists
+        \hat{\mathbf{w}}_{\hat{b}} $ such that $ \mathbf{X}_\mathbf{1}
+        \hat{\mathbf{w}}_{\hat{b}} = \mathbf{y} $. But consider
+        \begin{equation} \label{lr_2norm_aug}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}_b} &
+                \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2
+            \end{array}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Fundamentals}
+    \begin{itemize}
+        \item
+        Cast solving of an over/under-determined linear system as minimization
+        of the $ \ell^2 $-norm of the residual vector $ \mathbf{r} \triangleq
+        \mathbf{y} - \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}} $.
+
+        \item
+        \textit{Remark.} (\aref{lr_2norm_aug}) minimizes the \textbf{squared}
+        $ \ell^2 $-norm of $ \mathbf{r} $, but note that
+        \begin{equation*}
+            \arg\min_{\mathbf{w}_b}
+            \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2 =
+            \arg\min_{\mathbf{w}_b}
+            \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2
+        \end{equation*}
+        Here $ \arg\min_\mathbf{x}f(\mathbf{x}) $ retrieves the point that
+        minimizes $ f $.
+
+        \item
+        \textit{Remark.} (\aref{lr_2norm_aug}) minimizes the
+        \textbf{sum of squared residuals}. Also, note that
+        $ \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2 =
+        (\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b)^\top(\mathbf{y} -
+        \mathbf{X}_\mathbf{1}\mathbf{w}_b) $ by definition.
+
+        \item
+        \textit{Properties of }(\aref{lr_2norm_aug}). Let $ f(\mathbf{w}_b) =
+        \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2 $.
+        \begin{enumerate}
+            \item
+            $ \forall \mathbf{w}_b \in \mathbb{R}^{d + 1} $,
+            $ \exists \nabla f(\mathbf{w}_b) $ (differentiable everywhere).
+
+            \item
+            $ f $ convex $ \Rightarrow \hat{\mathbf{w}}_{\hat{b}} $ optimal
+            $ \Leftrightarrow \nabla f(\hat{\mathbf{w}}_{\hat{b}}) =
+            \mathbf{0} $ ($ \exists $ global minimum).
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\subsection{Solution derivation}
+
+\begin{frame}{Solution derivation}
+    \begin{itemize}
+        \item
+        At optimal $ \hat{\mathbf{w}}_{\hat{b}} \in \mathbb{R}^{d + 1} $,
+        $ \nabla \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}
+        \hat{\mathbf{w}}_{\hat{b}}\Vert_2^2 = \mathbf{0} $. Therefore
+        \begin{equation*}
+            \nabla\Vert\mathbf{y} -
+            \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}}\Vert_2^2 =
+            -2\mathbf{X}_\mathbf{1}^\top(\mathbf{y} -
+            \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}}) = \mathbf{0}
+            \Leftrightarrow \mathbf{X}_\mathbf{1}^\top\mathbf{y} =
+            \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1}
+            \hat{\mathbf{w}}_{\hat{b}}
+        \end{equation*}
+
+        \item
+        $ \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1} \in
+        \mathbb{R}^{(d + 1) \times (d + 1)} $ is full rank\footnote{
+            See first answer of this \ahref{
+https://math.stackexchange.com/questions/349738/prove-operatornamerankata-operatornameranka-for-any-a-in-m-m-times-n}
+            {math.stackexchange} question for proof.
+        }, i.e. invertible,
+        and therefore
+        \begin{equation} \label{lr_ols_aug}
+            \hat{\mathbf{w}}_{\hat{b}} = \big(
+                \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1}
+            \big)^{-1}\mathbf{X}_\mathbf{1}^\top\mathbf{y}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\subsection{Fitting the intercept}
+
+\section{Generalization}
+
+\subsection{Ridge regression}
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{../master_bib}
+\end{frame}
+
+\end{document}
