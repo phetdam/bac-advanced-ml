@@ -17,12 +17,15 @@
 
 % command for the title string. change for each lecture
 \newcommand{\lecturetitle}{Adaptive SGD: Adam}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
 % title page stuff. brackets content displayed in footer bar
 \title[\lecturetitle]{\lecturetitle}
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 13, 2021}
+\date{March 2, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
