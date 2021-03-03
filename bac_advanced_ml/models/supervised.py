@@ -65,16 +65,19 @@ class RidgeRegression(BaseEstimator):
         """
         # validate input
         X, y = check_X_y(X, y)
+        # compute mean of X, y and get centered X matrix and y vector
+        x_mean, y_mean = X.mean(axis = 0), y.mean()
+        X_c, y_c = X - x_mean, y - y_mean
         # delegate coefficient computation to different solving methods
         if self.solver == "matmul":
-            # compute coefficients using matrix inversion
+            # compute coefficients using matrix inversion on centered problem
             self.coef_ = np.linalg.inv(
-                X.T @ X + self.alpha * np.eye(X.shape[1])
-            ) @ X.T @ y
+                X_c.T @ X_c + self.alpha * np.eye(X_c.shape[1])
+            ) @ X_c.T @ y_c
         elif self.solver == "lsqr":
             # use scipy.sparse.linalg.lsqr to get augmented weights
             self.coef_ = scipy.sparse.linalg.lsqr(
-                X, y, damp = math.sqrt(self.alpha)
+                X_c, y_c, damp = math.sqrt(self.alpha)
             )[0]
         # compute intercept
         self.intercept_ = y.mean() - X.mean(axis = 0) @ self.coef_
