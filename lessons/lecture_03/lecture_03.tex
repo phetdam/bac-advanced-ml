@@ -17,7 +17,7 @@
 
 % command for the title string. change for each lecture
 \newcommand{\lecturetitle}{Linear Regression}
-% allow automatic alert-highlighted references and hyperlinks
+% allow automatic alert-highlighted references, href
 \newcommand{\aref}[1]{\alert{\ref{#1}}}
 \newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
 % title page stuff. brackets content displayed in footer bar
@@ -54,95 +54,12 @@
     \tableofcontents
 \end{frame}
 
-\section{Preliminaries}
-
-\subsection{Notation}
-
-\begin{frame}{Notation}
-    \begin{itemize}
-        \item
-        $ \mathcal{X} $ is the \textit{input space}, $ \mathcal{Y} $ is the 
-        \textit{output space}.
-
-        \item
-        \textit{Examples.}
-        \begin{itemize}
-            \item
-            \textit{Continuous inputs.} $ \mathcal{X} = \mathbb{R}^d $.
-
-            \item
-            \textit{Mixed inputs.} $ \mathcal{X} = \mathbb{R}^{d'} \times
-            \mathcal{C}_1 \times \ldots \mathcal{C}_c $. $ d' \in \mathbb{N} $
-            continuous inputs and $ c \in \mathbb{N} $ categorical inputs,
-            where $ |\mathcal{C}_i| < \infty $, $ \forall i \in
-            \{1, \ldots c\} $. 
-
-            \item
-            \textit{Continuous output.} $ \mathcal{Y} = \mathbb{R} $.
-
-            \item
-            \textit{Categorical output.} $ \mathcal{Y} = \mathcal{G} $,
-            $ \mathcal{G} $ a finite set of items (e.g. classes).
-        \end{itemize}
-
-        \item
-        \textit{Remark.} We will typically just set $ \mathcal{X} =
-        \mathbb{R}^d $ for simplicity. Usually $ \mathcal{Y} = \mathbb{R} $
-        can be assumed for regression problems.
-
-        \item
-        $ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots
-        (\mathbf{x}_N, y_N)\} \subset \mathcal{X} \times \mathcal{Y} $ denotes
-        the \textit{training data}.
-
-        \item
-        $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \ \ldots \
-        \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $ is the
-        \textit{input matrix},
-
-        \item
-        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
-        \mathbb{R}^N $ is the \textit{response vector}.
-
-        \item
-        \textit{Remark.} Sometimes we may also write $ \mathcal{D} \triangleq
-        (\mathbf{X}, \mathbf{y}) $.
-    \end{itemize}
-\end{frame}
-
-\subsection{Supervised learning}
-
-\begin{frame}{Supervised learning}
-    \begin{itemize}
-        \item
-        \textit{Definition.} A \textit{loss function} $ L : \mathbb{R}^2
-        \rightarrow [0, \infty) $ penalizes prediction error.
-
-        \item
-        \textit{Examples.}
-        \begin{itemize}
-            \item
-            \textit{Squared error loss.} $ L(y, \hat{y}) \triangleq
-            (y - \hat{y})^2 $ (regression).
-
-            \item
-            \textit{Exponential loss.} $ L(y, \hat{y}) \triangleq
-            e^{y\hat{y}} $ (classification).
-        \end{itemize}
-        \item
-        \textit{Definition.} A \textit{supervised learning problem} given
-        training data $ \mathcal{D} \subset \mathcal{X} \times \mathcal{Y} $
-    \end{itemize}
-\end{frame}
-
-\subsection{Loss functions}
-
 \begin{frame}{Motivation}
     \begin{itemize}
         \item
-        The simplest\footnotemark\footnotetext{
-            Later lectures will reveal many more interesting characteristics
-            of the model.
+        The simplest\footnote{
+            It may seem simple, but it contains more subtleties than one
+            might expect.
         } regression method that one should understand.
 
         \item
@@ -162,9 +79,9 @@
 
 \section{Linear regression}
 
-\subsection{Fundamentals}
+\subsection{The linear model}
 
-\begin{frame}{Fundamentals}
+\begin{frame}{The linear model}
     \begin{itemize}
         \item
         Suppose on the real-world $ (\Omega, \mathcal{F}, \mathbb{P}) $ we
@@ -174,9 +91,9 @@
             Technically, it should be called \textit{affine} regression since
             $ b $ provides a shift.
         } posits that
-        \begin{equation*}
+        \begin{equation} \label{lr_model}
             Y = \mathbf{w}^\top X + b + \varepsilon
-        \end{equation*}
+        \end{equation}
         Here $ \mathbf{w} \in \mathbb{R}^d $, $ b \in \mathbb{R} $, and
         independent $ \varepsilon \sim \mathcal{N}(0, \sigma^2) $\footnote{
             The assumption on homoscedastic Gaussian errors will be discussed
@@ -194,7 +111,9 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Fundamentals}
+\subsection{Solving the system}
+
+\begin{frame}{Solving the system}
     \begin{itemize}
         \item
         Suppose $ \mathcal{D} \triangleq (\mathbf{X}, \mathbf{y}) $, where
@@ -219,7 +138,8 @@
         \item
         Problem: often $ N \ne d + 1 $, so $ \mathbf{X}_\mathbf{1} $ is
         \textbf{not} invertible, and therefore $ \nexists
-        \hat{\mathbf{w}}_{\hat{b}} $ such that $ \mathbf{X}_\mathbf{1}
+        \hat{\mathbf{w}}_{\hat{b}} $ such that $ \hat{\mathbf{w}}_{\hat{b}} =
+        \mathbf{X}_\mathbf{1}^{-1}\mathbf{y} $, i.e. $ \mathbf{X}_1
         \hat{\mathbf{w}}_{\hat{b}} = \mathbf{y} $. But consider
         \begin{equation} \label{lr_2norm_aug}
             \begin{array}{ll}
@@ -230,7 +150,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Fundamentals}
+\begin{frame}{Solving the system}
     \begin{itemize}
         \item
         Cast solving of an over/under-determined linear system as minimization
@@ -246,8 +166,8 @@
             \arg\min_{\mathbf{w}_b}
             \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2
         \end{equation*}
-        Here $ \arg\min_\mathbf{x}f(\mathbf{x}) $ retrieves the point that
-        minimizes $ f $.
+        For function $ f $, $ \arg\min_\mathbf{x}f(\mathbf{x}) $ retrieves
+        the point that minimizes $ f $.
 
         \item
         \textit{Remark.} (\aref{lr_2norm_aug}) minimizes the
@@ -272,12 +192,12 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Fundamentals}
+\begin{frame}{Solving the system}
     \begin{itemize}
         \item
         At optimal $ \hat{\mathbf{w}}_{\hat{b}} \in \mathbb{R}^{d + 1} $,
         $ \nabla \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}
-        \hat{\mathbf{w}}_{\hat{b}}\Vert_2^2 = \mathbf{0} $. Therefore
+        \hat{\mathbf{w}}_{\hat{b}}\Vert_2^2 = \mathbf{0} $. See that
         \begin{equation*}
             \nabla\Vert\mathbf{y} -
             \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}}\Vert_2^2 =
@@ -294,7 +214,15 @@
             See first answer of this \ahref{
 https://math.stackexchange.com/questions/349738/prove-operatornamerankata-operatornameranka-for-any-a-in-m-m-times-n}
             {math.stackexchange} question for proof.
-        }, i.e. invertible,
+        }, i.e. invertible\footnote{
+            In practice this inverse is rarely computed. For example,
+            \ahref{
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
+            }{\texttt{scipy.linalg.lstsq}} LAPACK's \ahref{
+http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
+            }{\texttt{gelsd}} by default, which uses the singular value
+            decomposition.
+        },
         and therefore
         \begin{equation} \label{lr_ols_aug}
             \hat{\mathbf{w}}_{\hat{b}} = \big(
@@ -321,9 +249,96 @@ https://math.stackexchange.com/questions/349738/prove-operatornamerankata-operat
     \end{itemize}
 \end{frame}
 
-\section{Generalizations}
+\subsection{On centered data}
+
+\begin{frame}{On centered data}
+    \begin{itemize}
+        \item
+        Consider: can we estimate $ \mathbf{w}, b $ separately?
+
+        \item
+        \textit{Proposition.} Let $ X : \Omega \rightarrow \mathbb{R}^d $,
+        $ Y : \Omega \rightarrow \mathbb{R} $ be random variables on
+        $ (\Omega, \mathcal{F}, \mathbb{P}) $, and let $ \varepsilon \sim
+        \mathcal{N}(0, \sigma^2) $ be independent of $ X $, $ \sigma \in
+        (0, \infty) $. For $ \mathbf{w} \in \mathbb{R}^d $,
+        $ b \in \mathbb{R} $,
+        $ Y = \mathbf{w}^\top X + b + \varepsilon \Rightarrow b = \mu_Y -
+        \mathbf{w}^\top\mu_X $.
+
+        \item
+        \textit{Proof.} Taking expectations, $ \mu_Y = \mathbf{w}^\top\mu_X +
+        b \Leftrightarrow b = \mu_Y - \mathbf{w}^\top\mu_X $.
+
+        \item
+        \textit{Remark.} For any model $ Y = f(X) + b + \varepsilon $,
+        $ b = \mu_Y - \mu_{f(X)} $.
+
+        \item
+        \textit{Corollary.} $ Y - \mu_Y = \mathbf{w}^\top(X - \mu_X) +
+        \varepsilon $.
+
+        \item
+        \textit{Proof.} $ b = \mu_Y - \mathbf{w}^\top\mu_X \Rightarrow
+        Y - \mu_Y = \mathbf{w}^\top(X - \mu_X) + \varepsilon $.
+
+        \item
+        Conclusion: $ \mathbf{w} $ can be estimated independently of $ b $ if
+        inputs and outputs are centered before being used to estimate $ b $.
+    \end{itemize}        
+\end{frame}
+
+\begin{frame}{On centered data}
+    \begin{itemize}
+        \item
+        Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix,
+        $ \mathbf{y} \in \mathbb{R}^N $ be the response vector. Let
+        $ \bar{\mathbf{x}} \triangleq \frac{1}{N}\mathbf{X}^\top\mathbf{1} $,
+        $ \bar{y} \triangleq \frac{1}{N}\mathbf{y}^\top\mathbf{1} $,
+        $ \tilde{\mathbf{X}} \triangleq \mathbf{X} -
+        \mathbf{1}\bar{\mathbf{x}}^\top $, $ \tilde{\mathbf{y}} \triangleq
+        \mathbf{y} - \bar{y}\mathbf{1} $.
+
+        \item
+        Consider the no-intercept problem $ \min_{\mathbf{w}}\Vert
+        \tilde{\mathbf{y}} - \tilde{\mathbf{X}}\mathbf{w}\Vert_2^2 $. Assuming
+        that $ \operatorname{rk}\big(\tilde{\mathbf{X}}\big) = \min\{N, d\} $,
+        from (\aref{lr_ols_aug}) it's clear that $ \hat{\mathbf{w}} = \big(
+        \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}\big)^{-1}
+        \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}} $.
+
+        \item
+        However, $ \tilde{\mathbf{X}} $ centered $ \Rightarrow
+        \tilde{\mathbf{X}}^\top\mathbf{1} = \mathbf{0} \Rightarrow
+        \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}} =
+        \tilde{\mathbf{X}}^\top\mathbf{y} - \bar{y}
+        \tilde{\mathbf{X}}^\top\mathbf{1} =
+        \tilde{\mathbf{X}}^\top\mathbf{y} $. We can therefore replace
+        $ \tilde{\mathbf{y}} $ with $ \mathbf{y} $ in this case and see that
+        \begin{equation} \label{lr_ols_cent}
+            \begin{split}
+                \hat{\mathbf{w}} & = \big(
+	                \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}
+	            \big)^{-1}\tilde{\mathbf{X}}^\top\mathbf{y} \\
+	            \hat{b} & = \bar{y} - \hat{\mathbf{w}}^\top\bar{\mathbf{x}}
+            \end{split}
+        \end{equation}
+        This will also be true for \textit{ridge regression}.
+    \end{itemize}
+\end{frame}
 
 \section{Ridge regression}
+
+\begin{frame}
+
+\end{frame}
+
+\section{Appendix}
+\label{appendix}
+
+\begin{frame}
+
+\end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
