@@ -211,15 +211,18 @@
         \item
         $ \mathbf{X}_\mathbf{1}^\top\mathbf{X}_\mathbf{1} \in
         \mathbb{R}^{(d + 1) \times (d + 1)} $ is full rank\footnote{
-            See first answer of this \ahref{
-https://math.stackexchange.com/questions/349738/prove-operatornamerankata-operatornameranka-for-any-a-in-m-m-times-n}
-            {math.stackexchange} question for proof.
+            See first answer of this \ahref{%
+                https://math.stackexchange.com/questions/349738/prove-%
+                operatornamerankata-operatornameranka-for-any-a-in-m-m-times-n%
+            }{math.stackexchange} question for proof.
         }, i.e. invertible\footnote{
             In practice this inverse is rarely computed. For example,
-            \ahref{
-https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
-            }{\texttt{scipy.linalg.lstsq}} LAPACK's \ahref{
-http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
+            \ahref{%
+                https://docs.scipy.org/doc/scipy/reference/generated/%
+                scipy.linalg.lstsq.html%
+            }{\texttt{scipy.linalg.lstsq}} uses LAPACK's \ahref{%
+                http://www.netlib.org/lapack/explore-html/db/d6a/%
+                dgelsd_8f.html%
             }{\texttt{gelsd}} by default, which uses the singular value
             decomposition.
         },
@@ -432,19 +435,16 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
             We derive $ \hat{\mathbf{w}}_\mathbf{\Gamma},
             \hat{b}_\mathbf{\Gamma} $ using similar steps as those used to
             derive $ \hat{\mathbf{w}}, \hat{b} $ in (\aref{lr_ols_cent}), but
-            $ \tilde{\mathbf{C}} $ is instead replaced with
-            $ \tilde{\mathbf{C}}_\mathbf{\Gamma} \triangleq \mathbf{I} -
-            \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}
-            \mathbf{11}^\top\mathbf{\Gamma} $, the \textit{weighted
-            centering matrix}, and all unweighted averages $ \bar{\mathbf{x}},
-            \bar{y} $ are replaced with weighted averages
+            $ \tilde{\mathbf{C}} $ is replaced with
+            $ \tilde{\mathbf{C}}_\mathbf{\Gamma} $ and $ \bar{\mathbf{x}},
+            \bar{y} $ are replaced with
             $ \bar{\mathbf{x}}_\mathbf{\Gamma}, \bar{y}_\mathbf{\Gamma} $.
         }
         \begin{equation} \label{wlr_sol}
             \begin{split}
                 \hat{\mathbf{w}}_\mathbf{\Gamma} & = \big(
                     \tilde{\mathbf{X}}_\mathbf{\Gamma}^\top
-                    \mathbf{\Gamma}\tilde{\mathbf{X}}\mathbf{\Gamma}
+                    \mathbf{\Gamma}\tilde{\mathbf{X}}_\mathbf{\Gamma}
                 \big)^{-1}\tilde{\mathbf{X}}_\mathbf{\Gamma}^\top
                 \mathbf{\Gamma}\mathbf{y}_\mathbf{\Gamma} \\
                 \hat{b}_\mathbf{\Gamma} & = \bar{y}_\mathbf{\Gamma} -
@@ -452,11 +452,19 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
                 \bar{\mathbf{x}}_\mathbf{\Gamma}
             \end{split}
         \end{equation}
-        Here $ \bar{\mathbf{x}}_\mathbf{\Gamma} \triangleq
+
+        \item
+        $ \bar{\mathbf{x}}_\mathbf{\Gamma} \triangleq
         \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}\mathbf{X}^\top
         \mathbf{\Gamma 1}, \bar{y}_\mathbf{\Gamma} \triangleq
         \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}\mathbf{y}^\top
         \mathbf{\Gamma 1} $ are \textit{weighted averages}.
+        $ \tilde{\mathbf{X}}_\mathbf{\Gamma} \triangleq
+        \tilde{\mathbf{C}}_\mathbf{\Gamma}\mathbf{X} $, where
+        $ \tilde{\mathbf{C}}_\mathbf{\Gamma} \triangleq \mathbf{I} -
+        \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}
+        \mathbf{11}^\top\mathbf{\Gamma} $ is the
+        \textit{weighted centering matrix}.
     \end{itemize}
 \end{frame}
 
