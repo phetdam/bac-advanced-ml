@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 27, 2021}
+\date{March 4, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -54,6 +54,8 @@
     \tableofcontents
 \end{frame}
 
+\section{Linear regression}
+
 \begin{frame}{Motivation}
     \begin{itemize}
         \item
@@ -76,8 +78,6 @@
         How much about the model do you \textit{really} understand?
     \end{itemize}
 \end{frame}
-
-\section{Linear regression}
 
 \subsection{The linear model}
 
@@ -141,7 +141,7 @@
         \hat{\mathbf{w}}_{\hat{b}} $ such that $ \hat{\mathbf{w}}_{\hat{b}} =
         \mathbf{X}_\mathbf{1}^{-1}\mathbf{y} $, i.e. $ \mathbf{X}_1
         \hat{\mathbf{w}}_{\hat{b}} = \mathbf{y} $. But consider
-        \begin{equation} \label{lr_2norm_aug}
+        \begin{equation} \label{lr_obj_aug}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{w}_b} &
                 \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2
@@ -158,7 +158,7 @@
         \mathbf{y} - \mathbf{X}_\mathbf{1}\hat{\mathbf{w}}_{\hat{b}} $.
 
         \item
-        \textit{Remark.} (\aref{lr_2norm_aug}) minimizes the \textbf{squared}
+        \textit{Remark.} (\aref{lr_obj_aug}) minimizes the \textbf{squared}
         $ \ell^2 $-norm of $ \mathbf{r} $, but note that
         \begin{equation*}
             \arg\min_{\mathbf{w}_b}
@@ -170,14 +170,14 @@
         the point that minimizes $ f $.
 
         \item
-        \textit{Remark.} (\aref{lr_2norm_aug}) minimizes the
+        \textit{Remark.} (\aref{lr_obj_aug}) minimizes the
         \textbf{sum of squared residuals}. Also, note that
         $ \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2 =
         (\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b)^\top(\mathbf{y} -
         \mathbf{X}_\mathbf{1}\mathbf{w}_b) $ by definition.
 
         \item
-        \textit{Properties of }(\aref{lr_2norm_aug}). Let $ f(\mathbf{w}_b) =
+        \textit{Properties of }(\aref{lr_obj_aug}). Let $ f(\mathbf{w}_b) =
         \Vert\mathbf{y} - \mathbf{X}_\mathbf{1}\mathbf{w}_b\Vert_2^2 $.
         \begin{enumerate}
             \item
@@ -252,45 +252,46 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
 
 \subsection{On centered data}
 
-\begin{frame}{On centered data}
-    \begin{itemize}
-        \item
-        Consider: can we estimate $ \mathbf{w}, b $ separately?
-
-        \item
-        \textit{Proposition.} Let $ X : \Omega \rightarrow \mathbb{R}^d $,
-        $ Y : \Omega \rightarrow \mathbb{R} $ be random variables on
-        $ (\Omega, \mathcal{F}, \mathbb{P}) $, and let $ \varepsilon \sim
-        \mathcal{N}(0, \sigma^2) $ be independent of $ X $, $ \sigma \in
-        (0, \infty) $. For $ \mathbf{w} \in \mathbb{R}^d $,
-        $ b \in \mathbb{R} $,
-        $ Y = \mathbf{w}^\top X + b + \varepsilon \Rightarrow b = \mu_Y -
-        \mathbf{w}^\top\mu_X $.
-
-        \item
-        \textit{Remark.} For any model $ Y = f(X) + b + \varepsilon $,
-        $ b = \mu_Y - \mu_{f(X)} $.
-
-        \item
-        \textit{Proof.} Taking expectations, $ \mu_Y = \mathbf{w}^\top\mu_X +
-        b \Leftrightarrow b = \mu_Y - \mathbf{w}^\top\mu_X $.
-
-        \item
-        \textit{Corollary.} $ Y - \mu_Y = \mathbf{w}^\top(X - \mu_X) +
-        \varepsilon $.
-
-        \item
-        \textit{Proof.} $ b = \mu_Y - \mathbf{w}^\top\mu_X \Rightarrow
-        Y - \mu_Y = \mathbf{w}^\top(X - \mu_X) + \varepsilon $.
-
-        \item
-        Conclusion: $ \mathbf{w} $ can be estimated independently of $ b $ if
-        inputs and outputs are centered before being used to estimate $ b $.
-    \end{itemize}        
-\end{frame}
+%\begin{frame}{On centered data}
+%    \begin{itemize}
+%        \item
+%        Consider: can we estimate $ \mathbf{w}, b $ separately?
+%
+%        \item
+%        \textit{Proposition.} Let $ X : \Omega \rightarrow \mathbb{R}^d $,
+%        $ Y : \Omega \rightarrow \mathbb{R} $ be random variables on
+%        $ (\Omega, \mathcal{F}, \mathbb{P}) $, and let $ \varepsilon \sim
+%        \mathcal{N}(0, \sigma^2) $ be independent of $ X $, $ \sigma \in
+%        (0, \infty) $. For $ \mathbf{w} \in \mathbb{R}^d $,
+%        $ b \in \mathbb{R} $,
+%        $ Y = \mathbf{w}^\top X + b + \varepsilon \Rightarrow b = \mu_Y -
+%        \mathbf{w}^\top\mu_X $.
+%
+%        \item
+%        \textit{Proof.} Taking expectations, $ \mu_Y = \mathbf{w}^\top\mu_X +
+%        b \Leftrightarrow b = \mu_Y - \mathbf{w}^\top\mu_X $.
+%
+%        \item
+%        \textit{Remark.} For any model $ Y = f(X) + b + \varepsilon $,
+%        $ b = \mu_Y - \mu_{f(X)} $.
+%
+%        \item
+%        \textit{Corollary.} $ \mu_X = \mathbf{0} \Rightarrow b = \mu_Y $.
+%
+%        \item
+%        This implies that $ \mathbf{w} $
+%        
+%    \end{itemize}        
+%\end{frame}
 
 \begin{frame}{On centered data}
     \begin{itemize}
+        \item
+        Consider: can we estimate $ \mathbf{w}, b $ separately\footnote{
+            For $ h : X(\Omega) \rightarrow \mathbb{R} $, any model
+            $ Y = h(X) + b + \varepsilon \Rightarrow b = \mu_Y - \mu_{h(X)} $.
+        }?
+
         \item
         Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix,
         $ \mathbf{y} \in \mathbb{R}^N $ be the response vector. Let
@@ -298,24 +299,90 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
         $ \bar{y} \triangleq \frac{1}{N}\mathbf{y}^\top\mathbf{1} $,
         $ \tilde{\mathbf{X}} \triangleq \mathbf{X} -
         \mathbf{1}\bar{\mathbf{x}}^\top $, $ \tilde{\mathbf{y}} \triangleq
-        \mathbf{y} - \bar{y}\mathbf{1} $.
+        \mathbf{y} - \bar{y}\mathbf{1} $. Consider
+        \begin{equation*}
+            \begin{array}{lll}
+                \displaystyle\min_{\mathbf{w}, b} &
+                \Vert\mathbf{y} - \mathbf{Xw} - b\mathbf{1}\Vert_2^2 =
+                \displaystyle\min_{\mathbf{w}, b} & g(\mathbf{w}, b)
+            \end{array}
+        \end{equation*}
+        This is (\aref{lr_obj_aug}), but using $ \mathbf{X} $ and writing
+        $ \mathbf{w}, b $ separately. $ g $ is convex in $ \mathbf{w}, b
+        \Rightarrow \nabla_\mathbf{w}g(\hat{\mathbf{w}}, \hat{b}) =
+        \mathbf{0}, \frac{\partial g}{\partial b}(\hat{\mathbf{w}}, \hat{b})
+        = 0 $\footnote{
+            Since $ f $ convex, these are necessary and sufficient conditions
+            for optimality \cite{bv_convex_opt}.
+        }. See that
+        \begin{equation*}
+            \nabla_\mathbf{w} g(\hat{\mathbf{w}}, \hat{b}) =
+            -2\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\hat{\mathbf{w}} -
+            \hat{b}\mathbf{1}) = \mathbf{0} \Leftrightarrow
+            \mathbf{X}^\top\mathbf{X}\hat{\mathbf{w}} =
+            \mathbf{X}^\top\mathbf{y} - \hat{b}\mathbf{X}^\top\mathbf{1}            
+        \end{equation*}
+        \begin{equation*}
+            \begin{split}
+                \frac{\partial g}{\partial b}(\hat{\mathbf{w}}, \hat{b}) =
+	            -2\mathbf{1}^\top(\mathbf{y} - \mathbf{X}\hat{\mathbf{w}} -
+	            \hat{b}\mathbf{1}) = 0 & \Leftrightarrow
+	            \hat{b}\mathbf{1}^\top\mathbf{1} = \mathbf{y}^\top\mathbf{1} -
+	            \hat{\mathbf{w}}^\top\mathbf{X}^\top\mathbf{1} \\
+	            & \Rightarrow b = \bar{y} - \hat{\mathbf{w}}^\top\bar{\mathbf{x}}
+            \end{split}
+        \end{equation*}        
+    \end{itemize}
+
+    % spacing for footnote
+    \medskip
+\end{frame}
+
+\begin{frame}{On centered data}
+    \begin{itemize}
+        \item
+        Note that for $ \mathbf{1} \in \mathbb{R}^N,
+        \mathbf{1}^\top\mathbf{1} = N $. Substituting,
+        \begin{equation*}
+            \begin{split}
+	            & \mathbf{X}^\top\mathbf{X}\hat{\mathbf{w}} =
+	            \mathbf{X}^\top\mathbf{y} - \bar{y}\mathbf{X}^\top\mathbf{1} +
+	            \mathbf{X}^\top\mathbf{1}\bar{\mathbf{x}}^\top\hat{\mathbf{w}} \\
+	            \Rightarrow \ & \mathbf{X}^\top
+	            (\mathbf{X} - \mathbf{1}\bar{\mathbf{x}}^\top)\hat{\mathbf{w}} =
+	            \mathbf{X}^\top(\mathbf{y} - \bar{y}\mathbf{1}) \\
+	            \Rightarrow \ & \mathbf{X}^\top\left(
+	                \mathbf{X} - \frac{1}{N}\mathbf{11}^\top\mathbf{X}
+	            \right) = \mathbf{X}^\top\left(
+	                \mathbf{y} - \frac{1}{N}\mathbf{11}^\top\mathbf{y}
+	            \right) \\
+	            \Rightarrow \ & \mathbf{X}^\top\left(
+	                \mathbf{I} - \frac{1}{N}\mathbf{11}^\top
+	            \right)\mathbf{X} = \mathbf{X}^\top\left(
+	                \mathbf{I} - \frac{1}{N}\mathbf{11}^\top
+	            \right)\mathbf{y}
+            \end{split}
+        \end{equation*}
 
         \item
-        Consider the no-intercept problem $ \min_{\mathbf{w}}\Vert
-        \tilde{\mathbf{y}} - \tilde{\mathbf{X}}\mathbf{w}\Vert_2^2 $. Assuming
-        that $ \operatorname{rk}\big(\tilde{\mathbf{X}}\big) = \min\{N, d\} $,
-        from (\aref{lr_ols_aug}) it's clear that $ \hat{\mathbf{w}} = \big(
-        \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}\big)^{-1}
-        \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}} $.
+        Recall that $ \mathbf{I} - \frac{1}{N}\mathbf{11}^\top \triangleq
+        \tilde{\mathbf{C}} $ is the \textit{centering matrix}. Note
+        $ \tilde{\mathbf{C}} = \tilde{\mathbf{C}}^\top $ (symmetric),
+        $ \tilde{\mathbf{C}}\tilde{\mathbf{C}} = \tilde{\mathbf{C}} $
+        (idempotent), so the last equation becomes
+        \begin{equation*}
+            \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\tilde{\mathbf{C}}
+            \mathbf{X} = \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\mathbf{y}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
 
+\begin{frame}{On centered data}
+    \begin{itemize}
         \item
-        However, $ \tilde{\mathbf{X}} $ centered $ \Rightarrow
-        \tilde{\mathbf{X}}^\top\mathbf{1} = \mathbf{0} \Rightarrow
-        \tilde{\mathbf{X}}^\top\tilde{\mathbf{y}} =
-        \tilde{\mathbf{X}}^\top\mathbf{y} - \bar{y}
-        \tilde{\mathbf{X}}^\top\mathbf{1} =
-        \tilde{\mathbf{X}}^\top\mathbf{y} $. We can therefore replace
-        $ \tilde{\mathbf{y}} $ with $ \mathbf{y} $ in this case and see that
+        Note that the centering matrix $ \tilde{\mathbf{X}} \triangleq
+        \mathbf{X} - \mathbf{1}\bar{\mathbf{x}}^\top =
+        \tilde{\mathbf{C}}\mathbf{X} $. Therefore,
         \begin{equation} \label{lr_ols_cent}
             \begin{split}
                 \hat{\mathbf{w}} & = \big(
@@ -324,15 +391,281 @@ http://www.netlib.org/lapack/explore-html/db/d6a/dgelsd_8f.html
 	            \hat{b} & = \bar{y} - \hat{\mathbf{w}}^\top\bar{\mathbf{x}}
             \end{split}
         \end{equation}
-        We will estimate \textit{ridge regression} $ \hat{\mathbf{w}}_\lambda,
-        \hat{b} $ in a similar fashion.
+        Note that $ \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}} $ invertible
+        $ \Leftrightarrow \operatorname{rk}\big(\tilde{\mathbf{X}}\big) = d $.
+
+        \item
+        (\aref{lr_ols_cent}) says that by using $ \tilde{\mathbf{X}} $, we can
+        compute $ \hat{\mathbf{w}} $ independently of $ \hat{b} $.
+
+        \item
+        \textit{Remark.} If $ \mathbf{X} = \tilde{\mathbf{X}} $, i.e. the
+        inputs are already centered, then $ \hat{b} = \bar{y} $. If
+        $ \mathbf{X} = \tilde{\mathbf{X}}, \mathbf{y} = \tilde{\mathbf{y}} $,
+        i.e. both inputs and outputs are centered, then $ \hat{b} = 0 $.
+
+        \item
+        \alert{No intercept is needed if both inputs and outputs are centered.}
     \end{itemize}
 \end{frame}
 
-\section{Ridge regression}
+\section{Generalizations}
 
-\begin{frame}
+\subsection{Weighted least squares}
 
+\begin{frame}{Weighted least squares}
+    \begin{itemize}
+        \item
+        Let $ \mathbf{\Gamma} \triangleq \operatorname{diag}(\gamma_1, \ldots
+        \gamma_N)$ , $ \gamma_1, \ldots \gamma_N > 0 $. Consider
+        \begin{equation} \label{wlr_obj}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b} &
+                \left\Vert\mathbf{\Gamma}^{1 / 2}(\mathbf{y} - \mathbf{Xw} - 
+                b\mathbf{1})\right\Vert_2^2
+            \end{array}
+        \end{equation}
+        $ \mathbf{\Gamma} $ weights the components of the squared residuals.
+        The solution $ \hat{\mathbf{w}}_\mathbf{\Gamma},
+        \hat{b}_\mathbf{\Gamma} $ of (\aref{wlr_obj}), is given by the
+        equations\footnote{
+            We derive $ \hat{\mathbf{w}}_\mathbf{\Gamma},
+            \hat{b}_\mathbf{\Gamma} $ using similar steps as those used to
+            derive $ \hat{\mathbf{w}}, \hat{b} $ in (\aref{lr_ols_cent}), but
+            $ \tilde{\mathbf{C}} $ is instead replaced with
+            $ \tilde{\mathbf{C}}_\mathbf{\Gamma} \triangleq \mathbf{I} -
+            \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}
+            \mathbf{11}^\top\mathbf{\Gamma} $, the \textit{weighted
+            centering matrix}, and all unweighted averages $ \bar{\mathbf{x}},
+            \bar{y} $ are replaced with weighted averages
+            $ \bar{\mathbf{x}}_\mathbf{\Gamma}, \bar{y}_\mathbf{\Gamma} $.
+        }
+        \begin{equation} \label{wlr_sol}
+            \begin{split}
+                \hat{\mathbf{w}}_\mathbf{\Gamma} & = \big(
+                    \tilde{\mathbf{X}}_\mathbf{\Gamma}^\top
+                    \mathbf{\Gamma}\tilde{\mathbf{X}}\mathbf{\Gamma}
+                \big)^{-1}\tilde{\mathbf{X}}_\mathbf{\Gamma}^\top
+                \mathbf{\Gamma}\mathbf{y}_\mathbf{\Gamma} \\
+                \hat{b}_\mathbf{\Gamma} & = \bar{y}_\mathbf{\Gamma} -
+                \hat{\mathbf{w}}_\mathbf{\Gamma}^\top
+                \bar{\mathbf{x}}_\mathbf{\Gamma}
+            \end{split}
+        \end{equation}
+        Here $ \bar{\mathbf{x}}_\mathbf{\Gamma} \triangleq
+        \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}\mathbf{X}^\top
+        \mathbf{\Gamma 1}, \bar{y}_\mathbf{\Gamma} \triangleq
+        \frac{1}{\mathbf{1}^\top\mathbf{\Gamma 1}}\mathbf{y}^\top
+        \mathbf{\Gamma 1} $ are \textit{weighted averages}.
+    \end{itemize}
+\end{frame}
+
+\subsection{Ridge regression}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        At its simplest, ridge regression serves as a way to deflate, or
+        \textit{regularize}, the coefficients of $ \hat{\mathbf{w}} $. For
+        $ \lambda \ge 0 $, consider
+        \begin{equation} \label{ridge_obj}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b} &
+                \Vert\mathbf{y} - \mathbf{Xw} - b\mathbf{1}\Vert_2^2 +
+                \lambda\Vert\mathbf{w}\Vert_2^2
+            \end{array}
+        \end{equation}
+        $ \lambda\Vert\mathbf{w}\Vert_2^2 $ penalizes a candidate point
+        $ \mathbf{w} $ based on its $ \ell^2 $-norm. $ \lambda $ is a free
+        parameter that controls the penalization tradeoff.
+
+        \item
+        The solution $ \hat{\mathbf{w}}_\lambda, \hat{b}_\lambda $ of
+        (\aref{ridge_obj}) is given by\footnote{
+            We derive $ \hat{\mathbf{w}}_\lambda, \hat{b}_\lambda $ using
+            almost the exact same steps used to derive $ \hat{\mathbf{w}},
+            \hat{b} $.
+        }
+        \begin{equation} \label{ridge_sol}
+            \begin{split}
+                \hat{\mathbf{w}}_\lambda & = \big(
+	                \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}} +
+	                \lambda\mathbf{I}
+	            \big)^{-1}\tilde{\mathbf{X}}^\top\mathbf{y} \\
+	            \hat{b}_\lambda & = \bar{y} - \hat{\mathbf{w}}_\lambda^\top
+	            \bar{\mathbf{x}}
+            \end{split}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        Why use $ \lambda\Vert\mathbf{w}\Vert_2^2 $ as the
+        regularizer\footnote{
+            The list is not exhaustive. For example,
+            $ \hat{\mathbf{w}}_\lambda $ has lower variance than
+            $ \hat{\mathbf{w}} $, and
+            $ \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}} +
+            \lambda\mathbf{I} $ is well-conditioned even if
+            $ \tilde{\mathbf{X}}^\top\tilde{\mathbf{X}} $ itself is poorly
+            conditioned.
+        }?
+        \begin{enumerate}
+            \item
+            Analytically tractable, i.e. closed form solution available.
+
+            \item
+            Interpretable as a Bayesian prior over the coefficients.
+        \end{enumerate}
+
+        \item
+        \alert{
+            $ \hat{\mathbf{w}}_\lambda $ is affected by the
+            \textit{scaling} of the input matrix $ \mathbf{X} $. Why?
+        }
+
+        \item
+        Suppose the sample covariance matrix of $ \mathbf{X} $,
+        $ \mathbf{C}_\mathbf{X} $, is such that
+        $ \mathbf{C}_\mathbf{X} = \mathbf{I} $, i.e. uncorrelated, unit
+        variance features. $ \tilde{\mathbf{X}} $ has orthogonal columns.
+
+        \item
+        Since $ \mathbf{C}_\mathbf{X} \triangleq
+        \frac{1}{N}\tilde{\mathbf{X}}^\top\tilde{\mathbf{X}} = \mathbf{I} $,
+        then by (\aref{lr_ols_cent}), the OLS solution is
+        \begin{equation} \label{lr_ols_ortho}
+            \begin{split}
+	            \hat{\mathbf{w}} & = (N\mathbf{I})^{-1}\tilde{\mathbf{X}}^\top
+	            \mathbf{y} = \frac{1}{N}\tilde{\mathbf{X}}^\top\mathbf{y} \\
+	            \hat{b} & = \bar{y} - \hat{\mathbf{w}}^\top\bar{\mathbf{x}}
+	        \end{split}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        By (\aref{ridge_sol}), (\aref{lr_ols_ortho}), the ridge solution
+        $ \hat{\mathbf{w}}_\lambda $ is
+        \begin{equation} \label{ridge_sol_ortho}
+            \begin{split}
+	            \hat{\mathbf{w}}_\lambda & =
+	            (N\mathbf{I} + \lambda\mathbf{I})^{-1}
+	            \tilde{\mathbf{X}}^\top\mathbf{y} =
+	            \frac{1}{N + \lambda}\tilde{\mathbf{X}}^\top\mathbf{y} =
+	            \boxed{\frac{N}{N + \lambda}\hat{\mathbf{w}}} \\
+	            \hat{b}_\lambda & = \bar{y} - \hat{\mathbf{w}}_\lambda^\top
+	            \bar{\mathbf{x}} = \bar{y} - \frac{N}{N + \lambda}
+	            (\bar{y} - \hat{b}) =
+	            \boxed{
+	                \frac{N}{N + \lambda}\hat{b} +
+	                \frac{\lambda}{N + \lambda}\bar{y}
+	            }
+            \end{split}
+        \end{equation}
+
+        \item
+        (\aref{ridge_sol_ortho}) tells us that in the case of uncorrelated,
+        unit variance input features, $ \hat{\mathbf{w}}_\lambda $
+        deflates $ \hat{\mathbf{w}} $ by $ N / (N + \lambda) $, and
+        $ \hat{b}_\lambda $ is a convex combination of $ \hat{b} $ and
+        $ \bar{y} $. Clearly $ \lim_{\lambda \rightarrow \infty}
+        \hat{\mathbf{w}}_\lambda = \mathbf{0} $,
+        $ \lim_{\lambda \rightarrow \infty}\hat{b}_\lambda = \bar{y} $.
+
+        \item
+        Now suppose that $ \mathbf{C}_\mathbf{X} \triangleq
+        \operatorname{diag}(\nu_1, \ldots \nu_d) $,
+        $ \nu_1, \ldots \nu_d > 0 $. By (\aref{lr_ols_cent}),
+        \begin{equation} \label{lr_ols_diag}
+            \begin{split}
+                \hat{\mathbf{w}}_\nu & = (N\mathbf{C}_\mathbf{X})^{-1}
+	            \tilde{\mathbf{X}}^\top\mathbf{y} =
+	            \frac{1}{N}\operatorname{diag}\left(
+	                \nu_1^{-1}, \ldots \nu_d^{-1}
+	            \right)
+	            \tilde{\mathbf{X}}^\top\mathbf{y} \\
+	            \hat{b}_\nu & = \bar{y} - \hat{\mathbf{w}}_\nu^\top
+	            \bar{\mathbf{x}}
+            \end{split}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        Similarly, by (\aref{ridge_sol}), the new ridge solution
+        $ \hat{\mathbf{w}}_{\lambda, \nu}, \hat{b}_\nu $ is
+        \begin{equation} \label{ridge_sol_diag}
+            \begin{split}
+                \hat{\mathbf{w}}_{\lambda, \nu} & =
+                (N\mathbf{C}_\mathbf{X} + \lambda\mathbf{I})^{-1}
+                \tilde{\mathbf{X}}^\top\mathbf{y} \\
+                & = \operatorname{diag}\left(
+                    \frac{1}{N\nu_1 + \lambda}, \ldots
+                    \frac{1}{N\nu_d + \lambda}
+                \right)\tilde{\mathbf{X}}^\top\mathbf{y} \\
+                & = \boxed{
+                    \operatorname{diag}\left(
+	                    \frac{N\nu_1}{N\nu_1 + \lambda}, \ldots
+	                    \frac{N\nu_d}{N\nu_d + \lambda}
+	                \right)\hat{\mathbf{w}}_\nu
+	            } \\
+	            \hat{b}_{\lambda, \nu} & = \bar{y} -
+                \hat{\mathbf{w}}_{\lambda, \nu}^\top\bar{x} \\
+                & = \boxed{
+	                \bar{y} - \hat{\mathbf{w}}_\nu^\top
+	                \operatorname{diag}\left(
+		                \frac{N\nu_1}{N\nu_1 + \lambda}, \ldots
+	                    \frac{N\nu_d}{N\nu_d + \lambda}
+	                \right)\bar{\mathbf{x}}
+	            }
+            \end{split}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item 
+        (\aref{ridge_sol_diag}) shows that the shrinkage applied by
+        $ \hat{\mathbf{w}}_{\lambda, \nu} $ to the new OLS coefficients
+        $ \hat{\mathbf{w}}_\nu $ now depends on the feature variances
+        $ \nu_1, \ldots \nu_d $.
+
+        \item
+        $ i $th element $ \hat{w}_{\nu, i} $ of $ \hat{\mathbf{w}}_\nu $ is
+        deflated by $ N\nu_i / (N\nu_i + \lambda) $. For fixed $ \lambda $,
+        \begin{equation*}
+            \begin{array}{cc}
+                \displaystyle\lim_{\nu_i \rightarrow 0^+}
+                \frac{N\nu_i}{N\nu_i + \lambda} = 0 \quad & \quad
+                \displaystyle\lim_{\nu_i \rightarrow \infty}
+                \frac{N\nu_i}{N\nu_i + \lambda} = 1
+            \end{array}
+        \end{equation*}
+
+        \item
+        In other words, given a fixed choice of $ \lambda $, if
+        $ \nu_i\rightarrow 0 $, then $ \hat{w}_{\nu, i} $ is deflated
+        \textbf{more}, while if $ \nu_i \rightarrow \infty $, then
+        $ \hat{w}_{\nu, i} $ is deflated \textbf{less}.
+
+        \item
+        \alert{
+            Ridge regression implicitly assumes that higher-variance features
+            are \textbf{more predictive} and therefore shrinks the relevant
+            coefficients \textbf{less}
+        }.
+
+        \item
+        The assumption may be helpful or harmful, depending on context.
+    \end{itemize}
 \end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
