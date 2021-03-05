@@ -142,8 +142,10 @@ def linreg():
     return train_test_split(X, y, test_size = 0.2, random_state = 7)
 
 
-def test_r2_matmul(linreg):
-    """Check RidgeRegression R^2 is close to sklearn's when using matmul.
+def test_res_matmul(linreg):
+    """Check RidgeRegression is equivalent to sklearn when using matmul.
+
+    Checks the fit, predict, and score methods, checking solution and R^2.
 
     Parameters
     ----------
@@ -165,12 +167,16 @@ def test_r2_matmul(linreg):
     np.testing.assert_allclose(_lr.predict(X_test), lr.predict(X_test))
     # pylint: disable=no-member
     _score, score = _lr.score(X_test, y_test), lr.score(X_test, y_test)
-    # pylint: enable=no-member
     print(f"scikit-learn R^2: {_score:.6f}\nhand-coded R^2:   {score:.6f}")
+    # check that scores are close
+    np.testing.assert_allclose(_score, score)
+    # pylint: enable=no-member
 
 
-def test_r2_lsqr(linreg):
-    """Check RidgeRegression R^2 is close to sklearn's when using lsqr.
+def test_res_lsqr(linreg):
+    """Check RidgeRegression is equivalent to sklearn when using lsqr.
+
+    Checks the fit, predict, and score methods, checking solution and R^2.
 
     Parameters
     ----------
@@ -191,5 +197,7 @@ def test_r2_lsqr(linreg):
     np.testing.assert_allclose(_lr.predict(X_test), lr.predict(X_test))
     # pylint: disable=no-member
     _score, score = _lr.score(X_test, y_test), lr.score(X_test, y_test)
-    # pylint: enable=no-member
     print(f"scikit-learn R^2: {_score:.6f}\nhand-coded R^2:   {score:.6f}")
+    # check that scores are close
+    np.testing.assert_allclose(_score, score)
+    # pylint: enable=no-member

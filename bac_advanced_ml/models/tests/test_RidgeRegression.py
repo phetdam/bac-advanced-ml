@@ -8,8 +8,10 @@ from sklearn.linear_model import Ridge
 from ..supervised import RidgeRegression
 
 
-def test_r2_matmul(linreg):
-    """Check RidgeRegression R^2 is close to sklearn's when using matmul.
+def test_res_matmul(linreg):
+    """Check RidgeRegression is equivalent to sklearn when using matmul.
+
+    Checks the fit, predict, and score methods, checking solution and R^2.
 
     Parameters
     ----------
@@ -17,7 +19,7 @@ def test_r2_matmul(linreg):
         pytest fixture. See conftest.py.
     """
     # get data and true parameters
-    X_train, X_test, y_train, _, _, _ = linreg
+    X_train, X_test, y_train, y_test, _, _ = linreg
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
@@ -28,10 +30,18 @@ def test_r2_matmul(linreg):
     # pylint: enable=no-member
     # check that predictions are close
     np.testing.assert_allclose(_lr.predict(X_test), lr.predict(X_test))
+    # check that R^2 is close
+    # pylint: disable=no-member
+    np.testing.assert_allclose(
+        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+    )
+    # pylint: enable=no-member
 
 
-def test_r2_lsqr(linreg):
-    """Check RidgeRegression R^2 is close to sklearn's when using lsqr.
+def test_res_lsqr(linreg):
+    """Check RidgeRegression is equivalent to sklearn when using lsqr.
+
+    Checks the fit, predict, and score methods, checking solution and R^2.
 
     Parameters
     ----------
@@ -39,7 +49,7 @@ def test_r2_lsqr(linreg):
         pytest fixture. See conftest.py.
     """
     # get data and true parameters
-    X_train, X_test, y_train, _, _, _ = linreg
+    X_train, X_test, y_train, y_test, _, _ = linreg
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
@@ -50,3 +60,9 @@ def test_r2_lsqr(linreg):
     # pylint: enable=no-member
     # check that predictions are close
     np.testing.assert_allclose(_lr.predict(X_test), lr.predict(X_test))
+    # check that R^2 is close
+    # pylint: disable=no-member
+    np.testing.assert_allclose(
+        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+    )
+    # pylint: enable=no-member
