@@ -356,12 +356,12 @@
 	            \mathbf{X}^\top(\mathbf{y} - \bar{y}\mathbf{1}) \\
 	            \Rightarrow \ & \mathbf{X}^\top\left(
 	                \mathbf{X} - \frac{1}{N}\mathbf{11}^\top\mathbf{X}
-	            \right) = \mathbf{X}^\top\left(
+	            \right)\hat{\mathbf{w}} = \mathbf{X}^\top\left(
 	                \mathbf{y} - \frac{1}{N}\mathbf{11}^\top\mathbf{y}
 	            \right) \\
 	            \Rightarrow \ & \mathbf{X}^\top\left(
 	                \mathbf{I} - \frac{1}{N}\mathbf{11}^\top
-	            \right)\mathbf{X} = \mathbf{X}^\top\left(
+	            \right)\mathbf{X}\hat{\mathbf{w}} = \mathbf{X}^\top\left(
 	                \mathbf{I} - \frac{1}{N}\mathbf{11}^\top
 	            \right)\mathbf{y}
             \end{split}
@@ -374,8 +374,10 @@
         $ \tilde{\mathbf{C}}\tilde{\mathbf{C}} = \tilde{\mathbf{C}} $
         (idempotent), so the last equation becomes
         \begin{equation*}
-            \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\tilde{\mathbf{C}}
-            \mathbf{X} = \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\mathbf{y}
+            \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\big(
+                \tilde{\mathbf{C}}\mathbf{X}
+            \big)\hat{\mathbf{w}} =
+            \big(\tilde{\mathbf{C}}\mathbf{X}\big)^\top\mathbf{y}
         \end{equation*}
     \end{itemize}
 \end{frame}
