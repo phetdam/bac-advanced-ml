@@ -66,7 +66,9 @@
 % title, author + thanks, date
 \title{Exercise -1}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{February 23, 2020}
+% the extra thanks is also useful for making notes about previous versions.
+% you can remove this thanks if there are no version revisions.
+\date{March 6, 2021\thanks{Original version released on February 23, 2021.}}
 
 \begin{document}
 
@@ -74,6 +76,12 @@
 % need to include this after making title to undo the automatic
 % \thispagestyle{plain} command that is issued.
 \thispagestyle{fancy}
+
+% remove some space between title and first section to keep text on one page.
+% comment this line out or adjust the space reduction as needed. generally,
+% try to remove as little space as possible if you are trying to keep content
+% on one page, else comment this line out if content spans multiple pages.
+\vspace{-20 pt}
 
 \section{PCA whitening}
 
@@ -129,9 +137,7 @@ diagonal matrix we already computed.
 
 Consider the C function using the \href{
     https://numpy.org/devdocs/reference/c-api/array.html
-}{NumPy C array API} shown on the next page. Assume it is part of a C
-extension module and therefore has all necessary module initialization code
-as well as the required includes.
+}{NumPy C array API} shown on the next page.
 
 \begin{lstlisting}[language = C]
 static PyObject *
