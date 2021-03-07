@@ -6,6 +6,7 @@ Students are expected to have similar implementations.
 import math
 import numpy as np
 import scipy.sparse.linalg
+import scipy.special
 import scipy.optimize
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_X_y
@@ -151,8 +152,23 @@ def _logistic_loss_grad(w, X, y, alpha):
     numpy.ndarray
         Gradient of the objective at w, shape (n_features + 1,).
     """
-    # dummy implementation, fill it in later
-    return 0
+    # get number of features
+    _, n_features = X.shape
+    # split w into coefficients and intercept
+    w, b = w[:-1], w[-1]
+    # compute margin, i.e. y * (X @ w + b)
+    marg = y * (X @ w + b)
+    # compute logistic loss
+    loss = np.log(1 + np.exp(-marg)).sum() + 0.5 * alpha * w @ w
+    # compute y * e / (1 + e) terms. use sigmoid - 1 trick to get values.
+    # pylint: disable=no-member
+    emarg = y * (scipy.special.expit(marg) - 1)
+    # pylint: enable=no-member
+    # compute gradient. note that we need to treat intercept separately.
+    grad = np.empty(n_features + 1)
+    grad[:n_features] = X.T @ emarg + alpha * w
+    grad[n_features] = emarg.sum()
+    return loss, grad
 
 
 class LogisticClassifier(BaseEstimator):
@@ -203,8 +219,8 @@ class LogisticClassifier(BaseEstimator):
     def fit(self, X, y):
         # validate input
         X, y = check_X_y(X, y)
-        # get n_samples, n_features
-        n_samples, n_features = X.shape
+        # get n_features
+        _, n_features = X.shape
         # get number of unique labels in y. if labels.size != 2, raise error
         labels = np.unique(y)
         if labels.size != 2:
@@ -217,8 +233,8 @@ class LogisticClassifier(BaseEstimator):
         y_mask[y == labels[1]] = -1
         # solve for coefficients and intercept
         weights = scipy.optimize.minimize(
-            _logistic_loss_grad, np.zeros(n_features + 1), method = "L-BFGS-B",
-            jac = True, args = (X, y_mask, 1. / C),
+            _logistic_loss_grad, np.zeros(n_features + 1),
+            method = "L-BFGS-B", jac = True, args = (X, y_mask, 1. / self.C),
             options = {"gtol": self.tol, "maxiter": self.max_iter}
         )
         self.coef_ = weights[:-1]
@@ -227,6 +243,12 @@ class LogisticClassifier(BaseEstimator):
         return self
 
     def predict(self, X):
+        if not hasattr(self, "coef_") or not hasattr(self, "intercept_"):
+            raise RuntimeError("cannot predict with unfitted model")
+        # validate input matrix
+        X = check_array(X)
+        if X.shape[1] != self.coef_.shape[0]:
+            raise ValueError("n_features must match length of coef_ vector")
         raise NotImplementedError("predict method not implemented yet")
 
     def score(self, X, y):
