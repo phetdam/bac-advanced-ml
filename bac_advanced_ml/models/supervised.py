@@ -171,7 +171,7 @@ def _logistic_loss_grad(w, X, y, alpha):
     return loss, grad
 
 
-class LogisticClassifier(BaseEstimator):
+class LogisticRegression(BaseEstimator):
     r"""Reference implementation for a logistic regression classifier.
 
     Only suitable for binary classification tasks. Solver used to minimize the
@@ -237,6 +237,8 @@ class LogisticClassifier(BaseEstimator):
             method = "L-BFGS-B", jac = True, args = (X, y_mask, 1. / self.C),
             options = {"gtol": self.tol, "maxiter": self.max_iter}
         )
+        # set attributes
+        self.classes_ = labels
         self.coef_ = weights[:-1]
         self.intercept_ = weights[-1]
         # return self to allow for method chaining
