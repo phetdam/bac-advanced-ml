@@ -97,10 +97,12 @@ def blobcls(global_seed):
          [6, 5, 3, 4, 7, -1, 6, 1, -2, 9]]
     )
     # generate noisy classification problem using isotropic Gaussian blobs
+    # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
         n_samples = 600, n_features = 10, centers = centers,
         random_state = global_seed
     )
+    # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size = 0.2, random_state = global_seed
