@@ -227,16 +227,19 @@ class LogisticRegression(BaseEstimator):
             raise ValueError(
                 "Cannot fit coefficients on non-binary classification tasks"
             )
-        # get mask of +1, -1
+        # get mask of +1, -1. note that if we reverse these label assignments,
+        # we actually get weights of the same magnitude but opposite sign to
+        # those cmputed by scikit-learn's implementation.
         y_mask = np.empty(y.shape)
-        y_mask[y == labels[0]] = 1
-        y_mask[y == labels[1]] = -1
+        y_mask[y == labels[0]] = -1
+        y_mask[y == labels[1]] = 1
         # solve for coefficients and intercept
-        weights = scipy.optimize.minimize(
+        res = scipy.optimize.minimize(
             _logistic_loss_grad, np.zeros(n_features + 1),
             method = "L-BFGS-B", jac = True, args = (X, y_mask, 1. / self.C),
             options = {"gtol": self.tol, "maxiter": self.max_iter}
         )
+        weights = res.x
         # set attributes
         self.classes_ = labels
         self.coef_ = weights[:-1]
