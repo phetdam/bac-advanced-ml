@@ -237,7 +237,7 @@ class LogisticRegression(BaseEstimator):
         res = scipy.optimize.minimize(
             _logistic_loss_grad, np.zeros(n_features + 1),
             method = "L-BFGS-B", jac = True, args = (X, y_mask, 1. / self.C),
-            options = {"gtol": self.tol, "maxiter": self.max_iter}
+            options = dict(gtol = self.tol, maxiter = self.max_iter)
         )
         weights = res.x
         # set attributes
