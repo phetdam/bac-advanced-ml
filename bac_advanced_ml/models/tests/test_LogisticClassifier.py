@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression as _LogisticRegression
 # pylint: disable=relative-beyond-top-level
 from ..supervised import LogisticRegression
 
-#@pytest.mark.skip(reason = "not yet implemented")
+
 def test_res(blobcls):
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blobcls
@@ -20,3 +20,9 @@ def test_res(blobcls):
     # vector has extra dimension and has intercept_ as an array.
     np.testing.assert_allclose(_lc.coef_.ravel(), lc.coef_)
     np.testing.assert_allclose(_lc.intercept_[0], lc.intercept_)
+    # check that predictions are close
+    np.testing.assert_allclose(_lc.predict(X_test), lc.predict(X_test))
+    # accuracy should be the same
+    np.testing.assert_allclose(
+        _lc.score(X_test, y_test), lc.score(X_test, y_test)
+    )

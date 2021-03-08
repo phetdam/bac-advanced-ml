@@ -34,7 +34,7 @@ class RidgeRegression(BaseEstimator):
     Methods
     -------
     fit(X, y)
-        Compute coefficients to best fit the model to X, y.
+        Compute parameters to best fit the model to X, y.
     predict(X)
         Return predictions on given data X.
     score(X, y)
@@ -52,7 +52,7 @@ class RidgeRegression(BaseEstimator):
         self.solver = solver
 
     def fit(self, X, y):
-        """Compute coefficients to best fit the model to X, y.
+        """Compute parameters to best fit the model to X, y.
 
         Parameters
         ----------
@@ -97,7 +97,7 @@ class RidgeRegression(BaseEstimator):
         Returns
         -------
         numpy.ndarray
-            Predictions, shape (n_samples,)
+            Regression predictions, shape (n_samples,)
         """
         if not hasattr(self, "coef_") or not hasattr(self, "intercept_"):
             raise RuntimeError("cannot predict with unfitted model")
@@ -199,7 +199,7 @@ class LogisticRegression(BaseEstimator):
     Methods
     -------
     fit(X, y)
-        Compute coefficients to best fit the model to X, y.
+        Compute parameters to best fit the model to X, y.
     predict(X)
         Return predictions on given data X.
     score(X, y)
@@ -217,6 +217,19 @@ class LogisticRegression(BaseEstimator):
         self.max_iter = max_iter
 
     def fit(self, X, y):
+        """Compute parameters to best fit the model to X, y.
+
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Input matrix shape (n_samples, n_features)
+        y : numpy.ndarray
+            Response vector shape (n_samples,)
+
+        Returns
+        -------
+        self
+        """
         # validate input
         X, y = check_X_y(X, y)
         # get n_features
@@ -229,7 +242,7 @@ class LogisticRegression(BaseEstimator):
             )
         # get mask of +1, -1. note that if we reverse these label assignments,
         # we actually get weights of the same magnitude but opposite sign to
-        # those cmputed by scikit-learn's implementation.
+        # those computed by scikit-learn's implementation.
         y_mask = np.empty(y.shape)
         y_mask[y == labels[0]] = -1
         y_mask[y == labels[1]] = 1
@@ -248,13 +261,47 @@ class LogisticRegression(BaseEstimator):
         return self
 
     def predict(self, X):
+        """Return predictions on given data X.
+
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Input matrix shape (n_samples, n_features)
+
+        Returns
+        -------
+        numpy.ndarray
+            Predicted labels, shape (n_samples,). These are the same labels as
+            the labels passed during fitting and stored in self.classes_.
+        """
         if not hasattr(self, "coef_") or not hasattr(self, "intercept_"):
             raise RuntimeError("cannot predict with unfitted model")
         # validate input matrix
         X = check_array(X)
         if X.shape[1] != self.coef_.shape[0]:
             raise ValueError("n_features must match length of coef_ vector")
-        raise NotImplementedError("predict method not implemented yet")
+        # return predictions. negative class is class 0, positive is class 1
+        return np.where(
+            X @ self.coef_ + self.intercept_ > 0,
+            self.classes_[1], self.classes_[0]
+        )
 
     def score(self, X, y):
-        raise NotImplementedError("score method not implemented yet")
+        """Return the accuracy of the predictions.
+
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Input matrix shape (n_samples, n_features)
+        y : numpy.ndarray
+            Response vector shape (n_samples,)
+
+        Returns
+        -------
+        float
+            Fraction of examples predicted correctly
+        """
+        # get predictions (includes input checks)
+        y_pred = self.predict(X)
+        # return the accuracy (fraction of correct predictions)
+        return (y == y_pred).mean()

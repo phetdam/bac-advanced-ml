@@ -65,14 +65,8 @@ def blobcls(global_seed):
     """Generated blob classification problem with train/test split.
 
     Uses sklearn.datasets.make_blobs to make isotropic standard multivariate
-    Gaussian blobs in 10-dimensional Euclidean space with centers
-
-    .. code::
-
-       np.array([-4, -2, -5, 1, -6, -2, -7, 2, -5, 1])
-       np.array([6, 5, 3, 4, 7, -1, 6, 1, -2, 9])
-
-    The returned data has 600 samples, 10 features. Features are informative by
+    Gaussian blobs in 10-dimensional Euclidean space with random centers. The
+    returned data has 600 samples, 10 features. Features are informative by
     construction so we don't use sklearn.datasets.make_classification.
 
     Parameters
@@ -91,15 +85,10 @@ def blobcls(global_seed):
     y_test : numpy.ndarray
         Test/validation class labels, shape (120,)
     """
-    # centers for the two data clusters
-    centers = np.array(
-        [[-4, -2, -5, 1, -6, -2, -7, 2, -5, 1],
-         [6, 5, 3, 4, 7, -1, 6, 1, -2, 9]]
-    )
     # generate noisy classification problem using isotropic Gaussian blobs
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples = 600, n_features = 10, centers = centers,
+        n_samples = 600, n_features = 10, centers = 2,
         random_state = global_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
