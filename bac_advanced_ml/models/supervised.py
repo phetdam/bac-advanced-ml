@@ -43,7 +43,7 @@ class RidgeRegression(BaseEstimator):
     # allowable solvers
     _solvers = ("matmul", "lsqr")
 
-    def __init__(self, alpha = 1., solver = "lsqr"):
+    def __init__(self, alpha=1., solver="lsqr"):
         if alpha < 0:
             raise ValueError("alpha must be nonnegative")
         if solver not in self._solvers:
@@ -68,7 +68,7 @@ class RidgeRegression(BaseEstimator):
         # validate input
         X, y = check_X_y(X, y)
         # compute mean of X and get centered X matrix
-        x_mean = X.mean(axis = 0)
+        x_mean = X.mean(axis=0)
         X_c = X - x_mean
         # delegate coefficient computation to different solving methods
         if self.solver == "matmul":
@@ -79,7 +79,7 @@ class RidgeRegression(BaseEstimator):
         elif self.solver == "lsqr":
             # use scipy.sparse.linalg.lsqr to get augmented weights
             self.coef_ = scipy.sparse.linalg.lsqr(
-                X_c, y, damp = math.sqrt(self.alpha)
+                X_c, y, damp=math.sqrt(self.alpha)
             )[0]
         # compute intercept
         self.intercept_ = y.mean() - x_mean @ self.coef_
@@ -205,7 +205,7 @@ class LogisticRegression(BaseEstimator):
     score(X, y)
         Return the accuracy of the predictions.
     """
-    def __init__(self, tol = 1e-4, C = 1., max_iter = 100):
+    def __init__(self, tol=1e-4, C=1., max_iter=100):
         if tol <= 0:
             raise ValueError("tol must be positive")
         if C <= 0:
@@ -249,8 +249,8 @@ class LogisticRegression(BaseEstimator):
         # solve for coefficients and intercept
         res = scipy.optimize.minimize(
             _logistic_loss_grad, np.zeros(n_features + 1),
-            method = "L-BFGS-B", jac = True, args = (X, y_mask, 1. / self.C),
-            options = dict(gtol = self.tol, maxiter = self.max_iter)
+            method="L-BFGS-B", jac=True, args=(X, y_mask, 1. / self.C),
+            options=dict(gtol=self.tol, maxiter=self.max_iter)
         )
         weights = res.x
         # set attributes
