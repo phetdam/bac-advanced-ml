@@ -1,0 +1,195 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% command for the title string. change for each lecture
+\newcommand{\lecturetitle}{Intro to Parametric Estimation}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
+% title page stuff. brackets content displayed in footer bar
+\title[\lecturetitle]{\lecturetitle}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{March 8, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+% section
+\section{Maximum likelihood}
+
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        From last lecture, we saw how to fit the linear regression model.
+
+        \item
+        General method for fitting models?
+
+        \item
+        Are we making assumptions on the data distribution?
+    \end{itemize}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[scale = 0.18]{thomas_bayes.jpg}
+        \caption{
+            A portait of Thomas Bayes\footnote{
+                The eponymous Bayes' theorem will prove to be useful
+                throughout these slides.
+            }.
+        }
+        \label{thomas_bayes}
+    \end{figure}
+\end{frame}
+
+\subsection{MLE fundamentals}
+
+\begin{frame}{MLE fundamentals}
+    \begin{itemize}
+        \item
+        Let $ X : \Omega \rightarrow \mathbb{R}^d $ be the input variable,
+        $ Y : \Omega \rightarrow \mathbb{R} $ be the response variable. Let
+        $ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots
+        (\mathbf{x}_N, y_N)\} $ be the training data.
+
+        \item
+        Assume $ \mathbf{x}_1, \ldots \mathbf{x}_N $ are independently drawn
+        from $ X $ and $ y_1 \ldots y_N $ are independently drawn from $ Y $.
+        \textbf{Independence is a key assumption!}
+
+        \item
+        Assume a \textit{parametric model} for $ X, Y $ joint or $ Y \mid X $
+        conditional distribution. That is, the distribution is parametrized
+        by parameters $ \theta \in \Theta $, $ \Theta \subseteq \mathbb{R}^p $
+        the \textit{parameter space}.
+
+        \item
+        Natural question: Given $ \theta $, how \textbf{likely} is it to
+        sample $ \mathcal{D} $ from model?
+
+        \item
+        Natural maximization problem: Choose $ \hat{\theta} \in \Theta $, if
+        $ \exists \hat{\theta} $, that maximizes the joint
+        probability/density, or joint \textit{likelihood} of $ \mathcal{D} $.
+
+        \item
+        \textit{Remark. Notational abuse.} $ p $ often used to represent
+        probabilities, densities, or mixtures of probabilities/densities.
+        Be careful!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{MLE fundamentals}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Given training data $ \mathcal{D} \triangleq
+        (\mathbf{x}_1, y_1), \ldots (\mathbf{x}_N, y_N)\} $, each example
+        drawn from the $ X, Y $ joint distribution, let
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) \triangleq p(\mathbf{x}_1, \ldots
+                \mathbf{x}_N, y_1, \ldots y_N)
+        \end{equation*}
+        $ p(\mathcal{D} \mid \theta) $ is the \textit{joint likelihood} of
+        $ \mathcal{D} $.
+
+        \item
+        If $ D \triangleq [ \ X_1 \ \ldots \ X_N \ \ Y_1 \ \ldots
+        \ Y_N \ ]^\top $ is a random variable with distribution
+        parametrized by $ \theta $, $ p(\mathcal{D} \mid \theta) $ is the
+        likelihood of observing $ \mathbf{x}_1, \ldots \mathbf{x}_N, y_1,
+        \ldots y_N $. Note $ X_1, \ldots X_N $ i.i.d.,
+        $ Y_1, \ldots Y_N $ i.i.d.
+
+        \item
+        Joint distributions are complicated. Can we simplify
+        $ p(\mathcal{D} \mid \theta) $ somehow to make it easier to estimate?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{MLE fundamentals}
+    \begin{itemize}
+        \item
+        Yes, we use Bayes' rule on densities and the fact that our data
+        examples $ (\mathbf{x}_1, y_1), \ldots (\mathbf{x}_N, y_N) $ are
+        i.i.d.\footnote{
+            To be precise, the examples are \textit{conditionally independent}
+            given $ \theta $.
+        }, so
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) =
+            \prod_{k = 1}^N p(y_k, \mathbf{x}_k \mid \theta) =
+            \prod_{k = 1}^N p(y_k \mid \mathbf{x}_k, \theta)
+                p(\mathbf{x}_k \mid \theta)
+        \end{equation*}
+
+        \item
+        Often only the $ Y \mid X $ conditional distribution is modeled
+        $ \Rightarrow $ distribution of $ X $ is independent of $ \theta $,
+        i.e. $ p(\mathbf{x}_k \mid \theta) = p(\mathbf{x}_k) $. Then,
+        \begin{equation} \label{cond_likelihood}
+            p(\mathcal{D} \mid \theta) \propto
+            \prod_{k = 1}^N p(y_k \mid \mathbf{x}_k, \theta)
+        \end{equation}
+        Here $ \propto $ means ``is proportional to''. We omit the
+        $ p(\mathbf{x}_k) $ terms.
+    \end{itemize}
+\end{frame}
+
+\subsection{Linear regression}
+
+
+\section{Maximum \textit{a posteriori}}
+
+\subsection{MAP fundamentals}
+
+\subsection{Ridge regression}
+
+\subsection{Regularization}
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{master_bib}
+\end{frame}
+
+\end{document}
