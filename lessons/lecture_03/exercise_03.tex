@@ -66,7 +66,7 @@
 % title, author + thanks, date
 \title{Exercise 3}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{March 6, 2021\thanks{Original version released on March 4, 2021.}}
+\date{March 8, 2021\thanks{Original version released on March 4, 2021.}}
 
 % shortcut links. the % characters strip extra spacing.
 \newcommand{\pytest}{%
@@ -91,9 +91,6 @@
 % need to include this after making title to undo the automatic
 % \thispagestyle{plain} command that is issued.
 \thispagestyle{fancy}
-
-% reduce space between title and first section to keep text on one page
-\vspace{-1 pt}
 
 \section{Introduction}
 
@@ -126,7 +123,8 @@ three methods contains the comment block
 Your code \textbf{must} be written in the areas marked by these blocks. Do
 \textbf{not} change any of pre-written code. The exercise is complete
 $ \Leftrightarrow $ \texttt{pytest /path/to/exercise\_03.py} executes with
-zero test failures.
+zero test failures. Note that attributes ending with \texttt{\_}, ex.
+\texttt{coef\_}, are created \textbf{during} the fitting process.
 
 \subsection{Using \lsqr}
 
@@ -143,10 +141,8 @@ corresponds to the \texttt{damp} parameter passed to \lsqr.
 
 \medskip
 
-For this exercise, you should use only the \texttt{A}, \texttt{b}, and
-\texttt{damp} parameters. Do \textbf{not} pass values to any of the other
-named parameters listed in the \lsqr{} documentation. If you are stuck, read
-the relevant parts of the \lsqr{} documentation carefully.
+You should use \textbf{only} the \texttt{A}, \texttt{b}, and \texttt{damp}
+parameters. See the documentation for usage examples.
 
 \subsection{Tips}
 
