@@ -6,7 +6,7 @@ from sklearn.datasets import make_blobs, make_regression
 from sklearn.model_selection import train_test_split
 
 
-@pytest.fixture(scope = "session")
+@pytest.fixture(scope="session")
 def global_seed():
     """Universal seed value to be reused by all test methods.
 
@@ -17,7 +17,7 @@ def global_seed():
     return 7
 
 
-@pytest.fixture(scope = "session")
+@pytest.fixture(scope="session")
 def linreg(global_seed):
     """Generated linear regression problem with train/test split.
 
@@ -49,18 +49,18 @@ def linreg(global_seed):
     bias = 7
     # generate noisy regression problem
     X, y, coef = make_regression(
-        n_samples = 600, n_features = 10, n_informative = 10, bias = bias,
-        noise = 1, coef = True, random_state = global_seed
+        n_samples=600, n_features=10, n_informative=10, bias=bias, noise=1,
+        coef=True, random_state=global_seed
     )
     # split the data with train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size = 0.2, random_state = global_seed
+        X, y, test_size=0.2, random_state=global_seed
     )
     # return split data, coef, and bias
     return X_train, X_test, y_train, y_test, coef, bias
 
 
-@pytest.fixture(scope = "session")
+@pytest.fixture(scope="session")
 def blobcls(global_seed):
     """Generated blob classification problem with train/test split.
 
@@ -88,13 +88,12 @@ def blobcls(global_seed):
     # generate noisy classification problem using isotropic Gaussian blobs
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples = 600, n_features = 10, centers = 2,
-        random_state = global_seed
+        n_samples=600, n_features=10, centers=2, random_state=global_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size = 0.2, random_state = global_seed
+        X, y, test_size=0.2, random_state=global_seed
     )
     # return split data, coef, and bias
     return X_train, X_test, y_train, y_test

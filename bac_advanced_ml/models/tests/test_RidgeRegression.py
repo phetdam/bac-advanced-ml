@@ -23,7 +23,7 @@ def test_res_matmul(linreg):
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
-    lr = RidgeRegression(solver = "matmul").fit(X_train, y_train)
+    lr = RidgeRegression(solver="matmul").fit(X_train, y_train)
     # pylint: disable=no-member
     np.testing.assert_allclose(_lr.coef_, lr.coef_)
     np.testing.assert_allclose(_lr.intercept_, lr.intercept_)
@@ -53,7 +53,7 @@ def test_res_lsqr(linreg):
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
-    lr = RidgeRegression(solver = "lsqr").fit(X_train, y_train)
+    lr = RidgeRegression(solver="lsqr").fit(X_train, y_train)
     # pylint: disable=no-member
     np.testing.assert_allclose(_lr.coef_, lr.coef_)
     np.testing.assert_allclose(_lr.intercept_, lr.intercept_)

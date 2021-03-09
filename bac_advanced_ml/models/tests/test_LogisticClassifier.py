@@ -12,7 +12,7 @@ def test_res(blobcls):
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blobcls
     # hyperparameters to fix (in case defaults change)
-    shared_params = dict(tol = 1e-4, C = 1., max_iter = 100)
+    shared_params = dict(tol=1e-4, C=1., max_iter=100)
     # fit scikit-learn model and our model
     _lc = _LogisticRegression(**shared_params).fit(X_train, y_train)
     lc = LogisticRegression(**shared_params).fit(X_train, y_train)
