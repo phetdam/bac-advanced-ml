@@ -1,0 +1,265 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author + thanks, date
+\title{Exercise 4}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+\date{March 10, 2021}
+
+% shortcut links. the % characters strip extra spacing.
+\newcommand{\pytest}{\href{https://docs.pytest.org/en/stable/}{pytest}}
+\newcommand{\minimize}{%
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/generated/%
+        scipy.optimize.minimize.html%
+    }{\texttt{scipy.optimize.minimize}}%
+}
+% don't wanna keep typing this out
+\newcommand{\loglossgrad}{\texttt{\_logistic\_loss\_grad}}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+
+\section{Introduction}
+
+The goal of this exercise is to implement an $ \ell^2 $-regularized logistic
+regression model, minimizing the convex objective using the L-BFGS
+implementation provided by \minimize.
+
+\section{Instructions}
+
+\subsection{General}
+
+The \texttt{exercise\_04.py} file contains a skeleton for the
+\texttt{LogisticRegression} class, the \loglossgrad{} function, a unit test,
+and a \pytest{} fixture. Your job is to implement the \texttt{predict} and \texttt{score} methods of the \texttt{LogisticRegression} class and the \loglossgrad{}
+function by replacing the \texttt{\#\#\# your code goes here \#\#\#} comment
+blocks with the appropriate Python code.
+
+\medskip
+
+Your code \textbf{must} be written in the areas marked by these blocks. Do
+\textbf{not} change any of the pre-written code. The exercise is complete
+$ \Leftrightarrow $ \texttt{pytest /path/to/exercise\_04.py} executes with
+zero test failures. Note that attributes ending with \texttt{\_}, ex.
+\texttt{coef\_}, are created \textbf{during} the fitting process.
+
+\subsection{Objective and gradient}
+
+Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix, each row
+$ \mathbf{x}_k^\top $ a tranposed data example, and let $ \mathbf{y} \in
+\{-1, 1\}^N $ be the response label vector, $ -1 $ for negative class, $ 1 $
+for positive class. Let $ \mathbf{w} \in \mathbb{R}^d $ be the weight vector,
+$ b \in \mathbb{R} $ the intercept term. Then, for $ \alpha \in [0, \infty) $,
+the loss functional $ J_\mathcal{D} : \mathbb{R}^d \times \mathbb{R}
+\rightarrow [0, \infty) $, $ \mathcal{D} \triangleq
+(\mathbf{X}, \mathbf{y}) $, is such that
+\begin{equation} \label{logreg_obj}
+    J_\mathcal{D}(\mathbf{w}, b) = \sum_{k = 1}^N\log\left(
+        1 + e^{-y_k(\mathbf{w}^\top\mathbf{x}_k + b)}
+    \right) + \frac{1}{2}\alpha\Vert\mathbf{w}\Vert_2^2
+\end{equation}
+
+This form is exactly the unweighted objective minimized by scikit-learn for
+two-class logistic regression. To minimize $ J_\mathcal{D} $, we will be using
+L-BFGS, a \href{%
+    https://en.wikipedia.org/wiki/Quasi-Newton_method%
+}{quasi-Newton method} that is a limited-memory version of the \href{%
+    https://en.wikipedia.org/wiki/Broyden\%E2\%80\%93Fletcher\%E2\%80\%93%
+    Goldfarb\%E2\%80\%93Shanno_algorithm%
+}{BFGS algorithm}. The $ \mathbf{w}, b $ gradients of $ J_\mathcal{D} $, which
+are required\footnote{
+    If the gradient is not provided, \minimize{} will approximate it with
+    finite differences.
+} by [L-]BFGS, are such that
+\begin{equation} \label{logreg_grads}
+    \begin{split}
+        \nabla_\mathbf{w}J_\mathcal{D}(\mathbf{w}, b) & =
+	    \sum_{k = 1}^N y_k\mathbf{x}_k\left[
+	        \sigma\left(
+	            y_k\left(\mathbf{w}^\top\mathbf{x}_k + b\right)
+	        \right) - 1
+	    \right] + \alpha\mathbf{w} \\
+	    \nabla_bJ_\mathcal{D}(\mathbf{w}, b) & =
+	    \sum_{k = 1}^N y_k\left[
+	        \sigma\left(
+	            y_k\left(\mathbf{w}^\top\mathbf{x}_k + b\right)
+	        \right) - 1
+	    \right]
+    \end{split}
+\end{equation}
+
+Here $ \sigma : \mathbb{R} \rightarrow (0, 1) $ is the sigmoid function, i.e.
+$ \sigma(x) \triangleq 1 / (1 + e^{-x}) $.
+
+\subsection{Implementing \loglossgrad}
+
+\loglossgrad{} computes the loss and gradient for a two-class logistic
+regression model. It takes positional parameters \texttt{w}, the concatenated 
+coefficients $ [ \ \mathbf{w} \ \ b \ ]^\top \in \mathbb{R}^{d + 1} $,
+\texttt{X}, the input matrix $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
+\texttt{y}, the label vector $ \mathbf{y} \in \{-1, 1\}^N $, and
+\texttt{alpha}, the $ \alpha \in [0, \infty) $ parameter scaling the
+$ \ell^2 $ regularization term. Note that \texttt{alpha} does \textbf{not}
+show up in the signature of \texttt{LogisticRegression.\_\_init\_\_} and so
+\texttt{1 / self.C} should be passed to the \texttt{alpha} parameter of
+\loglossgrad, where \texttt{C} is the inverse regularization parameter
+mentioned in the class docstring. The use of \texttt{C} here is to conform to
+scikit-learn convention.
+
+\medskip
+
+The tuple \texttt{(loss, grad)} should be returned by \loglossgrad{}, where
+\texttt{loss} gives the current loss functional value
+$ J_\mathcal{D}(\mathbf{w}, b) $ and \texttt{grad} gives the loss functional
+$ [ \ \mathbf{w} \ \ b \ ]^\top $ gradient
+$ [ \ \nabla_\mathbf{w}J_\mathcal{D}(\mathbf{w}, b) \ \
+\nabla_bJ_\mathcal{D}(\mathbf{w}, b)\ ]^\top $. \texttt{loss} must be of
+type \texttt{float} or \texttt{numpy.float64} and \texttt{grad} must be of
+type \texttt{numpy.ndarray} with a float \texttt{dtype}.
+
+\subsection{Implementing \texttt{predict}}
+
+The \texttt{predict} method of the \texttt{LogisticRegression} class, when
+given \texttt{X}, a \texttt{numpy.ndarray} shape
+\texttt{(n\_samples, n\_features)}, where \texttt{n\_features} $ == d $,
+should return a \texttt{numpy.ndarray} shape \texttt{(n\_samples,)} giving the
+predicted class labels, containing only the values in \texttt{self.classes\_}
+recorded by the \texttt{fit} method. Given a new example $ \mathbf{x} \in
+\mathbb{R}^d $ and parameters $\mathbf{w} \in \mathbb{R}^d $, $ b \in
+\mathbb{R} $, the prediction rule $ F : \mathbb{R}^d \rightarrow
+\{\gamma_{-1}, \gamma_1\} $ is such that
+\begin{equation*}
+    F(\mathbf{x}) \triangleq \gamma_1\mathbb{I}_{(0, \infty)}
+        \left(\mathbf{w}^\top\mathbf{x} + b\right) +
+        \gamma_{-1}\mathbb{I}_{(-\infty, 0]}
+        \left(\mathbf{w}^\top\mathbf{x} + b\right)
+\end{equation*}
+
+Here $ \gamma_1 $, the positive class label, should be
+\texttt{self.classes\_[1]}, while $ \gamma_{-1} $, the negative class label,
+should be \texttt{self.classes\_[0]}. Be careful not to get them mixed up or
+a correct implementation will predict the opposite of the scikit-learn
+implementation for any new data example $ \mathbf{x} $.
+
+\subsection{Implementing \texttt{score}}
+
+The \texttt{score} method of the \texttt{LogisticRegression} class computes
+the accuracy of the predictions. Given parameters $ \mathbf{w}, b $,
+classification function $ F_{\mathbf{w}, b} $ (the model), and data
+$ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots (\mathbf{x}, y_N)\} $,
+where the $ y_k $ values may either be numeric or class labels, the accuracy
+$ \mathcal{A}_{\mathbf{w}, b} $ of the model on the data $ \mathcal{D} $ is
+\begin{equation*}
+    \mathcal{A}_{\mathbf{w}, b}(\mathcal{D}) = \frac{1}{|\mathcal{D}|}
+        \sum_{(\mathbf{x}, y) \in \mathcal{D}}\mathbb{I}_{\{y\}}\left(
+            F_{\mathbf{w}, b}(\mathbf{x})
+        \right)
+\end{equation*}
+
+Note that $ \operatorname{im}\mathcal{A}_{\mathbf{w}, b} = [0, 1] $, so for
+data $ \mathcal{D} $, $ \mathcal{A}_{\mathbf{w}, b}(\mathcal{D}) $ is the
+fraction of examples the model correctly clasified.
+
+\subsection{Tips}
+
+\begin{enumerate}
+    \item
+    Carefully read the \texttt{LogisticRegression} method docstrings.
+
+    \item
+    Remember that \loglossgrad{} should return both the objective (loss
+    functional) value \textbf{and} its $ [ \ \mathbf{w} \ \ b \ ]^\top $
+    gradient. If \texttt{n\_features} $ = d $, allocate a
+    \texttt{numpy.ndarray} shape \texttt{(n\_features + 1,)}, filling the
+    first \texttt{n\_features} elements with the $ \mathbf{w} $ gradient
+    and the last with the $ b $ gradient (partial derivative).
+
+    \item
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/generated/%
+        scipy.special.expit.html%
+    }{\texttt{scipy.special.expit}} is a vectorized elementwise sigmoid
+    function that is very useful for computing the $ \mathbf{w}, b $
+    gradients defined in (\ref{logreg_grads}) for \loglossgrad.
+
+    \item
+    Remember that $ \alpha = 1 / C $, so $ 1 / C $ should be passed to the
+    \texttt{alpha} parameter of \loglossgrad.
+
+    \item
+    Use NumPy functions whenever possible for efficiency, brevity, and ease
+    of debugging.
+\end{enumerate}
+
+
+
+
+\end{document}
