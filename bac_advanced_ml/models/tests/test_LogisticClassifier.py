@@ -9,6 +9,15 @@ from ..supervised import LogisticRegression
 
 
 def test_res(blobcls):
+    """Check LogisticRegression is equivalent to sklearn for two-class case.
+
+    Checks the fit, predict, and score methods, checking solution and accuracy.
+
+    Parameters
+    ----------
+    blobcls : tuple
+        pytest fixture. See conftest.py.
+    """
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blobcls
     # hyperparameters to fix (in case defaults change)

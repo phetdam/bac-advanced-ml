@@ -147,9 +147,9 @@ def _logistic_loss_grad(w, X, y, alpha):
 
     Returns
     -------
-    numpy.float64
+    loss : numpy.float64
         Objective value (total loss).
-    numpy.ndarray
+    grad : numpy.ndarray
         Gradient of the objective at w, shape (n_features + 1,).
     """
     # get number of features
