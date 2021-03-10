@@ -150,7 +150,7 @@ def test_res_matmul(linreg):
     Parameters
     ----------
     linreg : tuple
-        pytest fixture. See conftest.py.
+        pytest fixture. See linreg definition.
     """
     # get data and true parameters
     X_train, X_test, y_train, y_test = linreg
@@ -181,7 +181,7 @@ def test_res_lsqr(linreg):
     Parameters
     ----------
     linreg : tuple
-        pytest fixture. See conftest.py.
+        pytest fixture. See linreg definiton.
     """
     # get data and true parameters
     X_train, X_test, y_train, y_test = linreg
