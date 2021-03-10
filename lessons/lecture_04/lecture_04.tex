@@ -176,6 +176,47 @@
 
 \subsection{Linear regression}
 
+\subsection{Logistic regression}
+
+%\begin{frame}{Logistic regression}
+%
+%\end{frame}
+
+\begin{frame}{Logistic regression}
+    \begin{itemize}
+        \item
+        \textit{Multiclass logistic regression.} Let
+        $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix, let
+        $ \mathcal{C} \triangleq \{\mathcal{C}_1, \ldots \mathcal{C}_K\} $ be a
+        partition of $ \mathcal{X} $. Let $ \mathbf{Y} \in
+        \mathbb{R}^{N \times K} $ be the response indicator matrix
+        where $ \mathbf{x}_i \in \mathcal{C}_i \Rightarrow y_{ij} = 1 $. Let
+        $ \mathbf{W} \in \mathbb{R}^{d \times K} $ where each
+        column $ \mathbf{w}_j $ gives $ j $th class weights and let
+        $ \mathbf{b} \in \mathbb{R}^K $ be the vector where each
+        $ b_j $ is the $ j $th class intercept.
+
+        \item
+        Define $ \sigma_j : \mathbb{R}^{d \times K} \times \mathbb{R}^d \times
+        \mathbb{R}^K \rightarrow (0, 1) $ s.t. for $ j \in \{1, \ldots
+        |\mathcal{C}|\} $, $ \mathbf{x} \in \mathbb{R}^d $,
+		\begin{equation*}
+		    \sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b}) = \frac{
+		        e^{\mathbf{w}_j^\top\mathbf{x} + b_j}
+		    }{\sum_{k = 1}^K e^{\mathbf{w}_k^\top\mathbf{x} + b_k}}
+		\end{equation*}
+		For $ \lambda \in [0, \infty) $, the multi-class loss functional
+        $ J_\mathcal{D} : \mathbb{R}^{d \times |\mathcal{C}|} \rightarrow
+        [0, \infty) $, with data $ \mathcal{D} \triangleq
+        (\mathbf{X}, \mathbf{Y}) $, is then such that \cite{bishop_ml}
+		\begin{equation} \label{logreg_multiclass}
+		    J_\mathcal{D}(\mathbf{W}) = -\sum_{i = 1}^N\sum_{j = 1}^K
+		        y_{ij}\log\sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b})
+		        + \lambda\Vert\mathbf{W}\Vert_{\operatorname{F}}^2
+		\end{equation}
+    \end{itemize}
+\end{frame}
+
 
 \section{Maximum \textit{a posteriori}}
 
@@ -189,7 +230,7 @@
 \begin{frame}{References}
     \bibliographystyle{acm}
     % relative path may need to be updated depending on .tex file location
-    \bibliography{master_bib}
+    \bibliography{../master_bib}
 \end{frame}
 
 \end{document}

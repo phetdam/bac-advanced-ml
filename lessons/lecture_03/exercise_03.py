@@ -42,7 +42,7 @@ class RidgeRegression(BaseEstimator):
     # allowable solvers
     _solvers = ("matmul", "lsqr")
 
-    def __init__(self, alpha = 1., solver = "lsqr"):
+    def __init__(self, alpha=1., solver="lsqr"):
         if alpha < 0:
             raise ValueError("alpha must be nonnegative")
         if solver not in self._solvers:
@@ -120,7 +120,7 @@ class RidgeRegression(BaseEstimator):
         ###########################
 
 
-@pytest.fixture(scope = "session")
+@pytest.fixture(scope="session")
 def linreg():
     """Regression data returned by sklearn.datasets.make_regression.
 
@@ -134,12 +134,12 @@ def linreg():
     # generate noisy regression problem
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_regression(
-        n_samples = 600, n_features = 10, n_informative = 10, bias = 7,
-        noise = 1, random_state = _seed
+        n_samples=600, n_features=10, n_informative=10,
+        bias=7, noise=1, random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return it
-    return train_test_split(X, y, test_size = 0.2, random_state = 7)
+    return train_test_split(X, y, test_size=0.2, random_state=7)
 
 
 def test_res_matmul(linreg):
@@ -158,7 +158,7 @@ def test_res_matmul(linreg):
     _lr = Ridge().fit(X_train, y_train)
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
-    lr = RidgeRegression(solver = "matmul").fit(X_train, y_train)
+    lr = RidgeRegression(solver="matmul").fit(X_train, y_train)
     # pylint: disable=no-member
     np.testing.assert_allclose(_lr.coef_, lr.coef_)
     np.testing.assert_allclose(_lr.intercept_, lr.intercept_)
@@ -188,7 +188,7 @@ def test_res_lsqr(linreg):
     # fit sklearn model
     _lr = Ridge().fit(X_train, y_train)
     # fit our model and check that our solution is not far from sklearn's
-    lr = RidgeRegression(solver = "lsqr").fit(X_train, y_train)
+    lr = RidgeRegression(solver="lsqr").fit(X_train, y_train)
     # pylint: disable=no-member
     np.testing.assert_allclose(_lr.coef_, lr.coef_)
     np.testing.assert_allclose(_lr.intercept_, lr.intercept_)
