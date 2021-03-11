@@ -1,6 +1,5 @@
 __doc__ = "Week 4 exercise: implementation of regularized logistic regression."
 
-import math
 import numpy as np
 import pytest
 import scipy.special
