@@ -126,10 +126,10 @@
         drawn from the $ X, Y $ joint distribution, let
         \begin{equation*}
             p(\mathcal{D} \mid \theta) \triangleq p(\mathbf{x}_1, \ldots
-                \mathbf{x}_N, y_1, \ldots y_N)
+                \mathbf{x}_N, y_1, \ldots y_N \mid \theta)
         \end{equation*}
-        $ p(\mathcal{D} \mid \theta) $ is the \textit{joint likelihood} of
-        $ \mathcal{D} $.
+        $ p(\mathcal{D} \mid \theta) $ is called the
+        \textit{joint likelihood} of $ \mathcal{D} $.
 
         \item
         If $ D \triangleq [ \ X_1 \ \ldots \ X_N \ \ Y_1 \ \ldots
@@ -176,11 +176,146 @@
 
 \subsection{Linear regression}
 
+\begin{frame}{Linear regression}
+    \begin{itemize}
+        \item
+        Let $ X : \Omega \rightarrow \mathbb{R}^d $,
+        $ Y : \Omega \rightarrow \mathbb{R} $, be such that for
+        $ \mathbf{w} \in \mathbb{R}^d $, $ b \in \mathbb{R} $,
+        $ \sigma \in (0, \infty) $, $ \theta \triangleq (\mathbf{w}, b) $,
+        $ Y \mid X, \theta \sim \mathcal{N}\left(
+        \mathbf{w}^\top X + b, \sigma^2\right) $.
+
+        \item
+        Clearly $ \mathbb{E}[Y \mid X, \theta] = \mathbf{w}^\top X + b $. Note
+        that we are treating $ \theta $ like a random variable.
+        \textit{Maximum a posteriori} takes this approach.
+
+        \item
+        The $ Y \mid X, \theta $ \textit{conditional density}
+        $ p(y \mid \mathbf{x}, \theta) $ is simply
+       \begin{equation} \label{linreg_density}
+           p(y \mid \mathbf{x}, \theta) \triangleq
+	           \frac{1}{\sqrt{2\pi}\sigma}
+	           e^{-\frac{1}{2\sigma^2}\left(
+	               y - \mathbf{w}^\top\mathbf{x} - b
+               \right)^2}
+       \end{equation}
+       We can then rewrite (\aref{cond_likelihood}) more explicitly as
+       \begin{equation} \label{linreg_like}
+           p(\mathcal{D} \mid \theta) \propto
+               \prod_{k = 1}^N\frac{1}{\sqrt{2\pi}\sigma}
+               e^{-\frac{1}{2\sigma^2}\left(
+                   y_k - \mathbf{w}^\top\mathbf{x}_k - b
+               \right)^2}
+       \end{equation}
+
+        \item
+        \textit{Remark.} As is typical, we will now treat
+        $ p(\mathcal{D} \mid \theta) $ as a function of $ \theta $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Linear regression}
+    \begin{itemize}
+        \item
+        Note that $ p(\mathcal{D} \mid \cdot) $ concave $ \Rightarrow
+        \log p(\mathcal{D} \mid \cdot) $ concave as $ \log $ is nondecreasing
+        \cite{bv_convex_opt}. Globally optimal $ \hat{\theta} $ is such that
+        \begin{equation*}
+            \hat{\theta} \triangleq \arg\max_\theta p(\mathcal{D} \mid \theta)
+            = \arg\max_\theta \log p(\mathcal{D} \mid \theta)
+        \end{equation*}
+
+        \item
+        Problems are equivalent, but $ \log p(\mathcal{D} \mid \theta) $ is a
+        more convenient form. Taking the log of (\aref{linreg_like}) and
+        collecting constants into $ C $,
+        \begin{equation*}
+            \log p(\mathcal{D} \mid \theta) = C - \sum_{k = 1}^N
+                \frac{1}{2\sigma^2}\left(
+                    y_k - \mathbf{w}^\top\mathbf{x}_k - b
+                \right)^2
+        \end{equation*}
+
+        \item
+        $ \arg\max = -\arg\min $, $ \arg\max $ shift and positive scaling
+        invariant $ \Rightarrow $
+        \begin{equation} \label{linreg_like2cost}
+            \hat{\mathbf{w}}, \hat{b} =
+            \arg\max_{\mathbf{w}, b}\log p(\mathcal{D} \mid \mathbf{w}, b) =
+            \arg\min_{\mathbf{w}, b}\sum_{k = 1}^N\big(
+                y_k - \mathbf{w}^\top\mathbf{x}_k - b
+            \big)^2
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
 \subsection{Logistic regression}
 
-%\begin{frame}{Logistic regression}
-%
-%\end{frame}
+\begin{frame}{Logistic regression}
+    \begin{itemize}
+        \item
+        Let $ X : \Omega \rightarrow \mathbb{R}^d $, $ Y : \Omega \rightarrow
+        \{-1, 1\} $, be such that for $ \mathbf{w} \in \mathbb{R} $,
+        $ b \in \mathbb{R} $, $ \mathbb{P}\{Y = 1 \mid X, \theta\} =
+        \sigma\left(\mathbf{w}^\top X + b\right) $, where $ \sigma : \mathbb{R}
+        \rightarrow (0, 1) $ such that
+        \begin{equation*}
+            \sigma(z) = \frac{1}{1 + e^{-z}} = \frac{e^z}{1 + e^z} =
+            1 - \frac{1}{1 + e^z}
+        \end{equation*}
+
+        \item
+        $ \sigma $ is the \textit{sigmoid function}, use stems from the
+        desire to model $ \mathbb{P}\{Y \mid X, \theta\} $ with affine
+        functions \cite{esl}. Define $ \ell : (0, 1) \rightarrow \mathbb{R} $
+        such that
+        \begin{equation*}
+            \ell(p) \triangleq \log\left(\frac{p}{1 - p}\right)
+        \end{equation*}
+        Let $ p_{+, \theta} \triangleq \mathbb{P}\{Y = 1 \mid X, \theta\} $.
+        $ \frac{\sigma(z)}{1 - \sigma(z)} = e^z \Rightarrow
+        \ell(p_{+, \theta}) = \mathbf{w}^\top X + b $.
+
+        \item
+        For any probability $ p \in (0, 1) $, $ \ell(p) $ are the
+        \textit{log-odds}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic regression}
+    \begin{itemize}
+        \item
+        Using our parametrization for $ \mathbb{P}\{Y = 1 \mid X, \theta\} $,
+        we rewrite (\aref{cond_likelihood}) as
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) \propto
+            \prod_{k = 1}^N\mathbb{P}\{Y = y_k \mid X = \mathbf{x}_k, \theta\}
+        \end{equation*}
+        Since $ \sigma(z) = \frac{1}{1 + e^{-z}} $, 
+        $ 1 - \sigma(z) = \frac{1}{1 + e^z} $, then
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) \propto \prod_{k = 1}^N
+            \sigma\big(y_k\big(\mathbf{w}^\top\mathbf{x}_k + b\big)\big)
+        \end{equation*}
+
+        \item
+        Again\footnote{
+            $ p(\mathcal{D} \mid \cdot) $ is concave, $ \log $ is concave
+            and nondecreasing, $ \arg\max = -\arg\min $.
+        }, $ \hat{\theta} \triangleq \arg\max_\theta
+        p(\mathcal{D} \mid \theta) = -\arg\min_\theta
+        \log p(\mathcal{D} \mid \theta) $, so
+        \begin{equation} \label{logreg_like2cost}
+            \hat{\mathbf{w}}, \hat{b} = \arg\min_{\mathbf{w}, b}\sum_{k = 1}^N
+            \log\left(1 + e^{-y_k(\mathbf{w}^\top\mathbf{x}_k + b)}\right)
+        \end{equation}
+    \end{itemize}
+
+    % spacing for footnote
+    \medskip
+\end{frame}
 
 \begin{frame}{Logistic regression}
     \begin{itemize}
@@ -190,7 +325,7 @@
         $ \mathcal{C} \triangleq \{\mathcal{C}_1, \ldots \mathcal{C}_K\} $ be a
         partition of $ \mathcal{X} $. Let $ \mathbf{Y} \in
         \mathbb{R}^{N \times K} $ be the response indicator matrix
-        where $ \mathbf{x}_i \in \mathcal{C}_i \Rightarrow y_{ij} = 1 $. Let
+        where $ \mathbf{x}_i \in \mathcal{C}_j \Rightarrow y_{ij} = 1 $. Let
         $ \mathbf{W} \in \mathbb{R}^{d \times K} $ where each
         column $ \mathbf{w}_j $ gives $ j $th class weights and let
         $ \mathbf{b} \in \mathbb{R}^K $ be the vector where each
@@ -216,7 +351,6 @@
 		\end{equation}
     \end{itemize}
 \end{frame}
-
 
 \section{Maximum \textit{a posteriori}}
 
