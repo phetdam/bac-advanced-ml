@@ -66,7 +66,7 @@
 % title, author + thanks, date
 \title{Exercise 4}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{March 10, 2021}
+\date{March 11, 2021}
 
 % shortcut links. the % characters strip extra spacing.
 \newcommand{\pytest}{\href{https://docs.pytest.org/en/stable/}{pytest}}
@@ -180,8 +180,8 @@ The tuple \texttt{(loss, grad)} should be returned by \loglossgrad{}, where
 \texttt{loss} gives the current loss functional value
 $ J_\mathcal{D}(\mathbf{w}, b) $ and \texttt{grad} gives the loss functional
 $ [ \ \mathbf{w} \ \ b \ ]^\top $ gradient
-$ [ \ \nabla_\mathbf{w}J_\mathcal{D}(\mathbf{w}, b) \ \
-\nabla_bJ_\mathcal{D}(\mathbf{w}, b)\ ]^\top $. \texttt{loss} must be of
+$ [ \ \nabla_\mathbf{w}J_\mathcal{D}(\mathbf{w}, b)^\top \ \
+\nabla_bJ_\mathcal{D}(\mathbf{w}, b)^\top \ ]^\top $. \texttt{loss} must be of
 type \texttt{float} or \texttt{numpy.float64} and \texttt{grad} must be of
 type \texttt{numpy.ndarray} with a float \texttt{dtype}.
 
