@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{March 8, 2021}
+\date{March 15, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -162,9 +162,9 @@
         \end{equation*}
 
         \item
-        Often only the $ Y \mid X $ conditional distribution is modeled
-        $ \Rightarrow $ distribution of $ X $ is independent of $ \theta $,
-        i.e. $ p(\mathbf{x}_k \mid \theta) = p(\mathbf{x}_k) $. Then,
+        Often only the $ Y \mid X $ conditional distribution is modeled so the
+        distribution of $ X $ is independent of $ \theta $, i.e.
+        $ p(\mathbf{x}_k \mid \theta) = p(\mathbf{x}_k) $. Then,
         \begin{equation} \label{cond_likelihood}
             p(\mathcal{D} \mid \theta) \propto
             \prod_{k = 1}^N p(y_k \mid \mathbf{x}_k, \theta)
@@ -187,9 +187,11 @@
         \mathbf{w}^\top X + b, \sigma^2\right) $.
 
         \item
-        Clearly $ \mathbb{E}[Y \mid X, \theta] = \mathbf{w}^\top X + b $. Note
-        that we are treating $ \theta $ like a random variable.
-        \textit{Maximum a posteriori} takes this approach.
+        Clearly the regression function is $ \mathbb{E}[Y \mid X, \theta] =
+        \mathbf{w}^\top X + b $\footnote{
+            Note $ \theta $ is treated like a random variable despite being
+            fixed.
+        }.
 
         \item
         The $ Y \mid X, \theta $ \textit{conditional density}
@@ -219,9 +221,9 @@
 \begin{frame}{Linear regression}
     \begin{itemize}
         \item
-        Note that $ p(\mathcal{D} \mid \cdot) $ concave $ \Rightarrow
-        \log p(\mathcal{D} \mid \cdot) $ concave as $ \log $ is nondecreasing
-        \cite{bv_convex_opt}. Globally optimal $ \hat{\theta} $ is such that
+        Note that $ \arg\max $ is invariant under monotone transformations. For
+        example, if $ \hat{\theta} $ is the global maximum of
+        $ p(\mathcal{D} \mid \theta) $,
         \begin{equation*}
             \hat{\theta} \triangleq \arg\max_\theta p(\mathcal{D} \mid \theta)
             = \arg\max_\theta \log p(\mathcal{D} \mid \theta)
@@ -229,14 +231,14 @@
 
         \item
         Problems are equivalent, but $ \log p(\mathcal{D} \mid \theta) $ is a
-        more convenient form. Taking the log of (\aref{linreg_like}) and
-        collecting constants into $ C $,
-        \begin{equation*}
+        more convenient form (concave). Taking the log of (\aref{linreg_like})
+        and collecting constants into $ C $,
+        \begin{equation} \label{linreg_loglike}
             \log p(\mathcal{D} \mid \theta) = C - \sum_{k = 1}^N
                 \frac{1}{2\sigma^2}\big(
                     y_k - \mathbf{w}^\top\mathbf{x}_k - b
                 \big)^2
-        \end{equation*}
+        \end{equation}
 
         \item
         $ \arg\max = -\arg\min $, $ \arg\max $ shift and positive scaling
@@ -302,8 +304,8 @@
 
         \item
         Again\footnote{
-            $ p(\mathcal{D} \mid \cdot) $ is concave, $ \log $ is concave
-            and nondecreasing, $ \arg\max = -\arg\min $.
+            $ \arg\max $ invariant under monotone transformations,
+            $ \arg\max = -\arg\min $.
         }, $ \hat{\theta} \triangleq \arg\max_\theta
         p(\mathcal{D} \mid \theta) = -\arg\min_\theta
         \log p(\mathcal{D} \mid \theta) $, so
@@ -317,48 +319,203 @@
     \medskip
 \end{frame}
 
-\begin{frame}{Logistic regression}
-    \begin{itemize}
-        \item
-        \textit{Multiclass logistic regression.} Let
-        $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix, let
-        $ \mathcal{C} \triangleq \{\mathcal{C}_1, \ldots \mathcal{C}_K\} $ be a
-        partition of $ \mathcal{X} $. Let $ \mathbf{Y} \in
-        \mathbb{R}^{N \times K} $ be the response indicator matrix
-        where $ \mathbf{x}_i \in \mathcal{C}_j \Rightarrow y_{ij} = 1 $. Let
-        $ \mathbf{W} \in \mathbb{R}^{d \times K} $ where each
-        column $ \mathbf{w}_j $ gives $ j $th class weights and let
-        $ \mathbf{b} \in \mathbb{R}^K $ be the vector where each
-        $ b_j $ is the $ j $th class intercept.
-
-        \item
-        Define $ \sigma_j : \mathbb{R}^{d \times K} \times \mathbb{R}^d \times
-        \mathbb{R}^K \rightarrow (0, 1) $ s.t. for $ j \in \{1, \ldots
-        |\mathcal{C}|\} $, $ \mathbf{x} \in \mathbb{R}^d $,
-		\begin{equation*}
-		    \sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b}) = \frac{
-		        e^{\mathbf{w}_j^\top\mathbf{x} + b_j}
-		    }{\sum_{k = 1}^K e^{\mathbf{w}_k^\top\mathbf{x} + b_k}}
-		\end{equation*}
-		For $ \lambda \in [0, \infty) $, the multi-class loss functional
-        $ J_\mathcal{D} : \mathbb{R}^{d \times |\mathcal{C}|} \rightarrow
-        [0, \infty) $, with data $ \mathcal{D} \triangleq
-        (\mathbf{X}, \mathbf{Y}) $, is then such that \cite{bishop_ml}
-		\begin{equation} \label{logreg_multiclass}
-		    J_\mathcal{D}(\mathbf{W}) = -\sum_{i = 1}^N\sum_{j = 1}^K
-		        y_{ij}\log\sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b})
-		        + \lambda\Vert\mathbf{W}\Vert_{\operatorname{F}}^2
-		\end{equation}
-    \end{itemize}
-\end{frame}
-
 \section{Maximum \textit{a posteriori}}
 
 \subsection{MAP fundamentals}
 
+\begin{frame}{MAP fundamentals}
+    \begin{itemize}
+        \item
+        Maximum likelihood takes a \textit{frequentist} view towards parameter
+        estimation, i.e. there is a true $ \theta^* $ that the data
+        $ \mathcal{D} $ is sampled from.
+
+        \item
+        $ p(\mathcal{D} \mid \theta) \approx $ given $ \theta $, how likely is
+        it to sample $ \mathcal{D} $?
+
+        \item
+        Maximum \textit{a posteriori} is a \textit{Bayesian} approach to
+        parameter estimation, i.e. we treat $ \theta $ itself as a random
+        variable.
+
+        \item
+        \textit{Definition.} $ p(\theta) $, the density/pmf of the parameter,
+        is the \textit{prior}.
+
+        \item
+        MAP estimation considers the \textit{posterior}
+        $ p(\theta \mid \mathcal{D}) $. Roughly, $ p(\theta \mid \mathcal{D}) 
+        \approx $ given $ \mathcal{D} $, how likely is it to sample $ \theta $?
+
+        \item
+        $ p(\theta) $ reflects an initial guess for the distribution of the
+        parameter while $ p(\theta \mid \mathcal{D}) $ reflects the
+        distribution \textbf{conditional} on data $ \mathcal{D} $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{MAP fundamentals}
+    \begin{itemize}
+        \item
+        How can we link the likelihood and prior? Bayes' rule gives us
+        \begin{equation*}
+            p(\theta \mid \mathcal{D}) =
+            \frac{p(\mathcal{D} \mid \theta)p(\theta)}{p(\mathcal{D})} \propto
+            p(\mathcal{D} \mid \theta)p(\theta)
+        \end{equation*}
+
+        \item
+        We don't really care about $ p(\mathcal{D}) $, the marginal likelihood
+        of the data, since $ \mathcal{D} $ is given and $ p(\mathcal{D}) $ is
+        independent of $ \theta $.
+
+        \item
+        Clearly $ \log p(\theta \mid \mathcal{D}) = C +
+        \log p(\mathcal{D} \mid \theta) + \log p(\theta) $, where $ C $
+        collects any constant terms that don't depend on
+        $ \mathcal{D}, \theta $.
+
+        \item
+        It's clear that MAP estimation amounts to tacking on the log prior to
+        augment the objective function. Let's see a well-known example.
+    \end{itemize}
+\end{frame}
+
 \subsection{Ridge regression}
 
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        Recall (\aref{linreg_like}), the likelihood for the linear regression.
+        Suppose the coefficients $ \mathbf{w} \sim \mathcal{N}(\mathbf{0},
+        \nu^2\mathbf{I}) $, $ \nu > 0 $. The prior is then
+        \begin{equation} \label{ridge_prior}
+            p(\theta) \triangleq \frac{1}{(2\pi\nu)^{d / 2}}
+            e^{-\frac{1}{2\nu^2}\mathbf{w}^\top\mathbf{w}}
+        \end{equation}
+        Since we didn't assume a distribution\footnote{
+            Technically, no assumption amounts to assuming $ b $ is
+            uniformly distributed over $ \mathbb{R} $.
+        } on $ b $, $ b $ is omitted from
+        (\aref{ridge_prior}).
+
+        \item
+        Taking the natural log and collecting constants with $ C $, we have
+        \begin{equation*}
+            \log p(\theta) = C - \frac{1}{2\nu^2}\mathbf{w}^\top\mathbf{w}
+        \end{equation*}
+        If we add $ \log p(\theta) $ to (\aref{linreg_loglike}), multiply
+        by $ 2\sigma^2 $, and note $ \mathbf{w}^\top\mathbf{w} =
+        \Vert\mathbf{w}\Vert_2^2 $,
+        \begin{equation*}
+            \log p(\theta \mid \mathcal{D}) = C - \sum_{k = 1}^N
+            \big(y_k - \mathbf{w}^\top\mathbf{x}_k - b\big)^2 -
+            \frac{\sigma^2}{\nu^2}\Vert\mathbf{w}\Vert_2^2
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ridge regression}
+    \begin{itemize}
+        \item
+        Let $ \lambda = \frac{\sigma^2}{\nu^2} $. $ \arg\max_\theta
+        p(\theta \mid \mathcal{D}) =
+        -\arg\min_\theta\log p(\theta \mid \mathcal{D}) $ and so
+        \begin{equation}
+            \hat{\mathbf{w}}_\lambda, \hat{b}_\lambda =
+            \arg\min_{\mathbf{w}, b}\left\{\sum_{k = 1}^N
+            \big(y_k - \mathbf{w}^\top\mathbf{x}_k - b\big)^2 +
+            \lambda\Vert\mathbf{w}\Vert_2^2\right\}
+        \end{equation}
+
+        \item
+        \textit{Remark.} Note that $ \lambda $ is inversely proportional to
+        $ \nu $. Also, when $ \lambda $ increases, i.e. $ \nu $ is decreased,
+        there is a greater penalty applied to nonzero coefficients in the
+        objective.
+
+        \item
+        Increasing $ \lambda \Rightarrow $ assumption that $ \mathbf{w} $ is
+        more tightly concentrated around $ \mathbf{0} \Rightarrow $ greater
+        shrinkage of OLS coefficients.
+    \end{itemize}
+\end{frame}
+
 \subsection{Regularization}
+
+\begin{frame}{Regularization}
+    \begin{itemize}
+        \item
+        In the context of MAP estimation, regularization amounts to assuming a
+        prior distribution for $ \theta $. Therefore, there are simple
+        probabilistic interpretations for popular regularizers.
+
+        \item
+        $ \ell^2 $-norm regularization of the form
+        $ \lambda\Vert\mathbf{w}\Vert_2^2 $ for coefficients $ \mathbf{w} \in
+        \mathbb{R}^p \Rightarrow \mathbf{w} \sim
+        \mathcal{N}(\mathbf{0}, \alpha\mathbf{I}) $, where
+        $ \alpha \propto \lambda^{-1} $. More generally, for
+        $ \mathbf{Q} \triangleq \operatorname{diag}(\alpha_1, \ldots \alpha_p)
+        \succ \mathbf{0} $, $ \mathbf{v} \in \mathbb{R}^p $,
+        $ \alpha \propto \lambda^{-1} $,
+        \begin{equation*}
+            \lambda\Vert\mathbf{Q(w - \mathbf{v})}\Vert_2^2 \Rightarrow
+            \mathbf{w} \sim \mathcal{N}\big(
+                \mathbf{v}, \alpha\mathbf{Q}^{-1}\mathbf{Q}^{-1}
+            \big)
+        \end{equation*}
+
+        \item
+        $ \ell^1 $-norm regularizer $ \lambda\Vert\mathbf{w}\Vert_1 \Rightarrow
+        w_1, \ldots w_p \sim \operatorname{Laplace}(0, \gamma) $, where
+        $ \gamma \propto \lambda^{-1} $ and $ w_1, \ldots w_p $ mutually
+        independent. The prior is
+        \begin{equation*}
+            p(\mathbf{w}) = \prod_{j = 1}^p\frac{1}{2\gamma}
+            e^{-\frac{1}{\gamma}|w_j|}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+%\section{Appendix}
+%
+%\subsection{Multiclass logistic regression}
+%
+%\begin{frame}{Multiclass logistic regression}
+%    \begin{itemize}
+%        \item
+%        \textit{Multiclass logistic regression.} $ \mathbf{X} \in
+%        \mathbb{R}^{N \times d} $ is the input matrix, $ \mathcal{C}
+%        \triangleq \{\mathcal{C}_1, \ldots \mathcal{C}_K\} $ a partition of
+%        $ \mathbb{R}^n $. $ \mathbf{Y} \in \mathbb{R}^{N \times K} $ is the
+%        an indicator matrix where $ \mathbf{x}_i \in \mathcal{C}_j \Rightarrow
+%        y_{ij} = 1 $. $ \mathbf{W} \in \mathbb{R}^{d \times K} $ where column
+%        $ \mathbf{w}_j $ gives $ j $th class weights and
+%        $ \mathbf{b} \in \mathbb{R}^K $ be the vector where each
+%        $ b_j $ is the $ j $th class intercept.
+%
+%        \item
+%        Define $ \sigma_j : \mathbb{R}^{d \times K} \times \mathbb{R}^d \times
+%        \mathbb{R}^K \rightarrow (0, 1) $ s.t. for $ j \in \{1, \ldots
+%        |\mathcal{C}|\} $, $ \mathbf{x} \in \mathbb{R}^d $,
+%		\begin{equation*}
+%		    \sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b}) = \frac{
+%		        e^{\mathbf{w}_j^\top\mathbf{x} + b_j}
+%		    }{\sum_{k = 1}^K e^{\mathbf{w}_k^\top\mathbf{x} + b_k}}
+%		\end{equation*}
+%		For $ \lambda \in [0, \infty) $, the multi-class loss functional
+%        $ J_\mathcal{D} : \mathbb{R}^{d \times |\mathcal{C}|} \rightarrow
+%        [0, \infty) $, with data $ \mathcal{D} \triangleq
+%        (\mathbf{X}, \mathbf{Y}) $, is then such that \cite{bishop_ml}
+%		\begin{equation} \label{logreg_multiclass}
+%		    J_\mathcal{D}(\mathbf{W}) = -\sum_{i = 1}^N\sum_{j = 1}^K
+%		        y_{ij}\log\sigma_j(\mathbf{W}, \mathbf{x}, \mathbf{b})
+%		        + \lambda\Vert\mathbf{W}\Vert_{\operatorname{F}}^2
+%		\end{equation}
+%    \end{itemize}
+%\end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
