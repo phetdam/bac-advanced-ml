@@ -39,7 +39,7 @@ def _logistic_loss_grad(w, X, y, alpha):
 
 
 class LogisticRegression(BaseEstimator):
-    r"""Reference implementation for a logistic regression classifier.
+    r"""Implementation for a logistic regression classifier.
 
     Only suitable for binary classification tasks. Solver used to minimize the
     objective is the scipy.optimize.minimize L-BFGS-B implementation. Objective
