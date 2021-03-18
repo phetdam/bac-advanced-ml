@@ -8,18 +8,18 @@ from sklearn.linear_model import LogisticRegression as _LogisticRegression
 from ..supervised import LogisticRegression
 
 
-def test_res(blobcls):
+def test_res(blob_bin):
     """Check LogisticRegression is equivalent to sklearn for two-class case.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
 
     Parameters
     ----------
-    blobcls : tuple
+    blob_bin : tuple
         pytest fixture. See conftest.py.
     """
     # unpack data from fixture
-    X_train, X_test, y_train, y_test = blobcls
+    X_train, X_test, y_train, y_test = blob_bin
     # hyperparameters to fix (in case defaults change)
     shared_params = dict(tol=1e-4, C=1., max_iter=100)
     # fit scikit-learn model and our model
