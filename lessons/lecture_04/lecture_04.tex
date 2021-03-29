@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{March 15, 2021}
+\date{March 29, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -391,7 +391,7 @@
         Suppose the coefficients $ \mathbf{w} \sim \mathcal{N}(\mathbf{0},
         \nu^2\mathbf{I}) $, $ \nu > 0 $. The prior is then
         \begin{equation} \label{ridge_prior}
-            p(\theta) \triangleq \frac{1}{(2\pi\nu)^{d / 2}}
+            p(\theta) \triangleq \frac{1}{(2\pi\nu^2)^{d / 2}}
             e^{-\frac{1}{2\nu^2}\mathbf{w}^\top\mathbf{w}}
         \end{equation}
         Since we didn't assume a distribution\footnote{
