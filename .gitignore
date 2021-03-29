@@ -12,3 +12,5 @@
 **/*.toc
 # ignore __pycache__
 **/__pycache__
+# ignore big thomas bayes
+lessons/lecture_04/thomas_bayes_large.jpg
