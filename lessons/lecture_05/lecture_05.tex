@@ -132,7 +132,7 @@
         \item
         Generative modeling typically limited to classification, so from now on
         assume $ Y(\Omega) = \mathcal{C} $, $ \mathcal{C} \triangleq \{C_1,
-        \ldots C_K\} $, $ K $ number of classes.
+        \ldots C_K\} $, $ K $ the number of classes.
 
         \item
         We usually model $ Y \mid \theta $ with the categorical distribution,
@@ -142,37 +142,103 @@
             \sum_{k = 1}^Kp_k\mathbb{I}_{\{C_k\}}(y)
         \end{equation}
         Here $ K \in \mathbb{N} $, $ p_1, \ldots p_K \in (0, 1) $,
-        $ \sum_{k = 1}^Kp_k = 1 $.
+        $ \sum_{k = 1}^Kp_k = 1 $. Note $ p(C_k \mid \theta) \triangleq p_k $.
 
         \item        
         The \textit{class priors} $ p_1, \ldots p_K $ are typically estimated
         through maximum likelihood, i.e. $ \hat{p}_j \triangleq \frac{1}{N}
         \sum_{k = 1}^N\mathbb{I}_{\{C_j\}}(y_k) $ is the estimate for $ p_j $.
+
+        \item
+        The major difference between generative models is how to model
+        $ p(\mathbf{x} \mid y, \theta) $, which depends on assumptions and on
+        the type of input.
     \end{itemize}
 \end{frame}
 
-\subsection{Discrete features}
+\subsection{Multinomial naive Bayes}
 
-\begin{frame}{Discrete features}
+\begin{frame}{Multinomial naive Bayes}
     \begin{itemize}
         \item
         Suppose $ X(\Omega) = \{0, 1\}^d $, where for $ i \in
         \{1, \ldots d\} $, $ j \in \{1, \ldots K\} $,
-        $ p_{11}, \ldots p_{Kd} \in (0, 1) $,
-        $ X_i \mid Y = C_j \sim \operatorname{Bernoulli}(p_{ji}) $,
+        $ X_i \mid Y \sim \operatorname{Bernoulli}(p_{Y, i}) $,
          $ X_1 \mid Y, \ldots X_d \mid Y $ mutually independent\footnote{
             Class-conditional input feature independence is the
             \textit{naive Bayes} assumption \cite{bishop_ml}.
-        }. Let $ \mathbf{p}_j \triangleq 
-        [ \ p_{j1} \ \ldots  \ p_{jd} \ ]^\top \in \mathbb{R}^d $,
+        }, $ p_{C_1, 1}, \ldots p_{C_K, d} \in (0, 1) $. Writing the class
+        explicitly, we have
+        \begin{equation} \label{bern_nb_like}
+            p(\mathbf{x} \mid C_j, \theta) =
+            \prod_{i = 1}^dp(x_i \mid C_j, \theta) \triangleq
+            \prod_{i = 1}^dp_{C_j, i}^{x_i}(1 - p_{C_j, i})^{1 - x_i}
+        \end{equation}
+
+        \item
+        Again, the $ p_{C_j, i} $ parameters are typically estimated by
+        maximum likelihood, i.e. the estimate $ \hat{p}_{C_j, i} $ is such that
+        \begin{equation} \label{bern_nb_param_mle}
+            \hat{p}_{C_j, i} \triangleq \frac{N_{C_j, i}}{N_{C_j}} \triangleq
+            \frac{
+                |\{(\mathbf{x}, y) \in \mathcal{D} : x_i = 1, y = C_j\}|
+            }{
+                |\{(\mathbf{x}, y) \in \mathcal{D} : y = C_j\}|
+            } 
+        \end{equation}
     \end{itemize}
 \end{frame}
 
-%\section{Linear discriminant analysis}
+\subsection{Gaussian naive Bayes}
+
+\begin{frame}{Gaussian naive Bayes}
+    \begin{itemize}
+        \item
+        Suppose $ X(\Omega) = \mathbb{R}^d $, where for
+        $ i \in \{1, \ldots d\} $, $ j \in \{1, \ldots K\} $,
+        $ X_i \mid Y \sim \mathcal{N}(\mu_{Y, i}, \sigma_{Y, i}^2) $,
+        $ X_1 \mid Y, \ldots X_d \mid Y $ mutually independent,
+        $ \mu_{C_1, 1}, \ldots \mu_{C_K, d} \in \mathbb{R} $,
+        $ \sigma_{C_1, 1}, \ldots \sigma_{C_K, d} \in (0, \infty) $. Then,
+        \begin{equation} \label{normal_nb_like}
+            p(\mathbf{x} \mid C_j) \triangleq
+            \prod_{i = 1}^d\frac{1}{\sqrt{2\pi}\sigma_{C_j, i}}e^{
+                -\frac{1}{2}\sigma_{C_j, i}^{-2}(x_i - \mu_{C_j, i})^2
+            }
+        \end{equation}
+
+        \item
+        Maximum likelihood estimates for $ \mu_{C_j, i}, \sigma_{C_j, i}^2 $
+        are
+        \begin{equation}
+            \begin{split}
+            \hat{\mu}_{C_j, i} & \triangleq \frac{1}{|\mathcal{D}_{C_j}|}
+                \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}x_i \\
+            \sigma_{C_j, i}^2 & \triangleq \frac{1}{|\mathcal{D}_{C_j}|}
+                \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}
+                (x_i - \hat{\mu}_{C_j, i})^2
+            \end{split}
+        \end{equation}
+        Here $ \mathcal{D}_{C_j, i} \triangleq \{(\mathbf{x}, y) \in
+        \mathcal{D} : y = C_j\} $, the class $ C_j $ examples.
+    \end{itemize}
+\end{frame}
+
+%\section{Discriminant analysis}
 %
-%\section{Quadratic discriminant analysis}
+%\subsection{Quadratic discriminant analysis}
 %
-%\section{Discriminative vs. generative}
+%\subsection{Linear discriminant analysis}
+%
+%\begin{frame}{Linear discriminant analysis}
+%
+%\end{frame}
+%
+%\section{Shrinkage estimation}
+%
+%\subsection{Class prior shrinkage}
+%
+%\subsection{Covariance matrix shrinkage}
 
 
 
