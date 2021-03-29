@@ -1,0 +1,186 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% command for the title string. change for each lecture
+\newcommand{\lecturetitle}{Probabilistic generative models}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
+% title page stuff. brackets content displayed in footer bar
+\title[\lecturetitle]{\lecturetitle}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{March 29, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+% section
+\section{Generative modeling}
+
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        Let $ X : \Omega \rightarrow \mathbb{R}^d $ be the input variable,
+        $ Y : \Omega \rightarrow \mathbb{R} $ be the response variable. Let
+        $ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots
+        (\mathbf{x}_N, y_N)\} $ be the training data, each $ (\mathbf{x}_k,
+        y_k) $ sampled independently from $ X, Y $.
+
+        \item
+        Assume a parametric model for $ X, Y $ joint or $ Y \mid X $
+        conditional distribution, i.e. using a distribution parametrized by
+        $ \theta \in \Theta $, $ \Theta \subseteq \mathbb{R}^p $.
+
+        \item
+        We showed that the joint likelihood $ p(\mathcal{D} \mid \theta) $
+        is such that
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) =
+            \prod_{k = 1}^Np(y_k, \mathbf{x}_k \mid \theta) \propto
+            \prod_{k = 1}^Np(y_k \mid \mathbf{x}_n, \theta)
+        \end{equation*}
+
+        \item
+        In linear regression, we directly modeled $ p(y \mid \mathbf{x} \mid
+        \theta) $, positing $ Y \mid X \sim \mathcal{N}(\mathbf{w}^\top X + b,
+        \sigma^2) $, for $ \mathbf{w} \in \mathbb{R}^d $,
+        $ b \in \mathbb{R} $, $ \sigma \in (0, \infty) $.
+
+        \item
+        What's a way to model $ p(y, \mathbf{x} \mid \theta) $, the joint
+        $ X, Y $ likelihood?
+    \end{itemize}
+\end{frame}
+
+\subsection{Conditioning on class}
+
+\begin{frame}{Conditioning on class}
+    \begin{itemize}
+        \item
+        We can apply Bayes' rule to $ p(\mathcal{D} \mid \theta) $ to see that
+        \begin{equation*}
+            p(\mathcal{D} \mid \theta) =
+            \prod_{k = 1}^Np(y_k, \mathbf{x}_k \mid \theta) =
+            \prod_{k = 1}^Np(\mathbf{x}_k \mid y_k, \theta)p(y_k \mid \theta)
+        \end{equation*}
+
+        \item
+        Not too helpful for regression, where usually
+        $ Y(\Omega) = \mathbb{R} $, but useful for classification, where
+        $ Y(\Omega) = \mathcal{C} $, $ \mathcal{C} $ some finite set of
+        classes.
+
+        \item
+        $ p(\mathbf{x} \mid y, \theta) $ is a \textit{class-conditional
+        likelihood}, giving the likelihood of $ \mathbf{x} $ given $ \theta $
+        and knowledge that the pair $ (\mathbf{x}, y) $ is in some class.
+
+        \item
+        $ p(y \mid \theta) $ is the \textit{class prior}, essentially
+        $ \mathbb{P}\{Y = C \mid \theta\} $, $ C \in \mathcal{C} $.
+
+        \item
+        With $ p(\mathbf{x} \mid y, \theta) $ and $ p(y \mid \theta) $
+        we can model $ p(\mathcal{D} \mid \theta) $ directly and even generate
+        new $ (\mathbf{x}, y) $ examples, hence the moniker
+        \textit{generative modeling}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conditioning on class}
+    \begin{itemize}
+        \item
+        Generative modeling typically limited to classification, so from now on
+        assume $ Y(\Omega) = \mathcal{C} $, $ \mathcal{C} \triangleq \{C_1,
+        \ldots C_K\} $, $ K $ number of classes.
+
+        \item
+        We usually model $ Y \mid \theta $ with the categorical distribution,
+        i.e.
+        \begin{equation} \label{cat_dist_like}
+            p(y \mid \theta) \triangleq
+            \sum_{k = 1}^Kp_k\mathbb{I}_{\{C_k\}}(y)
+        \end{equation}
+        Here $ K \in \mathbb{N} $, $ p_1, \ldots p_K \in (0, 1) $,
+        $ \sum_{k = 1}^Kp_k = 1 $.
+
+        \item        
+        The \textit{class priors} $ p_1, \ldots p_K $ are typically estimated
+        through maximum likelihood, i.e. $ \hat{p}_j \triangleq \frac{1}{N}
+        \sum_{k = 1}^N\mathbb{I}_{\{C_j\}}(y_k) $ is the estimate for $ p_j $.
+    \end{itemize}
+\end{frame}
+
+\subsection{Discrete features}
+
+\begin{frame}{Discrete features}
+    \begin{itemize}
+        \item
+        Suppose $ X(\Omega) = \{0, 1\}^d $, where for $ i \in
+        \{1, \ldots d\} $, $ j \in \{1, \ldots K\} $,
+        $ p_{11}, \ldots p_{Kd} \in (0, 1) $,
+        $ X_i \mid Y = C_j \sim \operatorname{Bernoulli}(p_{ji}) $,
+         $ X_1 \mid Y, \ldots X_d \mid Y $ mutually independent\footnote{
+            Class-conditional input feature independence is the
+            \textit{naive Bayes} assumption \cite{bishop_ml}.
+        }. Let $ \mathbf{p}_j \triangleq 
+        [ \ p_{j1} \ \ldots  \ p_{jd} \ ]^\top \in \mathbb{R}^d $,
+    \end{itemize}
+\end{frame}
+
+%\section{Linear discriminant analysis}
+%
+%\section{Quadratic discriminant analysis}
+%
+%\section{Discriminative vs. generative}
+
+
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{../master_bib}
+\end{frame}
+
+\end{document}
