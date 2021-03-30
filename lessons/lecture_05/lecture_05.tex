@@ -178,8 +178,8 @@
 
         \item
         Again, the $ p_{C_j, i} $ parameters are typically\footnote{
-            Not exactly true for reasons covered in the smoothing and
-            shrinkage section.
+            Not exactly true. Usually some smoothing is applied to prevent
+            zero probabilities.
         } estimated by
         maximum likelihood, i.e. the estimate $ \hat{p}_{C_j, i} $ is such that
         \begin{equation} \label{bern_nb_param_mle}
@@ -314,10 +314,6 @@
 \begin{frame}{Decision boundaries}
     \begin{itemize}
         \item
-        Origin of linear and quadratic as discriminant analysis
-        differentiators?
-
-        \item
         For any fitted probabilistic classifier with estimated parameters
         $ \hat{\theta} $, given an unlabeled point $ \mathbf{x} \in
         \mathbb{R}^d $, the natural classification rule is
@@ -441,7 +437,7 @@
         \item
         $ \mathcal{B}_{C_a, C_b} $ under QDA is the solution set of a
         quadratic equation\footnote{
-            $ \mathcal{B}_{C_a, C_b} $ is also apparently known as a
+            $ \mathcal{B}_{C_a, C_b} $ in this form is apparently known as a
             \textit{quadric hypersurface}.        
         }.
     \end{itemize}
@@ -467,11 +463,11 @@
         that $ \hat{\mathbf{a}}_{C_a, C_b}, \hat{b}_{C_a, C_b} $ are such that
         \begin{equation*}
             \begin{split}
-            \hat{\mathbf{a}}_{C_a, C_b} & = \hat{\mathbf{\Sigma}}
+            \hat{\mathbf{a}}_{C_a, C_b} & = \hat{\mathbf{\Sigma}}^{-1}
                 \big(\hat{\mu}_{C_a} - \hat{\mu}_{C_b}\big) \\
             \hat{b}_{C_a, C_b} & = \frac{1}{2}
                 \big(\hat{\mu}_{C_a} + \hat{\mu}_{C_b}\big)^\top
-                \hat{\mathbf{\Sigma}}
+                \hat{\mathbf{\Sigma}}^{-1}
                 \big(\hat{\mu}_{C_a} - \hat{\mu}_{C_b}\big)
             - \log\frac{
                 p_{C_a \mid \hat{\theta}}
@@ -506,23 +502,78 @@
 %        $ i \in \{1, \ldots d\} $, $ j \in \{1, \ldots K\} $.
 %
 %        \item
-%        Note $ |\{(\mathbf{x}, y) \in \mathcal{D} : x_i = 1, y = C_j\}| = 0
-%        \Rightarrow \hat{p}_{C_j, i} = 0 \Rightarrow $ given a new example
-%        $ \mathbf{v} \in \mathbb{R}^d $, $ v_i = 1 $,
-%        $ p(\mathbf{v} \mid C_j, \hat{\theta}) = 0 \Rightarrow
-%        p(C_j \mid \mathbf{v}, \hat{\theta}) = 0 $.
-%
-%        \item
-%        If $ \mathbf{v} = \mathbf{x} + \mathbf{e}_i $ for some
-%        $ (\mathbf{x}, y) \in \mathcal{D} $, $ y = C_j $, the model predicts
-%        $ p(C_j \mid \mathbf{v}, \hat{\theta}) = 0 $ despite $ \mathbf{v} $,
-%        $ \mathbf{x} $ differing only at the $ i $th element.
-%
-%        \item
-%        Suppose we wish to estimate $ p_{C_j, i} $ using MAP. It's natural to
+%        Suppose we estimate $ p_{C_j, i} $ using MAP. It's natural to
 %        choose $ p_{C_j, i} \sim \operatorname{Beta}(\alpha, \beta) $ since
-%        $ p_{C_j, i} \in (0, 1) $, and the prior
+%        $ p_{C_j, i} \in (0, 1) $. The prior $ p(\theta) $ is such that
+%        \begin{equation} \label{bern_nb_prior}
+%            p(\theta) \propto \prod_{j = 1}^K\prod_{i = 1}^d
+%                p_{C_j, i}^{\alpha - 1}(1 - p_{C_j, i})^{\beta - 1}
+%        \end{equation}
+%        Here $ \alpha, \beta \in (0, \infty) $. Then, the posterior
+%        $ p(\theta \mid \mathcal{D} $ is such that
+%        \begin{equation} \label{bern_nb_post}
+%            p(\theta \mid \mathcal{D}) \propto
+%                \prod_{(\mathbf{x}, y) \in \mathcal{D}}
+%                \prod_{i = 1}^d p_{y, i}^{x_i}(1 - p_{y, i})^{1 - x_i}
+%                \prod_{j = 1}^K p_{C_j, i}^{\alpha - 1}
+%                (1 - p_{C_j, i})^{\beta - 1}
+%        \end{equation}
 %    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Probability smoothing}
+%    \begin{itemize}
+%        \item
+%        Recalling $ N_{C_j, i}, N_{C_j} $ definitions in
+%        (\aref{bern_nb_param_mle}), (\aref{bern_nb_post}) simplifies so
+%        we have
+%        \begin{equation*}
+%            p(\theta \mid \mathcal{D}) \propto \prod_{i = 1}^d\prod_{j = 1}^K
+%                p_{C_j, i}^{N_{C_j, i} + \alpha - 1}
+%                (1 - p_{C_j, i})^{N_{C_j} - N_{C_j, i} + \beta - 1}
+%        \end{equation*}
+%        The MAP estimate $ \hat{p}_{C_j, i, \alpha, \beta} $ for each\footnote{
+%            Each $ p_{C_j, i} $ independent, so
+%            $ \hat{p}_{C_j, i, \alpha, \beta} = \arg\max_{p \in (0, 1)}
+%                p^{N_{C_j, i} + \alpha - 1}
+%                (1 - p)^{N_{C_j} - N_{C_j, i} + \beta - 1} $.
+%        }
+%        $ p_{C_j, k} $ is such that
+%        \begin{equation} \label{bern_nb_param_map}
+%            \hat{p}_{C_j, i, \alpha, \beta} \triangleq \frac{
+%                N_{C_j, i} + \alpha - 1
+%            }{N_{C_j} + \alpha + \beta - 2}
+%        \end{equation}
+%
+%        \item
+%        Commonly, for some $ \eta \in [0, \infty) $, one chooses
+%        $ \alpha = \beta = 1 + \eta $, so the $ \eta $-parametrized MAP estimate
+%        $ \hat{p}_{C_j, i, \eta} $ is
+%        \begin{equation} \label{bern_nb_param_map_eta}
+%            \hat{p}_{C_j, i, \eta} \triangleq \frac{N_{C_j, i} + \eta}{
+%                N_{C_j} + 2\eta
+%            }
+%        \end{equation}
+%%        \item
+%%        Note $ |\{(\mathbf{x}, y) \in \mathcal{D} : x_i = 1, y = C_j\}| = 0
+%%        \Rightarrow \hat{p}_{C_j, i} = 0 $.
+%%
+%%        \item
+%%        If $ \mathbf{v} = \mathbf{x} + \mathbf{e}_i $ for some
+%%        $ (\mathbf{x}, y) \in \mathcal{D} $, $ y = C_j $, the model predicts
+%%        $ p(C_j \mid \mathbf{v}, \hat{\theta}) = 0 $ despite $ \mathbf{v} $,
+%%        $ \mathbf{x} $ differing only at the $ i $th element\footnote{
+%%            Smoothing is used in the
+%%            \href{%
+%%                https://scikit-learn.org/stable/modules/naive\_bayes.html\#%
+%%                multinomial-naive-bayes%
+%%            }{\alert{scikit-learn naive Bayes implementations}}.
+%%        }.
+%    \end{itemize}
+%
+%    % spacing for footnote
+%    \medskip
+%
 %\end{frame}
 %
 %\subsection{Covariance matrix shrinkage}
