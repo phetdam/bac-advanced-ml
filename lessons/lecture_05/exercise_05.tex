@@ -1,0 +1,216 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author + thanks, date
+\title{Exercise 5}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+\date{March 30, 2021}
+
+% shortcut links. the % characters strip extra spacing.
+\newcommand{\pytest}{\href{https://docs.pytest.org/en/stable/}{pytest}}
+\newcommand{\minimize}{%
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/generated/%
+        scipy.optimize.minimize.html%
+    }{\texttt{scipy.optimize.minimize}}%
+}
+% don't wanna keep typing this out
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\npinv}{%
+    \href{%
+        https://numpy.org/doc/stable/reference/generated/numpy.linalg.inv.html%
+    }{\texttt{numpy.linalg.inv}}%
+}
+\newcommand{\pdb}{%
+    \href{https://docs.python.org/3/library/pdb.html}{\texttt{pdb}}%
+}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+
+\section{Introduction}
+
+The goal of this exercise is to implement a linear discriminant classifier,
+computing the sample covariance matrix using a maximum likelihood estimate
+with optional shrinkage.
+
+\section{Instructions}
+
+\subsection{General}
+
+The \texttt{exercise\_05.py} file contains a skeleton for the
+\texttt{LinearDiscriminantAnalysis} class, unit tests, and \pytest{} fixtures.
+Your job is to finish implementing the \texttt{LinearDiscriminantAnalysis}
+class's \texttt{fit} and \texttt{score} methods by replacing the
+\texttt{\#\#\# your code goes here \#\#\#} comment blocks with appropriate
+Python code.
+
+\medskip
+
+Your code \textbf{must} be written in the areas marked by these blocks. Do
+\textbf{not} change any of the pre-written code. The exercise is complete
+$ \Leftrightarrow $ \texttt{pytest /path/to/exercise\_05.py} executes with
+zero test failures. Note that attributes ending with \texttt{\_}, ex.
+\texttt{coef\_}, are created \textbf{during} the fitting process.
+
+\subsection{Implementing \texttt{fit}}
+
+The class prior estimates must be assigned to the local variable
+\texttt{priors}, the class mean estimates must be assigned to the local
+variable \texttt{means}, and the covariance matrix estimate must be assigned
+to the local variable \texttt{cov}. At the end of the \texttt{fit} method,
+\texttt{priors} is assigned to \texttt{self.priors\_}, \texttt{means} is
+assigned to \texttt{self.means\_}, and \texttt{cov} is assigned to
+\texttt{self.covariance\_}.
+
+\subsection{%
+    Computing \texttt{priors\_}, \texttt{means\_}, \texttt{covariance\_}%
+}
+
+The estimates for the class priors and class means should be computed via
+maximum likelihood. Note that the shape of \texttt{means\_} is specified in
+the docstring to be \texttt{(n\_classes, n\_features)}. The covariance matrix
+estimate $ \hat{\mathbf{\Sigma}} \succeq \mathbf{0} \in
+\mathbb{R}^{d \times d} $ is such that for $ \alpha \in [0, 1] $ we have
+\begin{equation} \label{cov_est}
+    \hat{\mathbf{\Sigma}} \triangleq \alpha\frac{\tr(\mathbf{S})}{d}\mathbf{I}
+        + (1 - \alpha)\mathbf{S}
+\end{equation}
+
+Here $ \mathbf{S} \succeq \mathbf{0} \in \mathbb{R}^{d \times d} $ is the
+maximum likelihood estimate for the covariance matrix and
+$ \tr(\mathbf{S}) $ is its trace, i.e.
+\begin{equation*}
+    \tr(\mathbf{S}) = \sum_{i = 1}^ds_{ii}
+\end{equation*}
+
+Note that in this context, $ \tr(\mathbf{S}) / d $ is the average of the
+input features' variances. In practice, other \textit{shrinkage estimators}
+may be used, especially when $ d $ is much larger than $ N $, for example
+the \href{http://www.ledoit.net/ole1a.pdf}{Ledoit-Wolf}\footnote{
+    In portfolio optimization, Ledoit-Wolf instead refers to
+    \href{http://www.ledoit.net/honey.pdf}{%
+        a particular constant correlation shrinkage estimator%
+    }.
+} and
+\href{https://arxiv.org/pdf/0907.4698.pdf}{%
+    oracle approximating shrinkage%
+} estimators, which are beyond the scope of our introductory coverage.
+
+\subsection{Implementing \texttt{score}}
+
+The \texttt{score} method of the \texttt{LinearDiscriminantAnalysis} class
+computes the accuracy of the predictions. Given parameters $ \theta $,
+classification function $ F_\theta $ (the classifer), and data
+$ \mathcal{D} \triangleq \{(\mathbf{x}_1, y_1), \ldots (\mathbf{x}_N, y_N)\} $,
+where the $ y_k $ values may either be numeric or class labels, the accuracy
+$ \mathcal{A}_\theta $ of the model on the data $ \mathcal{D} $ is such that
+\begin{equation*}
+    \mathcal{A}_\theta(\mathcal{D}) = \frac{1}{|\mathcal{D}|}
+        \sum_{(\mathbf{x}, y) \in \mathcal{D}}\mathbb{I}_{\{y\}}\left(
+            F_\theta(\mathbf{x})
+        \right)
+\end{equation*}
+
+Note that $ \operatorname{im}\mathcal{A}_\theta = [0, 1] $, so for
+data $ \mathcal{D} $, $ \mathcal{A}_\theta(\mathcal{D}) $ is the
+fraction of examples the model correctly clasified.
+
+\subsection{Tips}
+
+\begin{enumerate}
+    \item
+    Carefully read the \texttt{LinearDiscriminantAnalysis} docstrings and
+    review slide 8.
+
+    \item
+    In the \texttt{fit} method, don't forget to either assign your covariance
+    matrix estimate to a local variable named \texttt{cov} or replace the
+    variable name passed to the \npinv{} call with the name of the local
+    variable holding a reference to the covariance matrix estimate.
+
+    \item
+    In the \texttt{score} method, you should first call the \texttt{predict}
+    method and use it get predicted labels.    
+
+    \item
+    Use NumPy functions whenever possible for efficiency, brevity, and ease
+    of debugging.
+
+    \item
+    Invoke \pytest{} with the \texttt{--pdb} flag to start the \pdb, the
+    Python debugger. Doing so allows you to inspect the variables in the
+    current call frame and look more closely at what went wrong.
+\end{enumerate}
+
+
+
+
+\end{document}
