@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{March 29, 2021}
+\date{March 30, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -113,7 +113,8 @@
         \item
         $ p(\mathbf{x} \mid y, \theta) $ is a \textit{class-conditional
         likelihood}, giving the likelihood of $ \mathbf{x} $ given $ \theta $
-        and knowledge that the pair $ (\mathbf{x}, y) $ is in some class.
+        and knowledge that the pair $ (\mathbf{x}, y) $ belongs to class
+        $ y \in \mathcal{C} $.
 
         \item
         $ p(y \mid \theta) $ is the \textit{class prior}, essentially
@@ -156,9 +157,9 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Multinomial naive Bayes}
+\subsection{Bernoulli naive Bayes}
 
-\begin{frame}{Multinomial naive Bayes}
+\begin{frame}{Bernoulli naive Bayes}
     \begin{itemize}
         \item
         Suppose $ X(\Omega) = \{0, 1\}^d $, where for $ i \in
@@ -201,7 +202,7 @@
         $ \mu_{C_1, 1}, \ldots \mu_{C_K, d} \in \mathbb{R} $,
         $ \sigma_{C_1, 1}, \ldots \sigma_{C_K, d} \in (0, \infty) $. Then,
         \begin{equation} \label{normal_nb_like}
-            p(\mathbf{x} \mid C_j) \triangleq
+            p(\mathbf{x} \mid C_j, \hat{\theta}) \triangleq
             \prod_{i = 1}^d\frac{1}{\sqrt{2\pi}\sigma_{C_j, i}}e^{
                 -\frac{1}{2}\sigma_{C_j, i}^{-2}(x_i - \mu_{C_j, i})^2
             }
@@ -210,7 +211,7 @@
         \item
         Maximum likelihood estimates for $ \mu_{C_j, i}, \sigma_{C_j, i}^2 $
         are
-        \begin{equation}
+        \begin{equation} \label{normal_nb_param_mle}
             \begin{split}
             \hat{\mu}_{C_j, i} & \triangleq \frac{1}{|\mathcal{D}_{C_j}|}
                 \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}x_i \\
@@ -219,28 +220,285 @@
                 (x_i - \hat{\mu}_{C_j, i})^2
             \end{split}
         \end{equation}
-        Here $ \mathcal{D}_{C_j, i} \triangleq \{(\mathbf{x}, y) \in
-        \mathcal{D} : y = C_j\} $, the class $ C_j $ examples.
+        Here $ \mathcal{D}_{C_j} \triangleq \{(\mathbf{x}, y) \in
+        \mathcal{D} : y = C_j\} $, the set of class $ C_j $ examples.
     \end{itemize}
 \end{frame}
 
-%\section{Discriminant analysis}
+\section{Discriminant analysis}
+
+\subsection{Linear discriminant analysis}
+
+\begin{frame}{Linear discriminant analysis}
+    \begin{itemize}
+        \item
+        Dropping the naive Bayes assumption, let
+        $ X \mid Y \sim \mathcal{N}(\mu_Y, \mathbf{\Sigma}) $, $ \mu_{C_1},
+        \ldots \mu_{C_K} \in \mathbb{R}^d $, $ \mathbf{\Sigma} \succ \mathbf{0}
+        \in \mathbb{R}^{d \times d} $.
+        Then, $ \forall j \in \{1, \ldots K\} $,
+        \begin{equation} \label{lda_like}
+            p(\mathbf{x} \mid C_j, \hat{\theta}) \triangleq \frac{1}{
+                (2\pi)^d|\mathbf{\Sigma}|^{1 / 2}
+            }e^{
+                -\frac{1}{2}(\mathbf{x} - \mu_{C_j})^\top
+                \mathbf{\Sigma}^{-1}(\mathbf{x} - \mu_{C_j})
+            }
+        \end{equation}
+
+        \item
+        Maximum likelihood estimates for $ \mu_{C_1}, \ldots \mu_{C_K},
+        \mathbf{\Sigma} $ are
+        \begin{equation}
+            \begin{split}
+            \hat{\mu}_{C_j} & \triangleq \frac{1}{|\mathcal{D}_{C_j}|}
+                \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}\mathbf{x} \\
+            \hat{\mathbf{\Sigma}} & \triangleq
+                \frac{1}{N}
+                \sum_{k = 1}^N
+                (\mathbf{x}_k - \hat{\mu}_{y_k})
+                (\mathbf{x}_k - \hat{\mu}_{y_k})^\top
+            \end{split}
+        \end{equation}
+
+        \item
+        Note the shared covariance matrix $ \hat{\mathbf{\Sigma}} $ and that
+        $ \hat{\mu}_{y_k} = \hat{\mu}_{C_j} $ if $ y_k = C_j $.
+    \end{itemize}
+\end{frame}
+
+\subsection{Quadratic discriminant analysis}
+
+\begin{frame}{Quadratic discriminant analysis}
+    \begin{itemize}
+        \item
+        Suppose we let $ X \mid Y \sim \mathcal{N}(\mu_Y, \mathbf{\Sigma}_Y) $,
+        $ \mu_{C_1}, \ldots \mu_{C_K} \in \mathbb{R}^d $,
+        $ \mathbf{\Sigma}_{C_1}, \ldots \mathbf{\Sigma}_{C_K} \succ \mathbf{0}
+        \in \mathbb{R}^{d \times d} $. Then, $ \forall j \in \{1, \ldots K\} $,
+        \begin{equation} \label{qda_like}
+            p(\mathbf{x} \mid C_j, \hat{\theta}) \triangleq \frac{1}{
+                (2\pi)^d|\mathbf{\Sigma}_{C_j}|^{1 / 2}
+            }e^{
+                -\frac{1}{2}(\mathbf{x} - \mu_{C_j})^\top
+                \mathbf{\Sigma}_{C_j}^{-1}(\mathbf{x} - \mu_{C_j})
+            }
+        \end{equation}
+
+        \item
+        Maximum likelihood estimates for $ \mu_{C_1}, \ldots \mu_{C_K},
+        \mathbf{\Sigma}_{C_1}, \ldots \mathbf{\Sigma}_{C_K} $ are
+        \begin{equation}
+            \begin{split}
+            \hat{\mu}_{C_j} & \triangleq \frac{1}{|\mathcal{D}_{C_j}|}
+                \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}\mathbf{x} \\
+            \hat{\mathbf{\Sigma}}_{C_j} & \triangleq
+                \frac{1}{|\mathcal{D}_{C_j}|}
+                \sum_{(\mathbf{x}, y) \in \mathcal{D}_{C_j}}
+                (\mathbf{x} - \hat{\mu}_{C_j})
+                (\mathbf{x} - \hat{\mu}_{C_j})^\top
+            \end{split}
+        \end{equation}
+
+        \item
+        Note each class $ C_j $ has its own covariance matrix
+        $ \mathbf{\Sigma}_{C_j} $.
+    \end{itemize}
+\end{frame}
+
+\subsection{Decision boundaries}
+
+\begin{frame}{Decision boundaries}
+    \begin{itemize}
+        \item
+        Origin of linear and quadratic as discriminant analysis
+        differentiators?
+
+        \item
+        For any fitted probabilistic classifier with estimated parameters
+        $ \hat{\theta} $, given an unlabeled point $ \mathbf{x} \in
+        \mathbb{R}^d $, the natural classification rule is
+        \begin{equation} \label{class_rule}
+            \arg\max_{C_j \in \mathcal{C}}p(C_j \mid \mathbf{x}, \hat{\theta})
+        \end{equation}
+
+        \item
+        Note that for class $ C_j $, $ j \in \{1, \ldots K\} $, we have
+        \begin{equation}
+            p(C_j \mid \mathbf{x}, \hat{\theta}) =
+            \frac{p(C_j, \mathbf{x} \mid \hat{\theta})}{
+                p(\mathbf{x} \mid \hat{\theta})
+            } = \frac{
+                p(\mathbf{x} \mid C_j, \hat{\theta})p(C_j \mid \hat{\theta})
+            }{
+                \sum_{j = 1}^Kp(\mathbf{x} \mid C_j, \hat{\theta})
+                p(C_j \mid \hat{\theta})
+            }
+        \end{equation}
+        We use definition of conditional probability, Bayes' rule, and law of
+        total probability since $ \mathcal{D}_{C_1} \cap \ldots
+        \mathcal{D}_{C_K} = \emptyset $. Note
+        $ p(\mathbf{x} \mid \hat{\theta}) = p(\mathbf{x}) $.
+
+        \item
+        For compactness of notation, let
+        $ p_{C_j \mid \hat{\theta}} \triangleq p(C_j \mid \hat{\theta}) $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Decision boundaries}
+    \begin{itemize}
+        \item
+        $ p(\mathbf{x}) $ doesn't change with $ C_j $. Given a fitted
+        generative model with parameters $ \hat{\theta} $, we can rewrite
+        (\aref{class_rule}) as\footnote{
+            $ \arg\max $ invariant to positive scaling and monotone
+            increasing transformations \cite{bv_convex_opt}.
+        }
+        \begin{equation*}
+            \arg\max_{C_j \in \mathcal{C}}\left\{
+                \log p(\mathbf{x} \mid C_j, \hat{\theta}) +
+                \log p_{C_j \mid \hat{\theta}}
+            \right\}
+        \end{equation*}
+
+        \item
+        Let $ p(\mathbf{x} \mid C_j, \hat{\theta}) $ be as defined in
+        (\aref{qda_like}). Take two classes $ C_a, C_b \in \mathcal{C} $ and
+        note the \textit{decision boundary} $ \mathcal{B}_{C_a, C_b} $ between
+        them is
+        \begin{equation} \label{decision_boundary}
+            \begin{split}
+            \mathcal{B}_{C_a, C_b} & \triangleq \{\mathbf{x} \in \mathbb{R}^d :
+                p(C_a \mid \mathbf{x}, \hat{\theta}) =
+                p(C_b \mid \mathbf{x}, \hat{\theta})\} \\ & =
+                \left\{
+                    \mathbf{x} \in \mathbb{R}^d : \log\frac{
+                        p(\mathbf{x} \mid C_a, \hat{\theta})
+                    }{p(\mathbf{x} \mid C_b, \hat{\theta})} + \log\frac{
+                        p_{C_a \mid \hat{\theta}}
+                    }{p_{C_b \mid \hat{\theta}}} = 0
+                \right\}
+            \end{split}
+        \end{equation}
+        We use properties of logarithms and the fact that the
+        $ p(\mathbf{x} \mid \hat{\theta}) $ terms in the denominator of
+        $ p(C_a \mid \mathbf{x}, \hat{\theta}), p(C_b \mid \mathbf{x},
+        \hat{\theta}) $ cancel to see this.
+    \end{itemize}
+
+    % spacing for footnote
+    \medskip
+\end{frame}
+
+\begin{frame}{Decision boundaries}
+    \begin{itemize}
+        \item
+        After some tedious math, under QDA (\aref{decision_boundary}) becomes
+        \begin{equation} \label{qda_decision_boundary}
+            \mathcal{B}_{C_a, C_b} = \left\{
+                \mathbf{x} \in \mathbb{R}^d : \frac{1}{2}
+                \mathbf{x}^\top\hat{\mathbf{Q}}_{C_a, C_b}\mathbf{x} -
+                \hat{\mathbf{a}}_{C_a, C_b}^\top\mathbf{x} +
+                \hat{b}_{C_a, C_b} = 0
+            \right\}
+        \end{equation}
+        Here $ \hat{\mathbf{Q}}_{C_a, C_b} \in \mathbb{R}^{d \times d},
+        \hat{\mathbf{a}}_{C_a, C_b} \in \mathbf{R}^d, \hat{b}_{C_a, C_b} \in
+        \mathbb{R} $ are such that
+        \begin{equation*}% \label{qda_decision_constants}
+            \begin{split}
+            \hat{\mathbf{Q}}_{C_a, C_b} & \triangleq
+                \hat{\mathbf{\Sigma}}_{C_a}^{-1} -
+                \hat{\mathbf{\Sigma}}_{C_b}^{-1} \\
+            \hat{\mathbf{a}}_{C_a, C_b} & \triangleq
+                \hat{\mathbf{\Sigma}}_{C_a}^{-1}\hat{\mu}_{C_a} -
+                \hat{\mathbf{\Sigma}}_{C_b}^{-1}\hat{\mu}_{C_b} \\
+            \hat{b}_{C_a, C_b} & \triangleq
+                \frac{1}{2}\left(
+                    \hat{\mu}_{C_a}^\top
+                    \hat{\mathbf{\Sigma}}_{C_a}^{-1}\hat{\mu}_{C_a} -
+                    \hat{\mu}_b^\top
+                    \hat{\mathbf{\Sigma}}_{C_b}^{-1}\hat{\mu}_{C_b} +
+                    \log\frac{
+                        |\hat{\mathbf{\Sigma}}_{C_a}|
+                    }{|\hat{\mathbf{\Sigma}}_{C_b}|}
+                \right) - \log\frac{p_{C_a \mid \hat{\theta}}}{
+                    p_{C_b \mid \hat{\theta}}
+                }
+            \end{split}
+        \end{equation*}
+
+        % remove some excess space
+        \vspace{-5 pt}
+
+        \item
+        $ \mathcal{B}_{C_a, C_b} $ under QDA is the solution set of a
+        quadratic equation\footnote{
+            $ \mathcal{B}_{C_a, C_b} $ is also apparently known as a
+            \textit{quadric hypersurface}.        
+        }.
+    \end{itemize}
+
+    % correct spacing for footnote
+    \medskip
+\end{frame}
+
+\begin{frame}{Decision boundaries}
+    \begin{itemize}
+        \item
+        If we let $ p(\mathbf{x} \mid C_j, \hat{\theta}) $ be defined as in
+        (\aref{lda_like}), then $ \hat{\mathbf{\Sigma}}_{C_a} =
+        \hat{\mathbf{\Sigma}}_{C_b} = \hat{\mathbf{\Sigma}} $, so
+        \begin{equation} \label{lda_decision_boundary}
+            \mathcal{B}_{C_a, C_b} = \big\{
+                \mathbf{x} \in \mathbb{R}^d :
+                    \hat{\mathbf{a}}_{C_a, C_b}^\top\mathbf{x} =
+                    \hat{b}_{C_a, C_b}
+            \big\}
+        \end{equation}
+        Note $ \hat{\mathbf{Q}}_{C_a, C_b} $ simplifies to $ \mathbf{0} $ and
+        that $ \hat{\mathbf{a}}_{C_a, C_b}, \hat{b}_{C_a, C_b} $ are such that
+        \begin{equation*}
+            \begin{split}
+            \hat{\mathbf{a}}_{C_a, C_b} & = \hat{\mathbf{\Sigma}}
+                \big(\hat{\mu}_{C_a} - \hat{\mu}_{C_b}\big) \\
+            \hat{b}_{C_a, C_b} & = \frac{1}{2}
+                \big(\hat{\mu}_{C_a} + \hat{\mu}_{C_b}\big)^\top
+                \hat{\mathbf{\Sigma}}
+                \big(\hat{\mu}_{C_a} - \hat{\mu}_{C_b}\big)
+            - \log\frac{
+                p_{C_a \mid \hat{\theta}}
+            }{p_{C_b \mid \hat{\theta}}}
+            \end{split}
+        \end{equation*}
+
+        \item
+        $ \mathcal{B}_{C_a, C_b} $ under LDA is the solution set of a linear
+        equation (hyperplane).
+
+        \item
+        Assuming the $ K $ classes share the same covariance matrix
+        $ \hat{\mathbf{\Sigma}} $ leads to \alert{linear} decision boundaries
+        while assuming different covariance matrices
+        $ \hat{\mathbf{\Sigma}}_{C_1}, \ldots \hat{\mathbf{\Sigma}}_{C_K} $
+        per class leads to \alert{quadratic} decision boundaries.
+    \end{itemize}
+\end{frame}
+
+%\section{Smoothing and shrinkage}
 %
-%\subsection{Quadratic discriminant analysis}
+%\subsection{Probability smoothing}
 %
-%\subsection{Linear discriminant analysis}
-%
-%\begin{frame}{Linear discriminant analysis}
-%
+%\begin{frame}{Probability smoothing}
+%    \begin{itemize}
+%        \item
+%        Recall the Bernoulli naive Bayes model whose likelihood was defined
+%        in (\ref{bern_nb_like}).
+%    \end{itemize}
 %\end{frame}
 %
-%\section{Shrinkage estimation}
-%
-%\subsection{Class prior shrinkage}
-%
 %\subsection{Covariance matrix shrinkage}
-
-
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
