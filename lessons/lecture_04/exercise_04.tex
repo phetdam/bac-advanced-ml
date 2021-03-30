@@ -99,9 +99,11 @@ implementation provided by \minimize.
 
 The \texttt{exercise\_04.py} file contains a skeleton for the
 \texttt{LogisticRegression} class, the \loglossgrad{} function, a unit test,
-and a \pytest{} fixture. Your job is to implement the \texttt{predict} and \texttt{score} methods of the \texttt{LogisticRegression} class and the \loglossgrad{}
-function by replacing the \texttt{\#\#\# your code goes here \#\#\#} comment
-blocks with the appropriate Python code.
+and a \pytest{} fixture. Your job is to implement the \texttt{predict} and
+\texttt{score} methods of the \texttt{LogisticRegression} class and the
+\loglossgrad{} function by replacing the
+\texttt{\#\#\# your code goes here \#\#\#} comment blocks with the appropriate
+Python code.
 
 \medskip
 
@@ -189,7 +191,7 @@ type \texttt{numpy.ndarray} with a float \texttt{dtype}.
 
 The \texttt{predict} method of the \texttt{LogisticRegression} class, when
 given \texttt{X}, a \texttt{numpy.ndarray} shape
-\texttt{(n\_samples, n\_features)}, where \texttt{n\_features} $ == d $,
+\texttt{(n\_samples, n\_features)}, where \texttt{n\_features} $ = d $,
 should return a \texttt{numpy.ndarray} shape \texttt{(n\_samples,)} giving the
 predicted class labels, containing only the values in \texttt{self.classes\_}
 recorded by the \texttt{fit} method. Given a new example $ \mathbf{x} \in
