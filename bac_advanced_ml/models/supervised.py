@@ -310,7 +310,18 @@ class LogisticRegression(BaseEstimator):
 class LinearDiscriminantAnalysis(BaseEstimator):
     """Reference implementation of linear discriminant analysis.
 
-    coef_, intercept_ computed by inversion of sample covariance matrix.
+    coef_, intercept_ computed by inversion of sample covariance matrix. The
+    sample covariance matrix may have shrinkage applied. Without shrinkage, it
+    is the maximum likelihood estimate of the true covariance matrix.
+
+    Parameters
+    ----------
+    shrinkage : float, default=None
+        Value in [0, 1] controlling the shrinkage of the covariance matrix
+        estimation. If shrinkage is not None, the covariance matrix estimate
+        will be `shrinkage * tr(S) / n_features * I + (1 - shrinkage) * S`.
+        Here `S` is the maximum likelihood estimate for the covariance matrix,
+        `I` is the identity matrix, `tr(S)` is the trace of `S`.
 
     Attributes
     ----------
@@ -337,8 +348,17 @@ class LinearDiscriminantAnalysis(BaseEstimator):
     score(X, y)
         Return the accuracy of the predictions.
     """
-    def __init__(self):
-        pass
+    def __init__(self, shrinkage=None):
+        # check that shrinkage is valid
+        if shrinkage is None:
+            pass
+        elif isinstance(shrinkage, float):
+            if shrinkage < 0 or shrinkage > 1:
+                raise ValueError("shrinkage must be in [0, 1]")
+        else:
+            raise TypeError("shrinkage must be float in [0, 1]")
+        # set shrinkage attribute
+        self.shrinkage = shrinkage
 
     def fit(self, X, y):
         """Compute parameters to best fit the model to X, y.
@@ -381,6 +401,13 @@ class LinearDiscriminantAnalysis(BaseEstimator):
             # need ddof=0 for maximum likelihood estimate; numpy API change
             # has made it such that the unbiased sample covariance is default
             cov += priors[i] * np.cov(X[y == labels[i]].T, ddof=0)
+        # apply shrinkage to cov if shrinkage is not None
+        alpha = self.shrinkage
+        if alpha is not None:
+            cov = (
+                alpha * np.trace(cov) * np.eye(n_features) / n_features +
+                (1 - alpha) * cov
+            )
         # inverse of covariance matrix (in practice, use np.linalg.lstsq)
         cov_i = np.linalg.inv(cov)
         # compute coefficients

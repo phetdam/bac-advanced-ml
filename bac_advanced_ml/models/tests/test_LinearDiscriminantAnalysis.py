@@ -9,7 +9,8 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as \
 from ..supervised import LinearDiscriminantAnalysis
 
 
-def test_res_binary(blob_bin):
+@pytest.mark.parametrize("shrinkage", [None, 0.2, 0.7])
+def test_res_binary(blob_bin, shrinkage):
     """Check LinearDiscriminantAnalysis equals sklearn for two-class case.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
@@ -19,12 +20,16 @@ def test_res_binary(blob_bin):
     ----------
     blob_bin : tuple
         pytest fixture. See conftest.py.
+    shrinkage : float
+        Shrinkage parameter to pass to LinearDiscriminantAnalysis
     """
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blob_bin
     # fit scikit-learn model and our model
-    _lc = _LinearDiscriminantAnalysis(solver="lsqr").fit(X_train, y_train)
-    lc = LinearDiscriminantAnalysis().fit(X_train, y_train)
+    _lc = _LinearDiscriminantAnalysis(solver="lsqr", shrinkage=shrinkage).fit(
+        X_train, y_train
+    )
+    lc = LinearDiscriminantAnalysis(shrinkage=shrinkage).fit(X_train, y_train)
     # check class labels, priors, means, covariance
     np.testing.assert_allclose(_lc.classes_, lc.classes_)
     np.testing.assert_allclose(_lc.priors_, lc.priors_)
@@ -42,7 +47,8 @@ def test_res_binary(blob_bin):
     )
 
 
-def test_res_multi(blob_multi):
+@pytest.mark.parametrize("shrinkage", [None, 0.2, 0.7])
+def test_res_multi(blob_multi, shrinkage):
     """Check LinearDiscriminantAnalysis equals sklearn for multi-class case.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
@@ -52,12 +58,16 @@ def test_res_multi(blob_multi):
     ----------
     blob_bin : tuple
         pytest fixture. See conftest.py.
+    shrinkage : float
+        Shrinkage parameter to pass to LinearDiscriminantAnalysis
     """
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blob_multi
     # fit scikit-learn model and our model
-    _lc = _LinearDiscriminantAnalysis(solver="lsqr").fit(X_train, y_train)
-    lc = LinearDiscriminantAnalysis().fit(X_train, y_train)
+    _lc = _LinearDiscriminantAnalysis(solver="lsqr", shrinkage=shrinkage).fit(
+        X_train, y_train
+    )
+    lc = LinearDiscriminantAnalysis(shrinkage=shrinkage).fit(X_train, y_train)
     # check class labels, priors, means, covariance
     np.testing.assert_allclose(_lc.classes_, lc.classes_)
     np.testing.assert_allclose(_lc.priors_, lc.priors_)
