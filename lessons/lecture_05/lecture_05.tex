@@ -177,7 +177,10 @@
         \end{equation}
 
         \item
-        Again, the $ p_{C_j, i} $ parameters are typically estimated by
+        Again, the $ p_{C_j, i} $ parameters are typically\footnote{
+            Not exactly true for reasons covered in the smoothing and
+            shrinkage section.
+        } estimated by
         maximum likelihood, i.e. the estimate $ \hat{p}_{C_j, i} $ is such that
         \begin{equation} \label{bern_nb_param_mle}
             \hat{p}_{C_j, i} \triangleq \frac{N_{C_j, i}}{N_{C_j}} \triangleq
@@ -493,12 +496,41 @@
 %\begin{frame}{Probability smoothing}
 %    \begin{itemize}
 %        \item
-%        Recall the Bernoulli naive Bayes model whose likelihood was defined
-%        in (\ref{bern_nb_like}).
+%        Recall the Bernoulli naive Bayes model, class-conditional likelihood
+%        defined in (\aref{bern_nb_like}). (\aref{bern_nb_param_mle}) gives
+%        maximum likelihood estimates
+%        $ \hat{p}_{C_j, i} $ for the probability parameters $ p_{C_j, i} $,
+%        $ i \in \{1, \ldots d\} $, $ j \in \{1, \ldots K\} $.
+%
+%        \item
+%        Note $ |\{(\mathbf{x}, y) \in \mathcal{D} : x_i = 1, y = C_j\}| = 0
+%        \Rightarrow \hat{p}_{C_j, i} = 0 \Rightarrow $ given a new example
+%        $ \mathbf{v} \in \mathbb{R}^d $, $ v_i = 1 $,
+%        $ p(\mathbf{v} \mid C_j, \hat{\theta}) = 0 \Rightarrow
+%        p(C_j \mid \mathbf{v}, \hat{\theta}) = 0 $.
+%
+%        \item
+%        If $ \mathbf{v} = \mathbf{x} + \mathbf{e}_i $ for some
+%        $ (\mathbf{x}, y) \in \mathcal{D} $, $ y = C_j $, the model predicts
+%        $ p(C_j \mid \mathbf{v}, \hat{\theta}) = 0 $ despite $ \mathbf{v} $,
+%        $ \mathbf{x} $ differing only at the $ i $th element.
+%
+%        \item
+%        Suppose we wish to estimate $ p_{C_j, i} $ using MAP. It's natural to
+%        choose $ p_{C_j, i} \sim \operatorname{Beta}(\alpha, \beta) $ since
+%        $ p_{C_j, i} \in (0, 1) $, and the prior
 %    \end{itemize}
 %\end{frame}
 %
 %\subsection{Covariance matrix shrinkage}
+%
+%\begin{frame}{Covariance matrix shrinkage}
+%    \begin{itemize}
+%        \item
+%        If there are many correlated predictors and/or $ d $ much larger than
+%        $ n $, (tibshirani p439, sklearn image)
+%    \end{itemize}
+%\end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
