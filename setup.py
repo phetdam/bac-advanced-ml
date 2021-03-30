@@ -8,7 +8,7 @@ _PACKAGE_NAME = "bac_advanced_ml"
 
 
 # reads requirements.txt and returns list for install_requires. usually not the
-# best idea is the requirements are complex but ours are pretty simple.
+# best idea if the requirements are complex but ours are pretty simple.
 def _read_reqs():
     # read requirements and split out newlines for return
     with open("requirements.txt") as f:
