@@ -22,9 +22,9 @@ class LinearDiscriminantAnalysis(BaseEstimator):
     shrinkage : float, default=None
         Value in [0, 1] controlling the shrinkage of the covariance matrix
         estimation. If shrinkage is not None, the covariance matrix estimate
-        will be `shrinkage * tr(S) / n_features * I + (1 - shrinkage) * S`.
-        Here `S` is the maximum likelihood estimate for the covariance matrix,
-        `I` is the identity matrix, `tr(S)` is the trace of `S`.
+        will be shrinkage * tr(S) / n_features * I + (1 - shrinkage) * S.
+        Here S is the maximum likelihood estimate for the covariance matrix,
+        I is the identity matrix, tr(S) is the trace of S.
 
     Attributes
     ----------
