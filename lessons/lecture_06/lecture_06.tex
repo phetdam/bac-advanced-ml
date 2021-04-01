@@ -1,0 +1,383 @@
+% standard beamer lecture template for slides
+% by Derek Huang
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% command for the title string. change for each lecture
+\newcommand{\lecturetitle}{Intro to Optimization}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
+% title page stuff. brackets content displayed in footer bar
+\title[\lecturetitle]{\lecturetitle}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{March 31, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+\section{Optimization fundamentals}
+
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the input matrix,
+        $ \mathbf{y} \in \mathbb{R}^N $ the response vector. Consider
+        fitting a linear regression model s.t. we minimize the
+        absolute value of the residuals. Optimal $ \hat{\mathbf{w}} \in
+        \mathbb{R}^d $, $ \hat{b} \in \mathbb{R} $ solve
+        \begin{equation*}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b} &
+                    \Vert\mathbf{y} - \mathbf{Xw} - b\mathbf{1}\Vert_1
+            \end{array}
+        \end{equation*}
+
+        \item
+        An optimization problem. Model fitting involves minimizing some
+        error metric $ \Rightarrow $ parameter estimation is an optimization
+        problem.
+
+        \item
+        Quite hard to solve. May be recast as the linear program (LP)
+        \cite{bv_convex_opt}
+        \begin{equation*}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b, \mathbf{t}} &
+                    \mathbf{1}^\top\mathbf{t} \\
+                \text{s.t.} &
+                    -\mathbf{t} \preceq \mathbf{y} - \mathbf{Xw} - b\mathbf{1}
+                    \preceq \mathbf{t} \\
+                & \mathbf{t} \succeq \mathbf{0}
+            \end{array}
+        \end{equation*}
+        Here $ \mathbf{t} \in \mathbb{R}^N $. Algorithms for solving LPs
+        are quite reliable \cite{bv_convex_opt}.
+    \end{itemize}
+\end{frame}
+
+\subsection{Convex sets and functions}
+
+\begin{frame}{Convex sets and functions}
+    \begin{itemize}
+        \item
+        Optimization problems broadly categorized as convex vs. nonconvex
+        $ \Rightarrow $ we need to know what convexity means.
+
+        \item
+        \textit{Definition.} Let $ \mathbf{x}_1, \mathbf{x}_2 \in
+        \mathbb{R}^n $, $ \mathbf{x}_1 \ne \mathbf{x}_2 $. The \textit{line}
+        passing through points $ \mathbf{x}_1, \mathbf{x}_2 $ is
+        $ \{\theta\mathbf{x}_1 + (1 - \theta)\mathbf{x}_2 :
+        \theta \in \mathbb{R}\} $. The \textit{line segment} connecting
+        points $ \mathbf{x}_1, \mathbf{x}_2 $ is $ \{\theta\mathbf{x}_1 +
+        (1 - \theta) \mathbf{x}_2 : \theta \in [0, 1]\} $
+        \cite{bv_convex_opt}.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[scale = 0.3]{bv_fig_2.1.png}
+        % remove excess space
+        \vspace{-10 pt}
+        \caption{
+            The $ \mathbf{x}_1, \mathbf{x}_2 $ line and line segment
+            parametrized by $ \theta $\footnote{
+                Figure 2.1 from Boyd and Vandenberghe's
+                \textit{Convex Optimization}.
+            }.
+        }
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Convex sets and functions}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A set $ C \subseteq \mathbb{R}^n $ is
+        \textit{convex} if $ \forall \mathbf{x}, \mathbf{y} \in C $,
+        $ \alpha \in [0, 1] $,
+        $ \alpha\mathbf{x} + (1 - \alpha)\mathbf{y} \in C $, i.e. $ C $
+        contains the $ \mathbf{x}, \mathbf{y} $ line segment
+        \cite{bv_convex_opt}.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[scale = 0.2]{bv_fig_2.2.png}
+        % remove excess space
+        \vspace{-10 pt}
+        \caption{
+            Convex and nonconvex sets. Only the leftmost set is
+            convex\footnote{
+                Figure 2.2 from Boyd and Vandenberghe's
+                \textit{Convex Optimization}.
+            }.
+        }
+        % remove excess space
+        \vspace{-15 pt}
+    \end{figure}
+    \begin{itemize}
+        \item
+        \textit{Definition.} $ f : \mathcal{M} \rightarrow
+        \mathbb{R} $, $ \mathcal{M} \subseteq \mathbb{R}^n $, is
+        \textit{convex} if $ \mathcal{M} $ convex and if
+        $ \forall \mathbf{x}, \mathbf{y} \in \mathcal{M} $,
+        $ \forall \alpha \in [0, 1] $,
+        $ f(\alpha\mathbf{x} + (1 - \alpha)\mathbf{y}) \le
+        \alpha f(\mathbf{x}) + (1 - \alpha)f(\mathbf{y}) $.
+
+        \item
+        \textit{Definition.} $ f : \mathcal{M} \rightarrow \mathbb{R} $ is
+        \textit{concave} if $ -f $ is convex.
+
+        \item
+        \textit{Remark.} Affine and linear functions are both convex and concave.
+    \end{itemize}
+
+    % adjust spacing since there is a footnote
+    \medskip
+\end{frame}
+
+\begin{frame}{Convex sets and functions}
+    \begin{figure}
+        \centering
+        \includegraphics[scale = 0.25]{bv_fig_3.1.png}
+        % remove extra space
+        \vspace{-10 pt}
+        \caption{Graph of a convex function\footnote{
+            Figure 3.1 from Boyd and Vandenberghe's
+            \textit{Convex Optimization}.
+        }. }
+        % remove excess space
+        \vspace{-15 pt}
+    \end{figure}
+    \begin{itemize}
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Exponential.} $ \forall a \in \mathbb{R} $, $ e^{ax} $
+            convex on $ \mathbb{R} $ \cite{bv_convex_opt}.
+
+            \item
+            \textit{Powers.} $ x^a $ convex on $ (0, \infty) $ if
+            $ a \in (\infty, 0] \cup [1, \infty) $, concave if
+            $ a \in [0, 1] $. $ \forall a \in [1, \infty) $, $ |x|^a $ convex
+            on $ \mathbb{R} $ \cite{bv_convex_opt}.
+
+            \item
+            \textit{Logarithms.} $ \log x $ concave on $ (0, \infty) $.
+
+            \item
+            \textit{Norms.} Any norm on $ \mathbb{R}^n $ is convex
+            \cite{bv_convex_opt}, e.g. $ \ell^p $-norm.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Convex sets and functions}
+    \begin{itemize}
+        \item
+        \textit{Lemma.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
+        differentiable $ \forall \mathbf{x} \in \mathcal{M} $. $ f $
+        convex $ \Leftrightarrow \mathcal{M} $ convex, $ \forall \mathbf{x},
+        \mathbf{y} \in \mathcal{M} $, $ f(\mathbf{y}) \ge f(\mathbf{x}) +
+        \nabla f(\mathbf{x})^\top(\mathbf{y} - \mathbf{x}) $
+        \cite{bv_convex_opt}.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        % remove extra space
+        \vspace{-5 pt}
+        \includegraphics[scale = 0.3]{bv_fig_3.2.png}
+        % remove extra space
+        \vspace{-10 pt}
+        \caption{Convex function bounded below by tangent line\footnote{
+            Figure 3.2 from Boyd and Vandenberghe's
+            \textit{Convex Optimization}.
+        }. }
+        % remove excess space
+        \vspace{-15 pt}
+    \end{figure}
+    \begin{itemize}
+        \item
+        \textit{Lemma.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
+        twice differentiable $ \forall \mathbf{x} \in \mathcal{M} $.
+        $ f $ convex $ \Leftrightarrow \mathcal{M} $ convex, $ \forall
+        \mathbf{x} \in \mathcal{M} $, $ \nabla^2f(\mathbf{x}) \succeq
+        \mathbf{0} $ \cite{bv_convex_opt}.
+
+        \item
+        \textit{Remark.} If $ \mathcal{M} \subseteq \mathbb{R} $ convex,
+        reduces to $ \forall x \in \mathcal{M}, f''(x) \ge 0 $.
+    \end{itemize}
+
+    % spacing for footnote
+    \medskip
+
+\end{frame}
+
+\subsection{Optimization problems}
+
+\begin{frame}{Optimization problems}
+    \begin{itemize}
+        \item
+        \textit{Definition.} For $ f: \mathbb{R}^n \rightarrow \mathbb{R} $,
+        $ \mathbf{u} : \mathbb{R}^n \rightarrow \mathbb{R}^p $,
+        $ \mathbf{v} : \mathbb{R}^n \rightarrow \mathbb{R}^q $, an
+        optimization problem is in \textit{standard form} if expressible as
+        \cite{bv_convex_opt}
+        \begin{equation} \label{opt_prob_std}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{x} & f(\mathbf{x}) \\
+                \text{s.t.} & \mathbf{u}(\mathbf{x}) \preceq \mathbf{0} \\
+                & \mathbf{v}(\mathbf{x}) = \mathbf{0}
+            \end{array}
+        \end{equation}
+        $ \mathbf{x} \in \mathbb{R}^n $ is the \textit{optimization
+        variable} \cite{bv_convex_opt}. $ \mathbf{u} \triangleq
+        [ \ u_1 \ \ldots \ u_p \ ]^\top $ gives the $ p $ \textit{inequality
+        constraints}, $ \mathbf{v} \triangleq [ \ v_1 \ \ldots \ v_q \ ]^\top $
+        gives the $ q $ \textit{equality constraints}. A point $ \mathbf{x}' $
+        is \textit{feasible} if $ \mathbf{u}(\mathbf{x}') \preceq
+        \mathbf{0} $, $ \mathbf{v}(\mathbf{x}') = \mathbf{0} $.
+
+        \item
+        Problem is \textit{constrained} if no constraints,
+        \textit{unconstrained} otherwise. Note maximization of $ f $ 
+        equivalent to minimization of $ -f $.
+
+        \item
+        \textit{Definition.} (\aref{opt_prob_std}) is a
+        \textit{convex optimization problem} if functions
+        $ f, u_1, \ldots u_p $ are convex and functions $ v_1, \ldots v_q $
+        are affine.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Optimization problems}
+    \begin{itemize}
+        \item
+        \textit{Examples.}
+        \begin{itemize}
+            \item
+            \textit{Weighted linear least squares.} Let $ \mathbf{\Gamma}
+            \triangleq \operatorname{diag}(\gamma_1, \ldots \gamma_N) \succ
+            \mathbf{0} \in \mathbb{R}^{N \times N} $ be the a data weighting
+            matrix. The unconstrained problem to solve is
+            \begin{equation*}
+                \begin{array}{ll}
+                    \displaystyle\min_{\mathbf{w}, b} &
+                    \Vert
+                        \mathbf{\Gamma}^{1 / 2}(\mathbf{y} - \mathbf{Xw} -
+                        b\mathbf{1})
+                    \Vert_2^2
+                \end{array}
+            \end{equation*}
+
+            \item
+            \textit{SVM dual problem.} Note $ \mathbf{X} \triangleq
+            [ \ \mathbf{x}_1 \ \ldots \mathbf{x}_N \ ]^\top $. The problem is
+            \begin{equation*}
+                \begin{array}{ll}
+                    \displaystyle\max_\alpha & \mathbf{1}^\top\alpha -
+                    \frac{1}{2}\alpha^\top\mathbf{H}\alpha \\
+                    \text{s.t.} & \alpha^\top\mathbf{y} = 0 \\
+                    & \mathbf{0} \preceq \alpha \preceq C\mathbf{1}
+                \end{array}
+            \end{equation*}
+            Here $ \alpha \in \mathbb{R}^N $,
+            $ \mathbf{H} \in \mathbb{R}^{N \times N} $ is such that
+            $ h_{ij} = y_iy_j\mathbf{x}_i^\top\mathbf{x}_j $, $ C > 0 $.
+
+            \item
+            Both problems are \textit{quadratic programs}. Quadratic programs
+            have convex, quadratic objectives and affine constraints (if any)
+            \cite{bv_convex_opt}.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Optimality conditions}
+
+\begin{frame}{Optimality conditions}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{optimal value} $ p^* $
+        of the problem defined in (\aref{opt_prob_std}) is such that
+        $ p^* = \inf\{f(\mathbf{x}) : \mathbf{u}(\mathbf{x}) \preceq
+        \mathbf{0}, \mathbf{v}(\mathbf{x}) = \mathbf{0}\} $
+        \cite{bv_convex_opt}.
+
+        \item
+        \textit{Definition.} $ \mathbf{x}^* $ is \textit{[globally] optimal}
+        if $ \mathbf{x}^* $ feasible and $ f(\mathbf{x}^*) = p^* $
+        \cite{bv_convex_opt}.
+
+        \item
+        \textit{Definition.} $ \mathbf{x}' $ is \textit{locally optimal} if
+        $ \mathbf{x}' $ feasible and $ \exists r \in (0, \infty) $
+        s.t. \cite{bv_convex_opt}
+        \begin{equation*}
+            f(\mathbf{x}') = \inf\{
+                f(\mathbf{x}) : \mathbf{u}(\mathbf{x}) \preceq \mathbf{0},
+                \mathbf{v}(\mathbf{x}) = \mathbf{0}, \Vert
+                    \mathbf{x}' - \mathbf{x}
+                \Vert_2 \le r
+            \}
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\section{First-order methods}
+
+\subsection{Gradient descent}
+
+\subsection{Accelerated gradient methods}
+
+\subsection{Adam}
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{../master_bib}
+\end{frame}
+
+\end{document}
