@@ -25,13 +25,14 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{March 30, 2021}
+\date{March 31, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
 % change ball to gray square (copied from stackoverflow; \par needed for break)
 \setbeamertemplate{subsection in toc}{        
-    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par
+}
 % use default enumeration scheme
 \setbeamertemplate{enumerate items}[default]
 % required line that fixes the problem of \mathbf, \bf not working in beamer
@@ -368,9 +369,11 @@
         them is
         \begin{equation} \label{decision_boundary}
             \begin{split}
-            \mathcal{B}_{C_a, C_b} & \triangleq \{\mathbf{x} \in \mathbb{R}^d :
+            \mathcal{B}_{C_a, C_b} & \triangleq \big\{
+                \mathbf{x} \in \mathbb{R}^d :
                 p(C_a \mid \mathbf{x}, \hat{\theta}) =
-                p(C_b \mid \mathbf{x}, \hat{\theta})\} \\ & =
+                p(C_b \mid \mathbf{x}, \hat{\theta})
+            \big\} \\ & =
                 \left\{
                     \mathbf{x} \in \mathbb{R}^d : \log\frac{
                         p(\mathbf{x} \mid C_a, \hat{\theta})
