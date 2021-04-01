@@ -16,7 +16,7 @@
 \useinnertheme{circles}
 
 % command for the title string. change for each lecture
-\newcommand{\lecturetitle}{Intro to Optimization}
+\newcommand{\lecturetitle}{Intro to Optimization, Part 1}
 % allow automatic alert-highlighted references and hyperlinks
 \newcommand{\aref}[1]{\alert{\ref{#1}}}
 \newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
@@ -54,7 +54,7 @@
     \tableofcontents
 \end{frame}
 
-\section{Optimization fundamentals}
+\section{Convex optimization}
 
 \begin{frame}{Motivation}
     \begin{itemize}
@@ -214,7 +214,7 @@
 \begin{frame}{Convex sets and functions}
     \begin{itemize}
         \item
-        \textit{Lemma.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
+        \textit{Theorem.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
         differentiable $ \forall \mathbf{x} \in \mathcal{M} $. $ f $
         convex $ \Leftrightarrow \mathcal{M} $ convex, $ \forall \mathbf{x},
         \mathbf{y} \in \mathcal{M} $, $ f(\mathbf{y}) \ge f(\mathbf{x}) +
@@ -237,7 +237,7 @@
     \end{figure}
     \begin{itemize}
         \item
-        \textit{Lemma.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
+        \textit{Theorem.} Let $ f : \mathcal{M} \rightarrow \mathbb{R} $ be
         twice differentiable $ \forall \mathbf{x} \in \mathcal{M} $.
         $ f $ convex $ \Leftrightarrow \mathcal{M} $ convex, $ \forall
         \mathbf{x} \in \mathcal{M} $, $ \nabla^2f(\mathbf{x}) \succeq
@@ -258,10 +258,11 @@
 \begin{frame}{Optimization problems}
     \begin{itemize}
         \item
-        \textit{Definition.} For $ f: \mathbb{R}^n \rightarrow \mathbb{R} $,
-        $ \mathbf{u} : \mathbb{R}^n \rightarrow \mathbb{R}^p $,
-        $ \mathbf{v} : \mathbb{R}^n \rightarrow \mathbb{R}^q $, an
-        optimization problem is in \textit{standard form} if expressible as
+        \textit{Definition.} Let $ \mathcal{M}_0, \mathcal{M}_1, \mathcal{M}_2
+        \subseteq \mathbb{R}^n $. For $ f: \mathcal{M}_0 \rightarrow
+        \mathbb{R} $, $ \mathbf{u} : \mathcal{M}_1 \rightarrow \mathbb{R}^p $,
+        $ \mathbf{v} : \mathcal{M}_2 \rightarrow \mathbb{R}^q $, a
+        \textit{standard form} optimization problem is written as
         \cite{bv_convex_opt}
         \begin{equation} \label{opt_prob_std}
             \begin{array}{ll}
@@ -272,11 +273,14 @@
         \end{equation}
         $ \mathbf{x} \in \mathbb{R}^n $ is the \textit{optimization
         variable} \cite{bv_convex_opt}. $ \mathbf{u} \triangleq
-        [ \ u_1 \ \ldots \ u_p \ ]^\top $ gives the $ p $ \textit{inequality
+        [ \ u_1 \ \ldots \ u_p \ ]^\top $ gives $ p $ \textit{inequality
         constraints}, $ \mathbf{v} \triangleq [ \ v_1 \ \ldots \ v_q \ ]^\top $
-        gives the $ q $ \textit{equality constraints}. A point $ \mathbf{x}' $
-        is \textit{feasible} if $ \mathbf{u}(\mathbf{x}') \preceq
-        \mathbf{0} $, $ \mathbf{v}(\mathbf{x}') = \mathbf{0} $.
+        gives $ q $ \textit{equality constraints}.
+
+        \item
+        \textit{Definition.} The \textit{domain} of (\aref{opt_prob_std}) is
+        $ \tilde{\mathcal{M}} \triangleq \mathcal{M}_0 \cap \mathcal{M}_1 \cap
+        \mathcal{M}_2 \ne \emptyset $ \cite{bv_convex_opt}.
 
         \item
         Problem is \textit{constrained} if no constraints,
@@ -287,7 +291,7 @@
         \textit{Definition.} (\aref{opt_prob_std}) is a
         \textit{convex optimization problem} if functions
         $ f, u_1, \ldots u_p $ are convex and functions $ v_1, \ldots v_q $
-        are affine.
+        are affine \cite{bv_convex_opt}.
     \end{itemize}
 \end{frame}
 
@@ -339,39 +343,73 @@
 \begin{frame}{Optimality conditions}
     \begin{itemize}
         \item
-        \textit{Definition.} The \textit{optimal value} $ p^* $
-        of the problem defined in (\aref{opt_prob_std}) is such that
-        $ p^* = \inf\{f(\mathbf{x}) : \mathbf{u}(\mathbf{x}) \preceq
-        \mathbf{0}, \mathbf{v}(\mathbf{x}) = \mathbf{0}\} $
+        \textit{Definition.} Let $ \mathbf{u}, \mathbf{v},
+        \tilde{\mathcal{M}} $ be defined as in (\aref{opt_prob_std}).
+        $ \mathbf{x}' \in \tilde{\mathcal{M}} $ is \textit{feasible} if
+        $ \mathbf{x}' \in \mathcal{X}^*
+        \triangleq \{\mathbf{x} \in \tilde{\mathcal{M}} :
+        \mathbf{u}(\mathbf{x}) \preceq \mathbf{0}, \mathbf{v}(\mathbf{x}) =
+        \mathbf{0}\} $. $ \mathcal{X}^* $ is the \textit{feasible set}
         \cite{bv_convex_opt}.
 
         \item
+        \textit{Definition.} The \textit{optimal value} $ p^* $
+        of an optimization problem, as defined in (\aref{opt_prob_std}), is
+        such that $ p^* = \inf\{f(\mathbf{x}) : \mathbf{x} \in
+        \mathcal{X}^*\} $ \cite{bv_convex_opt}.
+
+        \item
         \textit{Definition.} $ \mathbf{x}^* $ is \textit{[globally] optimal}
-        if $ \mathbf{x}^* $ feasible and $ f(\mathbf{x}^*) = p^* $
+        if $ \mathbf{x}^* \in \mathcal{X}^* $ and $ f(\mathbf{x}^*) = p^* $ 
         \cite{bv_convex_opt}.
 
         \item
         \textit{Definition.} $ \mathbf{x}' $ is \textit{locally optimal} if
-        $ \mathbf{x}' $ feasible and $ \exists r \in (0, \infty) $
-        s.t. \cite{bv_convex_opt}
+        $ \mathbf{x}' \in \mathcal{X}^* $ and $ \exists r \in (0, \infty) $
+        such that $ f(\mathbf{x}') = \inf\{
+            f(\mathbf{x}) : \mathbf{x} \in \mathcal{X}^*,
+            \Vert\mathbf{x}' - \mathbf{x}\Vert_2 \le r
+        \}$ \cite{bv_convex_opt}.
+
+        \item
+        \textit{Theorem.} Suppose (\aref{opt_prob_std}) is a convex
+        optimization problem. If $ \mathbf{x}' $ is locally optimal, then
+        $ \mathbf{x}' $ is [globally] optimal.
+
+        \item
+        \textit{Theorem.} Suppose (\aref{opt_prob_std}) is a convex
+        optimization problem and objective $ f $ differentiable.
+        $ \mathbf{x}^* \in \tilde{\mathcal{M}} $ optimal
+        $ \Leftrightarrow \mathbf{x}^* \in \mathcal{X}^* $,
+        $ \forall \mathbf{x} \in \mathcal{X}^* $,
+        $ \nabla f(\mathbf{x}^*)^\top(\mathbf{x} - \mathbf{x}^*) \ge 0 $.
+        If no constraints, reduces to $ \nabla f(\mathbf{x}^*) = \mathbf{0} $
+        \cite{bv_convex_opt}.
+    \end{itemize}
+\end{frame}
+
+\section{Duality}
+
+\subsection{The Lagrangian dual}
+
+\begin{frame}{The Lagrangian dual}
+    \begin{itemize}
+        \item
+        \textit{Definition.} The \textit{Lagrangian} $ \mathcal{L}_f :
+        \tilde{\mathcal{M}} \times \mathbb{R}^p \times \mathbb{R}^q \rightarrow
+        \mathbb{R} $ of (\aref{opt_prob_std}) is s.t.
         \begin{equation*}
-            f(\mathbf{x}') = \inf\{
-                f(\mathbf{x}) : \mathbf{u}(\mathbf{x}) \preceq \mathbf{0},
-                \mathbf{v}(\mathbf{x}) = \mathbf{0}, \Vert
-                    \mathbf{x}' - \mathbf{x}
-                \Vert_2 \le r
-            \}
+            \mathcal{L}_f(\mathbf{x}, \lambda, \nu) \triangleq f(\mathbf{x}) +
+            \lambda^\top\mathbf{u}(\mathbf{x}) + \nu^\top\mathbf{v}(\mathbf{x})
         \end{equation*}
     \end{itemize}
 \end{frame}
 
-\section{First-order methods}
+\section{Problems in machine learning}
 
-\subsection{Gradient descent}
+\subsection{Logistic regression}
 
-\subsection{Accelerated gradient methods}
-
-\subsection{Adam}
+\subsection{Linear SVM}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
