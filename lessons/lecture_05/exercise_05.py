@@ -103,7 +103,9 @@ class LinearDiscriminantAnalysis(BaseEstimator):
         ### your code goes here ###
         ###########################
 
-        # compute shared, possibly shrunk covariance matrix
+        # compute shared + shrunk covariance matrix. sample covariance matrix
+        # is convex combination of class prior weighted covariance matrices.
+        # note that self.shrinkage might be None, in which case no shrinkage!
         cov = np.zeros((n_features, n_features))
 
         ###########################
