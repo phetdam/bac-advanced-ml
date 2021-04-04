@@ -398,20 +398,51 @@
         \textit{Definition.} The \textit{Lagrangian} $ \mathcal{L}_f :
         \tilde{\mathcal{M}} \times \mathbb{R}^p \times \mathbb{R}^q \rightarrow
         \mathbb{R} $ of (\aref{opt_prob_std}) is s.t.
-        \begin{equation*}
+        \begin{equation} \label{std_lagrangian}
             \mathcal{L}_f(\mathbf{x}, \lambda, \nu) \triangleq f(\mathbf{x}) +
             \lambda^\top\mathbf{u}(\mathbf{x}) + \nu^\top\mathbf{v}(\mathbf{x})
-        \end{equation*}
+        \end{equation}
+        $ \lambda \in \mathbb{R}^p $, $ \nu \in \mathbb{R}^q $ are the
+        \textit{Lagrange multipliers} or \textit{dual variables}.
+
+        \item
+        \textit{Definition.} The \textit{[Lagrangian] dual} $ \ell_f :
+        \mathbb{R}^p \times \mathbb{R}^q \rightarrow \mathbb{R} $ of 
+        (\aref{opt_prob_std}) is s.t.
+        \begin{equation} \label{std_dual}
+            \ell_f(\lambda, \nu) \triangleq
+            \inf_{\mathbf{x} \in \tilde{\mathcal{M}}}
+            \{\mathcal{L}_f(\mathbf{x}, \lambda, \nu)\}
+        \end{equation}
+        $ \ell_f $ is always concave, even if the problem in
+        (\aref{opt_prob_std}) is nonconvex \cite{bv_convex_opt}.
+
+        \item
+        \textit{Theorem.} $ \forall \lambda \succeq \mathbf{0} \in
+        \mathbb{R}^p, \nu \in \mathbb{R}^q $, $ \ell_f(\lambda, \nu) \le p^* $.
+
+        \item
+        \textit{Definition.} $ (\lambda, \nu) \in \mathbb{R}^p \times
+        \mathbb{R}^q $ with $ \lambda \succeq \mathbf{0} $ is called
+        \textit{dual feasible} \cite{bv_convex_opt}.
+
+        \item
+        For any dual feasible $ (\lambda, \nu) $, $ \ell_f(\lambda, \nu) $
+        gives a lower bound to the optimal value of the original optimization
+        problem.
     \end{itemize}
 \end{frame}
 
+\begin{frame}{The Lagrangian dual}
+    \begin{itemize}
+        \item
+    \end{itemize}
+\end{frame}
+
+\subsection{Slater's condition}
+
 \subsection{Karush-Kuhn-Tucker conditions}
 
-\section{Machine learning applications}
-
-\subsection{Logistic regression}
-
-\subsection{Linear SVM}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
