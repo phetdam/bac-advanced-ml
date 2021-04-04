@@ -72,9 +72,7 @@
         \end{equation*}
 
         \item
-        An optimization problem. Model fitting involves minimizing some
-        error metric $ \Rightarrow $ parameter estimation is an optimization
-        problem.
+        Model parameter estimation is an optimization problem.
 
         \item
         Quite hard to solve. May be recast as the linear program (LP)
@@ -258,10 +256,11 @@
 \begin{frame}{Optimization problems}
     \begin{itemize}
         \item
-        \textit{Definition.} Let $ \mathcal{M}_0, \mathcal{M}_1, \mathcal{M}_2
-        \subseteq \mathbb{R}^n $. For $ f: \mathcal{M}_0 \rightarrow
-        \mathbb{R} $, $ \mathbf{u} : \mathcal{M}_1 \rightarrow \mathbb{R}^p $,
-        $ \mathbf{v} : \mathcal{M}_2 \rightarrow \mathbb{R}^q $, a
+        \textit{Definition.} Let $ \mathcal{M}_f, \mathcal{M}_\mathbf{u},
+        \mathcal{M}_\mathbf{v} \subseteq \mathbb{R}^n $. For
+        $ f: \mathcal{M}_f \rightarrow \mathbb{R} $, $ \mathbf{u} :
+        \mathcal{M}_\mathbf{u} \rightarrow \mathbb{R}^p $,
+        $ \mathbf{v} : \mathcal{M}_\mathbf{v} \rightarrow \mathbb{R}^q $, a
         \textit{standard form} optimization problem is written as
         \cite{bv_convex_opt}
         \begin{equation} \label{opt_prob_std}
@@ -279,8 +278,9 @@
 
         \item
         \textit{Definition.} The \textit{domain} of (\aref{opt_prob_std}) is
-        $ \tilde{\mathcal{M}} \triangleq \mathcal{M}_0 \cap \mathcal{M}_1 \cap
-        \mathcal{M}_2 \ne \emptyset $ \cite{bv_convex_opt}.
+        $ \tilde{\mathcal{M}} \triangleq \mathcal{M}_f \cap
+        \mathcal{M}_\mathbf{u} \cap \mathcal{M}_\mathbf{v} \ne \emptyset $
+        \cite{bv_convex_opt}.
 
         \item
         Problem is \textit{constrained} if no constraints,
@@ -303,7 +303,7 @@
             \item
             \textit{Weighted linear least squares.} Let $ \mathbf{\Gamma}
             \triangleq \operatorname{diag}(\gamma_1, \ldots \gamma_N) \succ
-            \mathbf{0} \in \mathbb{R}^{N \times N} $ be the a data weighting
+            \mathbf{0} \in \mathbb{R}^{N \times N} $ be the data weighting
             matrix. The unconstrained problem to solve is
             \begin{equation*}
                 \begin{array}{ll}
