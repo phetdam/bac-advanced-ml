@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{March 31, 2021}
+\date{April 5, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -129,11 +129,25 @@
     \begin{itemize}
         \item
         \textit{Definition.} A set $ C \subseteq \mathbb{R}^n $ is
+        \textit{affine} if $ \forall \mathbf{x}, \mathbf{y} \in C $,
+        $ \alpha \in \mathbb{R} $, $ \alpha\mathbf{x} + (1 - \alpha)\mathbf{y}
+        \in C $, i.e. $ C $ contains the $ \mathbf{x}, \mathbf{y} $ line.
+
+        \item
+        \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
+        \textit{affine hull} of $ C $, denoted $ \operatorname{aff} C $, is
+        $ \operatorname{aff} C \triangleq \{
+            \sum_{i = 1}^k\theta_i\mathbf{x}_i : \mathbf{x}_1, \ldots
+            \mathbf{x}_k \in C, \theta_1, \ldots \theta_k \in \mathbb{R},
+            \sum_{i = 1}^k\theta_i = 1
+        \} $ \cite{bv_convex_opt}.
+
+        \item
+        \textit{Definition.} A set $ C \subseteq \mathbb{R}^n $ is
         \textit{convex} if $ \forall \mathbf{x}, \mathbf{y} \in C $,
         $ \alpha \in [0, 1] $,
         $ \alpha\mathbf{x} + (1 - \alpha)\mathbf{y} \in C $, i.e. $ C $
-        contains the $ \mathbf{x}, \mathbf{y} $ line segment
-        \cite{bv_convex_opt}.
+        contains the $ \mathbf{x}, \mathbf{y} $ line segment.
     \end{itemize}
     \begin{figure}
         \centering
@@ -148,9 +162,57 @@
             }.
         }
         % remove excess space
-        \vspace{-15 pt}
+        \vspace{-10 pt}
     \end{figure}
     \begin{itemize}
+        \item
+        \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
+        \textit{convex hull} of $ C $, denoted $ \operatorname{conv} C $, is
+        $ \operatorname{conv} C \triangleq \{
+            \sum_{i = 1}^k\theta_i\mathbf{x}_i : \mathbf{x}_1, \ldots
+            \mathbf{x}_k \in C, \theta_1, \ldots \theta_k \in [0, 1],
+            \sum_{i = 1}^k\theta_i = 1        
+        \} $.
+    \end{itemize}
+    % adjust spacing since there is a footnote
+    \bigskip
+\end{frame}
+
+\begin{frame}{Convex sets and functions}
+    \begin{itemize}
+        \item
+        If $ C $ affine, then $ \operatorname{aff} C = C $, while if $ C $
+        convex, then $ \operatorname{conv} C = C $.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        % remove excess space
+        \vspace{-3 pt}
+        \includegraphics[scale = 0.24]{bv_fig_2.3.png}
+        % remove excess space
+        \vspace{-10 pt}
+        \caption{
+            Examples of $ \mathbb{R}^2 $ convex hulls\footnote{
+                Figure 2.3 from Boyd and Vandenberghe's
+                \textit{Convex Optimization}.
+            }.
+        }
+        % remove excess space
+        \vspace{-10 pt}
+    \end{figure}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
+        \textit{relative interior} of $ C $, denoted
+        $ \operatorname{relint} C $, is $ \operatorname{relint} C \triangleq 
+        \{\mathbf{x} \in C : B(\mathbf{x}, r) \cap \operatorname{aff} C
+        \subseteq C, r \in (0, \infty)\} $ \cite{bv_convex_opt}. Here
+        $ B(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in \mathbb{R}^n :
+        \Vert\mathbf{x}' - \mathbf{x}\Vert \le r\} $ for some norm
+        $ \Vert\cdot\Vert $\footnote{
+            All norms define the same relative interior \cite{bv_convex_opt}.        
+        }.
+
         \item
         \textit{Definition.} $ f : \mathcal{M} \rightarrow
         \mathbb{R} $, $ \mathcal{M} \subseteq \mathbb{R}^n $, is
@@ -163,27 +225,30 @@
         \item
         \textit{Definition.} $ f : \mathcal{M} \rightarrow \mathbb{R} $ is
         \textit{concave} if $ -f $ is convex.
-
-        \item
-        \textit{Remark.} Affine and linear functions are both convex and concave.
     \end{itemize}
 
-    % adjust spacing since there is a footnote
-    \medskip
+    % spacing for footnote
+    \bigskip
 \end{frame}
 
 \begin{frame}{Convex sets and functions}
+    \begin{itemize}
+        \item
+        Affine and linear functions are both convex and concave.
+    \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[scale = 0.25]{bv_fig_3.1.png}
         % remove extra space
-        \vspace{-10 pt}
+        \vspace{-3 pt}
+        \includegraphics[scale = 0.24]{bv_fig_3.1.png}
+        % remove extra space
+        \vspace{-5 pt}
         \caption{Graph of a convex function\footnote{
             Figure 3.1 from Boyd and Vandenberghe's
             \textit{Convex Optimization}.
         }. }
         % remove excess space
-        \vspace{-15 pt}
+        \vspace{-10 pt}
     \end{figure}
     \begin{itemize}
         \item
@@ -207,6 +272,9 @@
             \cite{bv_convex_opt}, e.g. $ \ell^p $-norm.
         \end{itemize}
     \end{itemize}
+
+    % spacing for footnote
+    \bigskip
 \end{frame}
 
 \begin{frame}{Convex sets and functions}
@@ -261,7 +329,10 @@
         $ f: \mathcal{M}_f \rightarrow \mathbb{R} $, $ \mathbf{u} :
         \mathcal{M}_\mathbf{u} \rightarrow \mathbb{R}^p $,
         $ \mathbf{v} : \mathcal{M}_\mathbf{v} \rightarrow \mathbb{R}^q $, a
-        \textit{standard form} optimization problem is written as
+        \textit{standard form} optimization problem is\footnote{
+            Assume the problem is well-defined, i.e. \textit{feasible}
+            (solvable) and bounded below.
+        }
         \cite{bv_convex_opt}
         \begin{equation} \label{opt_prob_std}
             \begin{array}{ll}
@@ -293,6 +364,9 @@
         $ f, u_1, \ldots u_p $ are convex and functions $ v_1, \ldots v_q $
         are affine \cite{bv_convex_opt}.
     \end{itemize}
+
+    % spacing for footnote
+    \medskip
 \end{frame}
 
 \begin{frame}{Optimization problems}
@@ -338,9 +412,9 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Optimality conditions}
+\subsection{Feasibility and optimality}
 
-\begin{frame}{Optimality conditions}
+\begin{frame}{Feasibility and optimality}
     \begin{itemize}
         \item
         \textit{Definition.} Let $ \mathbf{u}, \mathbf{v},
@@ -406,42 +480,256 @@
         \textit{Lagrange multipliers} or \textit{dual variables}.
 
         \item
-        \textit{Definition.} The \textit{[Lagrangian] dual} $ \ell_f :
-        \mathbb{R}^p \times \mathbb{R}^q \rightarrow \mathbb{R} $ of 
-        (\aref{opt_prob_std}) is s.t.
+        \textit{Definition.} The \textit{[Lagrangian] dual} $ f_d :
+        \tilde{\mathcal{M}}_d \rightarrow \mathbb{R} $ of 
+        (\aref{opt_prob_std}), is s.t.
         \begin{equation} \label{std_dual}
-            \ell_f(\lambda, \nu) \triangleq
+            f_d(\lambda, \nu) \triangleq
             \inf_{\mathbf{x} \in \tilde{\mathcal{M}}}
             \{\mathcal{L}_f(\mathbf{x}, \lambda, \nu)\}
         \end{equation}
-        $ \ell_f $ is always concave, even if the problem in
-        (\aref{opt_prob_std}) is nonconvex \cite{bv_convex_opt}.
+        Here $ \tilde{\mathcal{M}}_d \subseteq \mathbb{R}^p \times
+        \mathbb{R}^q $. $ f_d $ is \alert{always} concave, even if the
+        problem (\aref{opt_prob_std}) is nonconvex \cite{bv_convex_opt}.
+        $ (\lambda, \nu) \in \tilde{\mathcal{M}}_d $ with $ \lambda \succeq
+        \mathbf{0} $ is called \textit{dual feasible} \cite{bv_convex_opt}.
 
         \item
-        \textit{Theorem.} $ \forall \lambda \succeq \mathbf{0} \in
-        \mathbb{R}^p, \nu \in \mathbb{R}^q $, $ \ell_f(\lambda, \nu) \le p^* $.
+        \textit{Theorem.} $ \forall (\lambda, \nu) \in \tilde{\mathcal{M}}_d $,
+        $ \lambda \succeq \mathbf{0} $, $ f_d(\lambda, \nu) \le p^* $.
 
         \item
-        \textit{Definition.} $ (\lambda, \nu) \in \mathbb{R}^p \times
-        \mathbb{R}^q $ with $ \lambda \succeq \mathbf{0} $ is called
-        \textit{dual feasible} \cite{bv_convex_opt}.
-
-        \item
-        For any dual feasible $ (\lambda, \nu) $, $ \ell_f(\lambda, \nu) $
+        For any dual feasible $ (\lambda, \nu) $, $ f_d(\lambda, \nu) $
         gives a lower bound to the optimal value of the original optimization
         problem.
     \end{itemize}
+
+    % more footnote spacing
+    \medskip
 \end{frame}
 
 \begin{frame}{The Lagrangian dual}
     \begin{itemize}
         \item
+        If we let $ \operatorname{im}f \triangleq \mathbb{R}\cup\infty $,
+        (\aref{opt_prob_std}) can be written as the unconstrained\footnote{
+            For set $ A $, $ \mathbb{I}_A^\infty(x) = \infty $ if $ x \in A $,
+            else $ \mathbb{I}_A^\infty(x) = 0 $.
+        }
+        \begin{equation*}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{x} &
+                \displaystyle f(\mathbf{x}) + \mathbb{I}^\infty_{\{
+                    \mathbf{x} \in \mathbb{R}^p : \mathbf{x}\preceq \mathbf{0}
+                \}}\circ\mathbf{u}(\mathbf{x}) +
+                \mathbb{I}^\infty_{\{\mathbf{0}\}}\circ\mathbf{v}(\mathbf{x})
+            \end{array}
+        \end{equation*}
+        $ \lambda^\top\mathbf{u} $, $ \nu^\top\mathbf{v} $ are linear
+        underestimators of $ \displaystyle\mathbb{I}^\infty_{\{
+            \mathbf{x} \in \mathbb{R}^p : \mathbf{x}\preceq \mathbf{0}
+        \}}\circ\mathbf{u} $, $ \displaystyle
+        \mathbb{I}^\infty_{\{\mathbf{0}\}}\circ\mathbf{v} $, intuitively
+        justifying why $ f_d $ yields a lower bound for $ p^* $.
+
+        \item
+        A natural question is to find the closest underestimator to the
+        original problem, i.e. $ \lambda^*, \nu^* $ s.t.
+        $ p^* - f_d(\lambda^*, \nu^*) $ is minimized.
+
+        \item
+        \textit{Definition.} Let $ f_d $ be the dual for
+        (\aref{opt_prob_std}). The \textit{dual problem} for
+        (\aref{opt_prob_std}) is
+        \begin{equation} \label{opt_prob_std_dual}
+            \begin{array}{ll}
+                \displaystyle\max_{\lambda, \nu}& f_d(\lambda, \nu) \\
+                \text{s.t.} & \lambda\succeq \mathbf{0}
+            \end{array}
+        \end{equation}
+        $ \lambda^*, \nu^* $ is \textit{dual optimal} if optimal for
+        (\aref{opt_prob_std_dual}). (\aref{opt_prob_std}) is the
+        \textit{primal problem}.
+    \end{itemize}
+
+    % spacing for the footnote
+    \bigskip
+\end{frame}
+
+\begin{frame}{The Lagrangian dual}
+    \begin{itemize}
+        \item
+        \textit{Example.} Consider solving an undetermined linear system with
+        a minimum $ \ell^2 $-norm solution. I.e. for $ q < n $, we want to
+        solve
+        \begin{equation*}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{x} & \mathbf{x}^\top\mathbf{x} \\
+                \text{s.t.} & \mathbf{Ax} = \mathbf{b}
+            \end{array}
+        \end{equation*}
+        Here $ \mathbf{A} \in \mathbb{R}^{q \times n} $, $ \mathbf{b} \in
+        \mathbb{R}^q $. The Lagrangian $ \mathcal{L} : \mathbb{R}^n \times
+        \mathbb{R}^q \rightarrow \mathbb{R} $ is s.t.
+        $ \mathcal{L}(\mathbf{x}, \nu) \triangleq \mathbf{x}^\top\mathbf{x} 
+        + \nu^\top(\mathbf{Ax} - \mathbf{b}) $. $ \mathcal{L} $ is convex in
+        $ \mathbf{x} $, so at its minimizer $ \mathbf{x}^* $,
+        $ \nabla_\mathbf{x}\mathcal{L}(\mathbf{x}^*, \nu) =
+        2\mathbf{x}^* + \mathbf{A}^\top\nu = \mathbf{0} $. Clearly
+        $ \mathbf{x}^* = -\frac{1}{2}\mathbf{A}^\top\nu $. Then,
+        \begin{equation*}
+            f_d(\nu) \triangleq \inf_{\mathbf{x} \in \mathbb{R}^n}
+                \mathcal{L}(\mathbf{x}, \nu) = \mathcal{L}(\mathbf{x}^*, \nu) =
+                -\frac{1}{4}\nu^\top\mathbf{AA}^\top\nu - \mathbf{b}^\top\nu
+        \end{equation*}
+        No constraints on $ \nu $, so $ \operatorname{dom}f_d = \mathbb{R}^q $.
+        $ -f_d $ is convex, $ \mathbf{AA}^\top \succeq
+        \mathbf{0} $\footnote{
+            $ \forall \mathbf{x} \in \mathbb{R}^n,
+            \mathbf{x}^\top\mathbf{AA}^\top\mathbf{x} =
+            \big(\mathbf{A}^\top\mathbf{x}\big)^\top\mathbf{A}^\top\mathbf{x} =
+            \Vert\mathbf{A}^\top\mathbf{x}\Vert_2^2 \ge 0 $.
+        }.
     \end{itemize}
 \end{frame}
 
-\subsection{Slater's condition}
+\subsection{Strong duality}
+
+\begin{frame}{Strong duality}
+    \begin{itemize}
+        \item
+        \textit{Definition.} Let $ d^* $ denote the optimal value of the dual
+        problem (\aref{opt_prob_std_dual}). The property $ d^* \le p^* $ is
+        \textit{weak duality}, which always holds \cite{bv_convex_opt}.
+
+        \item
+        \textit{Definition.} If $ d^* = p^* $, we say that
+        \textit{strong duality} holds.
+
+        \item
+        \textit{Theorem.} If (\aref{opt_prob_std}) is a convex problem and
+        Slater's condition holds, i.e. $ \exists \mathbf{x} \in
+        \operatorname{relint}\tilde{\mathcal{M}} $ s.t.
+        $ \mathbf{u}(\mathbf{x}) \prec \mathbf{0} $,
+        $ \mathbf{v}(\mathbf{x}) = \mathbf{0} $, strong duality holds
+        \cite{bv_convex_opt}.
+
+        \item
+        If (\aref{opt_prob_std}) convex and $ u_1, \ldots u_k $ affine,
+        $ k \le p $, Slater's condition can be refined s.t. it holds when
+        $ \exists \mathbf{x} \in
+        \operatorname{relint}\tilde{\mathcal{M}} $ s.t.
+        $ u_1(\mathbf{x}) \le 0, \ldots u_k(\mathbf{x}) \le 0 $,
+        $ u_{k + 1}(\mathbf{x}) < 0, \ldots u_p(\mathbf{x}) < 0 $,
+        $ \mathbf{v}(\mathbf{x}) = \mathbf{0} $ \cite{bv_convex_opt}.
+
+        \item
+        Strong duality helps us establish optimality conditions.
+
+        \item
+        \textit{Definition.} Suppose strong duality holds for
+        (\aref{opt_prob_std}). Let $ \mathbf{x}^* $ be primal optimal and
+        $ \lambda^*, \nu^* $ be
+        dual optimal. Then, $ \forall i \in \{1, \ldots p\} $,
+        $ \lambda_i^* > 0 \Rightarrow u_i(\mathbf{x}^*) = 0 $, i.e.
+        \textit{complementary slackness} holds \cite{bv_convex_opt}.
+
+        \item
+        Equivalently, one can write $ u_i(\mathbf{x}^*) < 0 \Rightarrow
+        \lambda_i^* = 0 $.
+    \end{itemize}
+\end{frame}
 
 \subsection{Karush-Kuhn-Tucker conditions}
+
+\begin{frame}{Karush-Kun-Tucker conditions}
+    \begin{itemize}
+        \item
+        Many problems have differentiable objectives and constraints.
+
+        \item
+        \textit{Definition.} Suppose strong duality holds for
+        (\aref{opt_prob_std}) and $ f $, $ \mathbf{u} $, $ \mathbf{v} $
+        differentiable. Then, the following conditions must hold.
+        \begin{enumerate}
+            \item
+            \textit{Stationarity.} $ \nabla f(\mathbf{x}^*) +
+            \nabla\mathbf{u}(\mathbf{x}^*)^\top\lambda^* +
+            \nabla\mathbf{v}(\mathbf{x}^*)^\top\nu^* = \mathbf{0} $.
+
+            \item
+            \textit{Primal feasibility.} $ \mathbf{u}(\mathbf{x}^*) \preceq
+            \mathbf{0} $, $ \mathbf{v}(\mathbf{x}^*) = \mathbf{0} $.
+
+            \item
+            \textit{Dual feasibility.} $ \lambda^* \succeq \mathbf{0} $.
+
+            \item
+            \textit{Complementary slackness.} $ \mathbf{u}(\mathbf{x}^*)^\top
+            \lambda^* = 0 $.
+        \end{enumerate}
+        These are the \textit{Karush-Kuhn-Tucker conditions}
+        \cite{bv_convex_opt}.
+
+        \item
+        Note $ \mathbf{x}^* =
+        \arg\min_{\mathbf{x} \in \tilde{\mathcal{M}}}
+        \mathcal{L}_f(\mathbf{x}, \lambda^*, \nu^*) \Rightarrow
+        \nabla_\mathbf{x}\mathcal{L}_f(\mathbf{x}^*, \lambda^*, \nu^*) =
+        \mathbf{0} $, where
+        \begin{equation*}
+            \nabla_\mathbf{x}\mathcal{L}_f(\mathbf{x}^*, \lambda^*, \nu^*)
+            \triangleq  \nabla f(\mathbf{x}^*) +
+            \nabla\mathbf{u}(\mathbf{x}^*)^\top\lambda^* +
+            \nabla\mathbf{v}(\mathbf{x}^*)^\top\nu^*
+        \end{equation*}
+        By strong duality, $ f(\mathbf{x}^*) = f_d(\lambda^*, \nu^*)
+        \triangleq \inf_{\mathbf{x} \in \tilde{\mathcal{M}}}\{
+            \mathcal{L}_f(\mathbf{x}, \lambda^*, \nu^*)
+        \} $.
+
+        \item
+        Complementary slackness is equivalently written as
+        $ \lambda_i^*u_i(\mathbf{x}^*) = 0 $,
+        $ \forall i \in \{1, \ldots p\} $, as 
+        $ \mathbf{u}(\mathbf{x}^*)^\top\lambda^* = 0 \Leftrightarrow
+        u_i(\mathbf{x}^*) = 0 \Rightarrow \lambda_i^* = 0 $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Karush-Kuhn-Tucker conditions}
+    \begin{itemize}
+        \item
+        KKT conditions are \alert{necessary} optimality conditions for general
+        optimization problems with differentiable objective and constraints.
+
+        \item
+        But if (\aref{opt_prob_std}) is convex and $ \mathbf{x}^*, \lambda^*,
+        \nu^* $ satisfy the KKT conditions, then strong duality holds,
+        $ \mathbf{x}^* $ is primal optimal, $ (\lambda^*, \nu^*) $ is dual
+        optimal.
+
+        \item
+        KKT conditions are \alert{sufficient} for optimality if the problem is
+        convex. Furthermore, if $ \mathbf{x}^* $ also satisfies Slater's
+        condition, then KKT conditions become \alert{necessary and sufficient}
+        for optimality.
+
+        \item
+        In summary:
+        \begin{enumerate}
+            \item
+            Strong duality $ \Rightarrow $ KKT conditions satisfied.
+
+            \item
+            Convex problem, KKT conditions $ \Rightarrow $ strong duality.
+
+            \item
+            Convex problem, Slater's condition, KKT conditions
+            $ \Leftrightarrow $ strong duality.
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
 
 
 % BibTeX slide for references. should use either acm or ieeetr style
