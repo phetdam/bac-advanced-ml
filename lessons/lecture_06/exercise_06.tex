@@ -1,0 +1,208 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author + thanks, date
+\title{Exercise 6}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+% the extra thanks is also useful for making notes about previous versions.
+% you can remove this thanks if there are no version revisions.
+\date{April 8, 2021}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+% remove some space between title and first section to keep text on one page.
+% comment this line out or adjust the space reduction as needed. generally,
+% try to remove as little space as possible if you are trying to keep content
+% on one page, else comment this line out if content spans multiple pages.
+%\vspace{-20 pt}
+
+\section{Convexity}
+
+\subsection{The convex hull}
+
+Let $ C \subseteq \mathbb{R}^n $ be a set. Prove that $ C =
+\operatorname{conv} C \Leftrightarrow C $ convex.
+
+\medskip
+
+\textit{Hint.} Note that given $ \mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_3
+\in C $, $ \alpha_1, \alpha_2 \in [0, 1] $, that
+$ \alpha_2(\alpha_1\mathbf{x}_1 + (1 - \alpha_1))\mathbf{x}_2 +
+(1 - \alpha_2)\mathbf{x}_3 \in C $.
+
+\subsection{Positive semidefinite matrices}
+
+Let $ \mathbb{S}_{\succ\mathbf{0}}^n \triangleq \{\mathbf{A} \in \mathbb{R}^{n \times n} : \mathbf{A} \succ \mathbf{0}\} $ be the set of $ n \times n $ positive definite matrices. Prove $ \mathbb{S}_{\succ\mathbf{0}}^n $ is convex.
+
+\medskip
+
+\textit{Hint.} Note that $ \mathbb{S}_{\succ\mathbf{0}}^n $ is closed under
+addition and multiplication by positive scalars.
+
+\subsection{Norms}
+
+Prove that any norm $ \Vert\cdot\Vert $ on a vector space $ V $ is convex.
+
+\medskip
+
+\textit{Hint.} Use the triangle inequality and absolute homogeneity properties
+of norms.
+
+\subsection{Function composition}
+
+Let $ f : \mathbb{R}^m \rightarrow \mathbb{R} $ be convex and nondecreasing
+and let $ g : \mathbb{R}^n \rightarrow \mathbb{R}^m $ be convex. Prove that
+$ f \circ g $ is convex.
+
+\section{Optimization}
+
+\subsection{Underdetermined linear systems}
+
+Suppose we have the underdetermined linear system $ \mathbf{Ax} = \mathbf{b} $,
+where $ \mathbf{A} \in \mathbb{R}^q $, $ \operatorname{rk}(\mathbf{A}) = q $,
+$ \mathbf{x} \in \mathbb{R}^n $, $ \mathbf{b} \in \mathbb{R}^q $, and
+$ q < n $. The minimum $ \ell^2 $-norm solution $ \mathbf{x}^* $ to
+$ \mathbf{Ax} = \mathbf{b} $ solves
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle\min_\mathbf{x} & \Vert\mathbf{x}\Vert_2^2 \\
+        \text{s.t.} & \mathbf{Ax} = \mathbf{b}
+    \end{array}
+\end{equation*}
+
+Derive an analytical solution for $ \mathbf{x}^* $.
+
+\medskip
+
+\textit{Hint.} $ \mathbf{A} $ full rank means $ \mathbf{AA}^\top $ is
+invertible. Strong duality holds as well. Use the Lagrangian to compute the
+primal optimal $ \mathbf{x}^* $ in terms of the dual optimal
+$ \nu^* \in \mathbb{R}^q $ and solve the resulting dual problem to get an
+analytical expression for $ \nu^* $ that can be substituted back into the
+expression for $ \mathbf{x}^* $.
+
+\subsection{Markowitz portfolios}
+
+Suppose we have $ n $ investable risky assets with covariance matrix
+$ \mathbf{C} \succ \mathbf{0} \in \mathbb{R}^{n \times n} $. Let
+$ \mathbf{w} \in \mathbb{R}^n $ be a portfolio, i.e. a vector indicating how
+much dollar wealth is invested long or short in each asset. A portfolio
+$ \mathbf{w}^* $ with minimium expected variance and \$1 total outlay,
+assuming no borrowing cost, solves
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle\min_{\mathbf{w}} & \mathbf{w}^\top\mathbf{Cw} \\
+        \text{s.t.} & \mathbf{1}^\top\mathbf{w} = 1
+    \end{array}
+\end{equation*}
+
+Find an analytical expression for $ \mathbf{w}^* $.
+
+\medskip
+
+\textit{Hint.} Strong duality holds here so the Karush-Kuhn-Tucker conditions
+are satisfied for primal optimal $ \mathbf{w}^* $ and dual optimal
+$ \nu^* \in \mathbb{R} $. Use stationarity of the Lagrangian at
+$ \mathbf{w}^*, \nu^* $ to compute $ \mathbf{w}^* $ as a function of
+$ \nu^* $ and use the equality constraint to get analytical expressions for
+both $ \nu^* $ and $ \mathbf{w}^* $.
+
+\subsection{Highly constrained portfolios}
+
+Suppose we want to form a minimum variance long-only portfolio
+$ \mathbf{w}^* \in \mathbb{R}^n $ with positive total outlay capped at \$1
+where at least $ \kappa \in [0, 1) $ of the portfolio is invested in cash,
+i.e. not invested in any assets. Furthermore, no more than
+$ \gamma \in (0, 1) $, $ \gamma > \kappa $, of the total wealth may be
+invested in any one asset. $ \mathbf{w}^* $ solves
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle\min_\mathbf{w} & \mathbf{w}^\top\mathbf{Cw} \\
+        \text{s.t} & 0 \le \mathbf{1}^\top\mathbf{w} \le 1 - \kappa \\
+        & \mathbf{0} \preceq \mathbf{w} \preceq \gamma\mathbf{1}
+    \end{array}
+\end{equation*}
+
+Derive the dual problem corresponding to the primal problem above.
+
+\medskip
+
+\textit{Hint.} First, rewrite the problem in standard form and note that
+the Lagrange multipliers $ \lambda \in \mathbb{R}^{2n + 2} $. Use the
+convexity of $ \mathcal{L}_f : \mathbb{R}^n \times \mathbb{R}^{2n + 2}
+\rightarrow \mathbb{R} $, the Lagrangian, to write $ \mathbf{w}^* $ in terms
+of $ \lambda $ and derive an expression for $ f_d : \mathbb{R}^{2n + 2}
+\rightarrow \mathbb{R} $, the dual of the objective. Rewrite the
+$ \mathbf{w} $ inequalities in terms of $ \lambda $.
+
+
+
+
+\end{document}
