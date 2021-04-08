@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{April 7, 2021}
+\date{April 8, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -560,11 +560,14 @@
     \begin{itemize}
         \item
         \textit{Example.} Consider solving an undetermined linear system with
-        a minimum $ \ell^2 $-norm solution. I.e. for $ q < n $, we want to
+        a minimum $ \ell^2 $-norm solution\footnote{
+            Squared $ \ell^2 $-norm is differentiable and does not change the
+            solution.
+        }. I.e. for $ q < n $, we want to
         solve
         \begin{equation*}
             \begin{array}{ll}
-                \displaystyle\min_\mathbf{x} & \mathbf{x}^\top\mathbf{x} \\
+                \displaystyle\min_\mathbf{x} & \Vert\mathbf{x}\Vert_2^2 \\
                 \text{s.t.} & \mathbf{Ax} = \mathbf{b}
             \end{array}
         \end{equation*}
@@ -591,6 +594,9 @@
             \Vert\mathbf{A}^\top\mathbf{x}\Vert_2^2 \ge 0 $.
         }.
     \end{itemize}
+
+    % spacing for footnote
+    \medskip
 \end{frame}
 
 \subsection{Strong duality}
