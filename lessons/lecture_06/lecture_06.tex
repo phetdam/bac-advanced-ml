@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{April 8, 2021}
+\date{April 10, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -136,7 +136,7 @@
         \item
         \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
         \textit{affine hull} of $ C $, denoted $ \operatorname{aff} C $, is
-        $ \operatorname{aff} C \triangleq \{
+        s.t. $ \operatorname{aff} C \triangleq \{
             \sum_{i = 1}^k\theta_i\mathbf{x}_i : \mathbf{x}_1, \ldots
             \mathbf{x}_k \in C, \theta_1, \ldots \theta_k \in \mathbb{R},
             \sum_{i = 1}^k\theta_i = 1
@@ -168,7 +168,7 @@
         \item
         \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
         \textit{convex hull} of $ C $, denoted $ \operatorname{conv} C $, is
-        $ \operatorname{conv} C \triangleq \{
+        s.t. $ \operatorname{conv} C \triangleq \{
             \sum_{i = 1}^k\theta_i\mathbf{x}_i : \mathbf{x}_1, \ldots
             \mathbf{x}_k \in C, \theta_1, \ldots \theta_k \in [0, 1],
             \sum_{i = 1}^k\theta_i = 1        
@@ -204,9 +204,10 @@
         \item
         \textit{Definition.} Let $ C \subseteq \mathbb{R}^n $. The
         \textit{relative interior} of $ C $, denoted
-        $ \operatorname{relint} C $, is $ \operatorname{relint} C \triangleq 
-        \{\mathbf{x} \in C : B(\mathbf{x}, r) \cap \operatorname{aff} C
-        \subseteq C, r \in (0, \infty)\} $ \cite{bv_convex_opt}. Here
+        $ \operatorname{relint} C $, is s.t. $ \operatorname{relint} C
+        \triangleq \{\mathbf{x} \in C : B(\mathbf{x}, r) \cap
+        \operatorname{aff} C \subseteq C, r \in (0, \infty)\} $
+        \cite{bv_convex_opt}. Here
         $ B(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in \mathbb{R}^n :
         \Vert\mathbf{x}' - \mathbf{x}\Vert \le r\} $ for some norm
         $ \Vert\cdot\Vert $\footnote{
@@ -622,15 +623,18 @@
 
         \item
         If (\aref{opt_prob_std}) convex and $ u_1, \ldots u_k $ affine,
-        $ k \le p $, Slater's condition can be refined s.t. it holds when
+        $ k \le p $, Slater's condition can be refined s.t. if
         $ \exists \mathbf{x} \in
         \operatorname{relint}\tilde{\mathcal{M}} $ s.t.
         $ u_1(\mathbf{x}) \le 0, \ldots u_k(\mathbf{x}) \le 0 $,
         $ u_{k + 1}(\mathbf{x}) < 0, \ldots u_p(\mathbf{x}) < 0 $,
-        $ \mathbf{v}(\mathbf{x}) = \mathbf{0} $ \cite{bv_convex_opt}.
+        $ \mathbf{v}(\mathbf{x}) = \mathbf{0} $, strong duality
+        holds \cite{bv_convex_opt}.
 
         \item
-        Strong duality helps us establish optimality conditions.
+        If (\aref{opt_prob_std}) convex, $ \mathbf{u} $ affine,
+        $ \tilde{\mathcal{M}} = \mathbb{R}^n $, strong duality holds if
+        $ |\mathcal{X}^*| > 0 $.
 
         \item
         \textit{Definition.} Suppose strong duality holds for
@@ -699,7 +703,7 @@
         $ \lambda_i^*u_i(\mathbf{x}^*) = 0 $,
         $ \forall i \in \{1, \ldots p\} $, as 
         $ \mathbf{u}(\mathbf{x}^*)^\top\lambda^* = 0 \Leftrightarrow
-        u_i(\mathbf{x}^*) = 0 \Rightarrow \lambda_i^* = 0 $.
+        u_i(\mathbf{x}^*) < 0 \Rightarrow \lambda_i^* = 0 $.
     \end{itemize}
 \end{frame}
 
@@ -717,7 +721,10 @@
 
         \item
         KKT conditions are \alert{sufficient} for optimality if the problem is
-        convex. Furthermore, if $ \mathbf{x}^* $ also satisfies Slater's
+        convex.
+        
+        \item        
+        Furthermore, if $ \mathbf{x}^* $ also satisfies Slater's
         condition, then KKT conditions become \alert{necessary and sufficient}
         for optimality.
 
