@@ -25,7 +25,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{April 10, 2021}
+\date{April 19, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -512,26 +512,32 @@
 \begin{frame}{The Lagrangian dual}
     \begin{itemize}
         \item
-        If we let $ \operatorname{im}f \triangleq \mathbb{R}\cup\infty $,
-        (\aref{opt_prob_std}) can be written as the unconstrained\footnote{
-            For set $ A $, $ \mathbb{I}_A^\infty(x) = \infty $ if $ x \in A $,
-            else $ \mathbb{I}_A^\infty(x) = 0 $.
-        }
+        If we allow infinite values, (\aref{opt_prob_std}) can be written as
+        the unconstrained
         \begin{equation*}
             \begin{array}{ll}
                 \displaystyle\min_\mathbf{x} &
-                \displaystyle f(\mathbf{x}) + \mathbb{I}^\infty_{\{
-                    \mathbf{x} \in \mathbb{R}^p : \mathbf{x}\preceq \mathbf{0}
+                \displaystyle f(\mathbf{x}) + \tilde{\mathbb{I}}^\infty_{\{
+                    \mathbf{x}' \in \mathbb{R}^p : \mathbf{x}' \preceq
+                    \mathbf{0}
                 \}}\circ\mathbf{u}(\mathbf{x}) +
-                \mathbb{I}^\infty_{\{\mathbf{0}\}}\circ\mathbf{v}(\mathbf{x})
+                \tilde{\mathbb{I}}^\infty_{\{\mathbf{0}\}} \circ
+                \mathbf{v}(\mathbf{x})
             \end{array}
         \end{equation*}
+        % \displaystyle used inline to raise the superscript more
+        $ \displaystyle\tilde{\mathbb{I}}_A^\infty $  is such that for set
+        $ A $, $ \displaystyle\tilde{\mathbb{I}}_A^\infty(x) = 0 $ if
+        $ x \in A $, else
+        $ \displaystyle\tilde{\mathbb{I}}_A^\infty = \infty $.
+
+        \item
         $ \lambda^\top\mathbf{u} $, $ \nu^\top\mathbf{v} $ are linear
-        underestimators of $ \displaystyle\mathbb{I}^\infty_{\{
-            \mathbf{x} \in \mathbb{R}^p : \mathbf{x}\preceq \mathbf{0}
+        underestimators of $ \displaystyle\tilde{\mathbb{I}}^\infty_{\{
+            \mathbf{x}' \in \mathbb{R}^p : \mathbf{x}' \preceq \mathbf{0}
         \}}\circ\mathbf{u} $, $ \displaystyle
-        \mathbb{I}^\infty_{\{\mathbf{0}\}}\circ\mathbf{v} $, intuitively
-        justifying why $ f_d $ yields a lower bound for $ p^* $.
+        \tilde{\mathbb{I}}^\infty_{\{\mathbf{0}\}}\circ\mathbf{v} $,
+        intuitively justifying why $ f_d $ yields a lower bound for $ p^* $.
 
         \item
         A natural question is to find the closest underestimator to the
@@ -576,19 +582,20 @@
         \mathbb{R}^q $. The Lagrangian $ \mathcal{L} : \mathbb{R}^n \times
         \mathbb{R}^q \rightarrow \mathbb{R} $ is s.t.
         $ \mathcal{L}(\mathbf{x}, \nu) \triangleq \mathbf{x}^\top\mathbf{x} 
-        + \nu^\top(\mathbf{Ax} - \mathbf{b}) $. $ \mathcal{L} $ is convex in
-        $ \mathbf{x} $, so at its minimizer $ \mathbf{x}^* $,
-        $ \nabla_\mathbf{x}\mathcal{L}(\mathbf{x}^*, \nu) =
-        2\mathbf{x}^* + \mathbf{A}^\top\nu = \mathbf{0} $. Clearly
-        $ \mathbf{x}^* = -\frac{1}{2}\mathbf{A}^\top\nu $. Then,
+        + \nu^\top(\mathbf{Ax} - \mathbf{b}) $. Fixing $ \nu $, $ \mathcal{L} $
+        is convex in $ \mathbf{x} $, so at its minimizer $ \mathbf{x}_\nu $,
+        $ \nabla_\mathbf{x}\mathcal{L}(\mathbf{x}_\nu, \nu) =
+        2\mathbf{x}_\nu + \mathbf{A}^\top\nu = \mathbf{0} \Rightarrow
+        \mathbf{x}_\nu = -\frac{1}{2}\mathbf{A}^\top\nu $. Then,
         \begin{equation*}
             f_d(\nu) \triangleq \inf_{\mathbf{x} \in \mathbb{R}^n}
-                \mathcal{L}(\mathbf{x}, \nu) = \mathcal{L}(\mathbf{x}^*, \nu) =
+                \mathcal{L}(\mathbf{x}, \nu) =
+                \mathcal{L}(\mathbf{x}_\nu, \nu) =
                 -\frac{1}{4}\nu^\top\mathbf{AA}^\top\nu - \mathbf{b}^\top\nu
         \end{equation*}
-        No constraints on $ \nu $, so $ \operatorname{dom}f_d = \mathbb{R}^q $.
-        $ -f_d $ is convex, $ \mathbf{AA}^\top \succeq
-        \mathbf{0} $\footnote{
+        $ \forall \nu \in \mathbb{R}^q $, $ f_d(\nu) \in \mathbb{R} $, so
+        $ \operatorname{dom}f_d = \mathbb{R}^q $. $ -f_d $ is convex,
+        $ \mathbf{AA}^\top \succeq \mathbf{0} $\footnote{
             $ \forall \mathbf{x} \in \mathbb{R}^n,
             \mathbf{x}^\top\mathbf{AA}^\top\mathbf{x} =
             \big(\mathbf{A}^\top\mathbf{x}\big)^\top\mathbf{A}^\top\mathbf{x} =
