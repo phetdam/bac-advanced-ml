@@ -287,7 +287,7 @@ $ \nabla_\mathbf{w}\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) = \mathbf{0} $. Ex
 Here the matrix $ [ \ -\mathbf{I} \ \ \mathbf{I} \ \ -\mathbf{1} \ \
 \mathbf{1} \ ] \in \mathbb{R}^{n \times (2n + 2)} $, as $ \mathbf{I} \in
 \mathbb{R}^{n \times n} $, $ \mathbf{1} \in \mathbb{R}^n $. The above result
-can be more clearly seen if $ \mathcal{L}_f $ if the inequality constraints
+can be more clearly seen if the inequality constraints of $ \mathcal{L}_f $
 are written more explicitly as
 \begin{equation*}
     \begin{split}
@@ -386,20 +386,6 @@ must be positive semidefinite, as $ f_d $ is a quadratic function. Furthermore,
 $ \forall \lambda \in \mathbb{R}^{2n + 2} $, $ f_d(\lambda) \in \mathbb{R} $,
 which means $ \operatorname{dom} f_d = \mathbb{R}^{2n + 2} $. Therefore, the
 dual problem for the primal portfolio optimization problem is simply
-%\begin{equation*}
-%    \begin{array}{ll}
-%        \displaystyle\max_\lambda &
-%        \displaystyle-\frac{1}{4}\lambda^\top\begin{bmatrix}
-%            -\mathbf{I} \ \\ \phantom{-} \mathbf{I} \ \\
-%            \ \ -\mathbf{1}^\top \ \\ \ \ \phantom{-} \mathbf{1}^\top \
-%        \end{bmatrix}\mathbf{C}^{-1}\begin{bmatrix}
-%            \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
-%        \end{bmatrix}\lambda + \displaystyle\lambda^\top\begin{bmatrix}
-%            \ \mathbf{0} \ \\ -\gamma\mathbf{1} \ \\ \ 0 \ \\ -(1 - \kappa) \
-%        \end{bmatrix} \\
-%        \text{s.t.} & \lambda \succeq \mathbf{0}
-%    \end{array}
-%\end{equation*}
 \begin{equation*}
     \begin{array}{ll}
         \displaystyle\max_\lambda & f_d(\lambda) \\
