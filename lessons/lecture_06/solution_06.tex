@@ -277,7 +277,7 @@ $ \nabla_\mathbf{w}\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) = \mathbf{0} $. Ex
     \nabla_\mathbf{w}\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) =
     2\mathbf{Cw}_\lambda + \begin{bmatrix}
         \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
-    \end{bmatrix}\lambda \Leftrightarrow
+    \end{bmatrix}\lambda = \mathbf{0} \Leftrightarrow
     \mathbf{w}_\lambda = -\frac{1}{2}\begin{bmatrix}
         \ -\mathbf{C}^{-1} & \mathbf{C}^{-1} & -\mathbf{C}^{-1}\mathbf{1} &
         \mathbf{C}^{-1}\mathbf{1} \
@@ -288,7 +288,7 @@ Here the matrix $ [ \ -\mathbf{I} \ \ \mathbf{I} \ \ -\mathbf{1} \ \
 \mathbf{1} \ ] \in \mathbb{R}^{n \times (2n + 2)} $, as $ \mathbf{I} \in
 \mathbb{R}^{n \times n} $, $ \mathbf{1} \in \mathbb{R}^n $. The above result
 can be more clearly seen if the inequality constraints of $ \mathcal{L}_f $
-are written more explicitly as
+are written more explicitly. We can write
 \begin{equation*}
     \begin{split}
     \mathcal{L}_f(\mathbf{w}, \lambda) & = \mathbf{w}^\top\mathbf{Cw} +
