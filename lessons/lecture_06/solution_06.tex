@@ -1,0 +1,419 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author + thanks, date
+\title{Solution 6}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+% the extra thanks is also useful for making notes about previous versions.
+% you can remove this thanks if there are no version revisions.
+\date{April 19, 2021}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+% remove some space between title and first section to keep text on one page.
+% comment this line out or adjust the space reduction as needed. generally,
+% try to remove as little space as possible if you are trying to keep content
+% on one page, else comment this line out if content spans multiple pages.
+%\vspace{-20 pt}
+
+\section{Convexity}
+
+\subsection{The convex hull}
+
+\textit{Proof.} Suppose $ C $ is convex. Then, $ \forall \mathbf{x}_1,
+\mathbf{x}_2 \in C $, $ \alpha_1 \in [0, 1] $, $ \gamma_{1, 2} \triangleq
+\alpha_1\mathbf{x}_1 + (1 - \alpha_1)\mathbf{x}_2 \in C $. Choose an arbitrary
+$ \mathbf{x}_3 \in C $, $ \alpha_2 \in [0, 1] $. Then, $ C $ convex,
+$ \gamma_{1, 2} \in C \Rightarrow \gamma_{1, 3} \triangleq
+\alpha_2\mathbf{x}_3 + (1 - \alpha_2)\gamma_{1, 2} \in C $. $ \forall n \in
+\mathbb{N} $, $ \alpha_{n - 1} \in [0, 1] $, $ \mathbf{x}_n \in C $,
+$ \gamma_{1, n} \triangleq \alpha_{n - 1}\mathbf{x}_n + (1 - \alpha_{n - 1})
+\gamma_{1, n - 1} \in C $, which can be written as the convex combination
+\begin{equation*}
+    \alpha_{n - 1}\mathbf{x}_n + \left(
+        \prod_{j = 2}^{n - 1}(1 - \alpha_j)
+    \right)\left(
+        \alpha_1\mathbf{x}_1 + (1 - \alpha_1)\mathbf{x}_2 +
+        \sum_{k = 3}^{n - 1}\alpha_{k - 1}\mathbf{x}_k
+    \right)
+\end{equation*}
+
+Since $ \mathbf{x}_1, \ldots \mathbf{x}_n \in C $, $ \alpha_1, \ldots
+\alpha_{n - 1} \in [0, 1] $ arbitrary, then any $ \gamma_{1, n} \in C $ is a
+convex combination, so $ C $ contains all convex combinations of its elements,
+i.e. $ \operatorname{conv} C \subseteq C $. Since $ C \subseteq
+\operatorname{conv} C $, we conclude that $ C = \operatorname{conv} C $. Now,
+suppose that $ C = \operatorname{conv} C $. Then, $ \forall \mathbf{x}_1,
+\mathbf{x}_2 \in C $, $ \alpha \in [0, 1] $, $ \gamma_{1, 2} \triangleq
+\alpha\mathbf{x}_1 + (1 - \alpha)\mathbf{x}_2 \in \operatorname{conv} C $, and
+since $ C = \operatorname{conv} C $, $ \gamma_{1, 2} \in C \Rightarrow C $
+convex, by definition.
+
+\subsection{Positive definite matrices}
+
+\textit{Proof.} Choose arbitrary $ \mathbf{A}, \mathbf{B} \in
+\mathbb{S}^n_{\succ \mathbf{0}} $. $ \mathbb{S}^n_{\succ \mathbf{0}} $ closed
+under multiplication by positive scalars $ \Rightarrow \forall \alpha
+\in (0, 1) $, we have $ \alpha\mathbf{A}, (1 - \alpha)\mathbf{B} \in
+\mathbb{S}^n_{\succ \mathbf{0}} $. $ \mathbb{S}^n_{\succ \mathbf{0}} $ closed
+under matrix addition $ \Rightarrow \forall \alpha \in [0, 1] $, we have
+$ \alpha\mathbf{A} + (1 - \alpha)\mathbf{B} \in
+\mathbb{S}^n_{\succ \mathbf{0}} $. $ \mathbf{A}, \mathbf{B}, $ arbitrary
+$ \Rightarrow \forall \alpha \in [0, 1], \forall \mathbf{A}, \mathbf{B} \in
+\mathbb{S}^n_{\succ \mathbf{0}} $, $ \alpha\mathbf{A} +
+(1 - \alpha)\mathbf{B}) \in \mathbb{S}^n_{\succ \mathbf{0}} \Rightarrow
+\mathbb{S}^n_{\succ \mathbf{0}} $ convex.
+
+\subsection{Norms}
+
+\textit{Proof.} Choose arbitrary $ \mathbf{u}, \mathbf{v} \in V $, $ \alpha \in
+[0, 1] $. By the triangle inequality and absolute homogeneity properties of
+norms, $ \Vert\alpha\mathbf{u} + (1 - \alpha)\mathbf{v}\Vert \le
+|\alpha|\Vert\mathbf{u}\Vert + |1 - \alpha|\Vert\mathbf{v}\Vert =
+\alpha\Vert\mathbf{u}\Vert + (1 - \alpha)\Vert\mathbf{v}\Vert $. Since
+$ \alpha \in [0, 1] $, $ \mathbf{u}, \mathbf{v} \in V $ arbitrary, the
+inequality holds $ \forall \alpha \in [0, 1], \forall \mathbf{u}, \mathbf{v}
+\in V \Rightarrow V $ is convex.
+
+% no \hrulefill since the footnote line is there
+
+\subsection{Scalar composition}
+
+\textit{Proof.} $ f $ nondecreasing $ \Rightarrow \forall x, y \in
+\mathbb{R} $, $ x < y $, that $ f(x) \le f(y) $. $ g $ convex $ \Rightarrow
+\forall \mathbf{x}, \mathbf{y} \in \mathbb{R}^n $, $ \alpha \in [0, 1] $,
+that $ g(\alpha\mathbf{x} + (1 - \alpha)\mathbf{y}) \le
+\alpha g(\mathbf{x}) + (1 - \alpha)g(\mathbf{y}) $. Since $ f $ is also
+convex, then
+\begin{equation*}
+    f \circ g(\alpha\mathbf{x} + (1 - \alpha)\mathbf{y}) \le
+    f(\alpha g(\mathbf{x}) + (1 - \alpha)g(\mathbf{y})) \le
+    \alpha f \circ g(\mathbf{x}) + (1 - \alpha)f \circ g(\mathbf{y})
+\end{equation*}
+
+This holds $ \forall \alpha \in [0, 1] $, $ \forall \mathbf{x}, \mathbf{y} \in
+\mathbb{R}^n $, so $ f \circ g $ is convex.
+
+\section{Optimization}
+
+\subsection{Underdetermined linear systems}
+
+\textit{Solution.} The Lagrangian $ \mathcal{L}_f : \mathbb{R}^n \times
+\mathbb{R}^q \rightarrow \mathbb{R} $ is such that
+\begin{equation*}
+    \mathcal{L}_f(\mathbf{x}, \nu) \triangleq \mathbf{x}^\top\mathbf{x} +
+    \nu^\top(\mathbf{Ax} - \mathbf{b})
+\end{equation*}
+
+Strong duality holds, so $ \exists \mathbf{x}^* \in \mathbb{R}^n $ primal
+optimal, $ \exists \nu^* \in \mathbb{R}^q $ dual optimal. Letting $ f_d $
+denote the dual of the objective, strong duality $ \Rightarrow
+\Vert\mathbf{x}^*\Vert_2^2 = f_d(\nu^*) \triangleq \inf_{\mathbf{x} \in
+\mathbb{R}^n}\{\mathcal{L}_f(\mathbf{x}, \nu^*)\} =
+\mathcal{L}_f(\mathbf{x}^*, \nu^*) $. Since $ \mathcal{L}_f $ convex in
+$ \mathbf{x} $,
+\begin{equation*}
+    \nabla_\mathbf{x}\mathcal{L}_f(\mathbf{x}^*, \nu^*) =
+    2\mathbf{x}^* + \mathbf{A}^\top\nu^* = \mathbf{0} \Leftrightarrow
+    \mathbf{x}^* = -\frac{1}{2}\mathbf{A}^\top\nu^*
+\end{equation*}
+
+Therefore, substituting our expression for $ \mathbf{x}^* $ into the
+definition of $ \mathcal{L}_f $, we can write the dual $ f_d $ at $ \nu^* $ as
+\begin{equation*}
+    f_d(\nu^*) = -\frac{1}{4}\big\Vert\mathbf{A}^\top\nu^*\big\Vert_2^2 -
+    \mathbf{b}^\top\nu^*
+\end{equation*}
+
+Since $ f_d $ concave, then $ \nabla f_d(\nu^*) = \mathbf{0} $, and we see that
+\begin{equation*}
+    \nabla f_d(\nu^*) = -\frac{1}{2}\mathbf{AA}^\top\nu^* - \mathbf{b} =
+    \mathbf{0} \Leftrightarrow
+    \nu^* = -2\big(\mathbf{AA}^\top\big)^{-1}\mathbf{b}
+\end{equation*}
+
+Substituting this expression into the previous expression for $ \mathbf{x}^* $,
+we see that
+\begin{equation*}
+    \mathbf{x}^* = \mathbf{A}^\top\big(\mathbf{AA}^\top\big)^{-1}\mathbf{b}
+\end{equation*}
+
+\subsection{Markowitz portfolios}
+
+\textit{Solution.} The Lagrangian $ \mathcal{L}_f : \mathbb{R}^n \times \mathbb{R} \rightarrow \mathbb{R} $ is such that
+\begin{equation*}
+    \mathcal{L}_f(\mathbf{w}, \nu) \triangleq \mathbf{w}^\top\mathbf{Cw} +
+    \nu\big(\mathbf{1}^\top\mathbf{w} - 1\big)
+\end{equation*}
+
+Strong duality holds, so $ \exists \mathbf{w}^* \in \mathbb{R}^n $ primal
+optimal, $ \exists \nu^* \in \mathbb{R} $ dual optimal. Strong duality
+$ \Rightarrow p^* = f_d(\nu^*) \triangleq \inf_{\mathbf{w} \in \mathbb{R}^n}
+\{\mathcal{L}(\mathbf{w}, \nu^*)\} = \mathcal{L}(\mathbf{w}^*, \nu^*) $.
+Since $ \mathcal{L}_f $ is convex in $ \mathbf{w} $, then
+\begin{equation*}
+    \nabla\mathcal{L}_f(\mathbf{w}^*, \nu^*) = 2\mathbf{Cw}^* +
+    \nu^*\mathbf{1} = \mathbf{0} \Leftrightarrow
+    \mathbf{w}^* = -\frac{1}{2}\nu^*\mathbf{C}^{-1}\mathbf{1}
+\end{equation*}
+
+Since $ \nu^* $ is scalar, we can use the equality constraint to see that
+\begin{equation*}
+    1 = \mathbf{1}^\top\mathbf{w}^* =
+    -\frac{1}{2}\nu^*\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} \Leftrightarrow
+    \nu^* = -\frac{2}{\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1}}
+\end{equation*}
+
+Substituting the result for $ \nu^* $ into the previous expression for
+$ \mathbf{w}^* $, we have
+\begin{equation*}
+    \mathbf{w}^* = \frac{
+        \mathbf{C}^{-1}\mathbf{1}
+    }{
+        \mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1}
+    }
+\end{equation*}
+
+\subsection{Highly constrained portfolios}
+
+\textit{Solution.} It is instructive to first write the problem in standard
+form, i.e. as
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle\min_\mathbf{w} & \mathbf{w}^\top\mathbf{Cw} \\
+        \text{s.t.} & -\mathbf{w} \preceq \mathbf{0} \\
+            & \mathbf{w} - \gamma\mathbf{1} \preceq \mathbf{0} \\
+            & -\mathbf{1}^\top\mathbf{w} \le 0 \\
+            & \mathbf{1}^\top\mathbf{w} - (1 - \kappa) \le 0
+    \end{array}
+\end{equation*}
+
+Here we choose to write the scalar inequalities last for ease of
+identification. In total, we can see that there are $ 2n + 2 $ inequality
+constraints, so the Lagrangian $ \mathcal{L}_f : \mathbb{R}^n \times
+\mathbb{R}^{2n + 2} \rightarrow \mathbb{R} $ can be written such that
+\begin{equation*}
+    \mathcal{L}_f(\mathbf{w}, \lambda) \triangleq \mathbf{w}^\top\mathbf{Cw} +
+        \lambda^\top\begin{bmatrix}
+            \ -\mathbf{w} \ \\
+            \ \mathbf{w} - \gamma\mathbf{1} \\ \
+            \ -\mathbf{1}^\top\mathbf{w} \ \\
+            \ \mathbf{1}^\top\mathbf{w} - (1 - \kappa) \
+        \end{bmatrix}
+\end{equation*}
+
+Since $ \mathcal{L}_f $ is convex in $ \mathbf{w} $, $ \forall \lambda \in
+\mathbb{R}^{2n + 2} $, at $ \mathbf{w}_\lambda \triangleq
+\arg\min_{\mathbf{w} \in\mathbb{R}^n}\mathcal{L}_f(\mathbf{w}, \lambda) $,
+$ \nabla_\mathbf{w}\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) = \mathbf{0} $. Expanding,
+\begin{equation} \label{p2.3_wlambda}
+    \nabla_\mathbf{w}\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) =
+    2\mathbf{Cw}_\lambda + \begin{bmatrix}
+        \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
+    \end{bmatrix}\lambda \Leftrightarrow
+    \mathbf{w}_\lambda = -\frac{1}{2}\begin{bmatrix}
+        \ -\mathbf{C}^{-1} & \mathbf{C}^{-1} & -\mathbf{C}^{-1}\mathbf{1} &
+        \mathbf{C}^{-1}\mathbf{1} \
+    \end{bmatrix}\lambda
+\end{equation}
+
+Here the matrix $ [ \ -\mathbf{I} \ \ \mathbf{I} \ \ -\mathbf{1} \ \
+\mathbf{1} \ ] \in \mathbb{R}^{n \times (2n + 2)} $, as $ \mathbf{I} \in
+\mathbb{R}^{n \times n} $, $ \mathbf{1} \in \mathbb{R}^n $. The above result
+can be more clearly seen if $ \mathcal{L}_f $ if the inequality constraints
+are written more explicitly as
+\begin{equation*}
+    \begin{split}
+    \mathcal{L}_f(\mathbf{w}, \lambda) & = \mathbf{w}^\top\mathbf{Cw} +
+    \sum_{k = 1}^n(
+        -\lambda_kw_k + \lambda_{n + k}(w_k - \gamma) - \lambda_{2n + 1}w_k +
+        \lambda_{2n + 2}w_k
+    ) - \lambda_{2n + 2}(1 - \kappa) \\ & =
+    \mathbf{w}^\top\mathbf{Cw} + \sum_{k = 1}^n\underbrace{
+        (-\lambda_k + \lambda_{n + k} - \lambda_{2n + 1} + \lambda_{2n + 2})
+    }_{
+        k\text{th row of } [
+            \ -\mathbf{I} \ \ \mathbf{I} \ \ -\mathbf{1} \ \ \mathbf{1} \
+        ]\lambda
+    }w_k - \gamma\sum_{k' = 1}^n\lambda_{n + k'} - \lambda_{2n + 2}(1 - \kappa)
+    \end{split}
+\end{equation*}
+
+By the definition of the dual, $ f_d(\lambda) \triangleq \inf_{\mathbf{w}
+\in \mathbb{R}^n}\{\mathcal{L}_f(\mathbf{w}, \lambda)\} =
+\mathcal{L}_f(\mathbf{w}_\lambda, \lambda) $, so substituting, we have
+\begin{equation*}
+    \begin{split}
+    f_d(\lambda) = \frac{1}{4}\lambda^\top\begin{bmatrix}
+        -\mathbf{I} \ \\ \phantom{-} \mathbf{I} \ \\ \ \ -\mathbf{1}^\top \ \\
+        \ \ \phantom{-} \mathbf{1}^\top \
+    \end{bmatrix}\mathbf{C}^{-1}\begin{bmatrix}
+        \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
+    \end{bmatrix}\lambda & - \frac{1}{2}\lambda^\top\begin{bmatrix}
+        % row 1
+        \ \phantom{-}\mathbf{C}^{-1} & -\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{C}^{-1}\mathbf{1} & -\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 2
+        \ -\mathbf{C}^{-1} & \phantom{-}\mathbf{C}^{-1} & 
+        -\mathbf{C}^{-1}\mathbf{1} & \phantom{-}\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 3
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 4
+        -\mathbf{1}^\top\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} \
+    \end{bmatrix}\lambda \\
+    % starts at the subtraction of second block matrix term
+    & + \lambda^\top\begin{bmatrix}
+        \ \mathbf{0} \ \\ -\gamma\mathbf{1} \ \\ \ 0 \ \\ -(1 - \kappa) \
+    \end{bmatrix}
+    \end{split}
+\end{equation*}
+
+Multiplying the block matrices out in the first term, we can make the note that
+\begin{equation*}
+    \begin{bmatrix}
+        -\mathbf{I} \ \\ \phantom{-} \mathbf{I} \ \\ \ \ -\mathbf{1}^\top \ \\
+        \ \ \phantom{-} \mathbf{1}^\top \
+    \end{bmatrix}\mathbf{C}^{-1}\begin{bmatrix}
+        \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
+    \end{bmatrix} = \begin{bmatrix}
+        % row 1
+        \ \phantom{-}\mathbf{C}^{-1} & -\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{C}^{-1}\mathbf{1} & -\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 2
+        \ -\mathbf{C}^{-1} & \phantom{-}\mathbf{C}^{-1} & 
+        -\mathbf{C}^{-1}\mathbf{1} & \phantom{-}\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 3
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} \ \\
+        % row 4
+        -\mathbf{1}^\top\mathbf{C}^{-1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1} &
+        -\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} &
+        \phantom{-}\mathbf{1}^\top\mathbf{C}^{-1}\mathbf{1} \
+    \end{bmatrix}
+\end{equation*}
+
+We can therefore combine the first two terms in the expression for
+$ f_d(\lambda) $ and arrive at
+\begin{equation*}
+    f_d(\lambda) = -\frac{1}{4}\lambda^\top\begin{bmatrix}
+        -\mathbf{I} \ \\ \phantom{-} \mathbf{I} \ \\ \ \ -\mathbf{1}^\top \ \\
+        \ \ \phantom{-} \mathbf{1}^\top \
+    \end{bmatrix}\mathbf{C}^{-1}\begin{bmatrix}
+        \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
+    \end{bmatrix}\lambda + \lambda^\top\begin{bmatrix}
+        \ \mathbf{0} \ \\ -\gamma\mathbf{1} \ \\ \ 0 \ \\ -(1 - \kappa) \
+    \end{bmatrix}
+\end{equation*}
+
+By properties of the dual, $ f_d $ is concave, so the block matrix product
+must be positive semidefinite, as $ f_d $ is a quadratic function. Furthermore,
+$ \forall \lambda \in \mathbb{R}^{2n + 2} $, $ f_d(\lambda) \in \mathbb{R} $,
+which means $ \operatorname{dom} f_d = \mathbb{R}^{2n + 2} $. Therefore, the
+dual problem for the primal portfolio optimization problem is simply
+%\begin{equation*}
+%    \begin{array}{ll}
+%        \displaystyle\max_\lambda &
+%        \displaystyle-\frac{1}{4}\lambda^\top\begin{bmatrix}
+%            -\mathbf{I} \ \\ \phantom{-} \mathbf{I} \ \\
+%            \ \ -\mathbf{1}^\top \ \\ \ \ \phantom{-} \mathbf{1}^\top \
+%        \end{bmatrix}\mathbf{C}^{-1}\begin{bmatrix}
+%            \ -\mathbf{I} & \mathbf{I} & -\mathbf{1} & \mathbf{1} \
+%        \end{bmatrix}\lambda + \displaystyle\lambda^\top\begin{bmatrix}
+%            \ \mathbf{0} \ \\ -\gamma\mathbf{1} \ \\ \ 0 \ \\ -(1 - \kappa) \
+%        \end{bmatrix} \\
+%        \text{s.t.} & \lambda \succeq \mathbf{0}
+%    \end{array}
+%\end{equation*}
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle\max_\lambda & f_d(\lambda) \\
+        \text{s.t.} & \lambda \succeq \mathbf{0}
+    \end{array}
+\end{equation*}
+
+Since the primal problem is a convex optimization problem with affine
+constraints and open domain\footnote{
+    $ \mathbb{R}^n $ is both open and closed.
+}, assuming that the feasible set is nonempty, then $ \exists \mathbf{w}^* \in
+\mathbb{R}^n $ primal optimal, $ \exists \lambda^* \succeq \mathbf{0} \in
+\mathbb{R}^{2n + 2} $ dual optimal. The $ \lambda^* $ obtained from solving
+the dual problem can then be used in (\ref{p2.3_wlambda}) to compute
+$ \mathbf{w}^* $.
+
+\end{document}
