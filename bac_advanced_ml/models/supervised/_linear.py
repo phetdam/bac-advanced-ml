@@ -238,7 +238,7 @@ class LogisticRegression(BaseEstimator):
         labels = np.unique(y)
         if labels.size != 2:
             raise ValueError(
-                "Cannot fit coefficients on non-binary classification tasks"
+                "cannot fit coefficients on non-binary classification tasks"
             )
         # get mask of +1, -1. note that if we reverse these label assignments,
         # we actually get weights of the same magnitude but opposite sign to
