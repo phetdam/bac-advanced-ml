@@ -41,30 +41,26 @@ From PyPI
 
 Ideally, once the exercise materials are in a relatively stable state, rolling
 releases to PyPI can be made to simplify the installation process. This is a
-future concern, however, and won't be available for this semester.
+future concern, however, and a feature that is not yet available.
 
 
 Compiling TeX source
 ====================
 
-   Note:
+To compile the ``.tex`` files to PDF using the ``compile_tex.sh`` file, you
+will need to have `TeX Live`__ installed on your system. For Ubuntu users this
+can be downloaded using ``apt-get`` while it can take a bit more legwork for
+Windows and Mac users.
 
-   `BibTeX`__ is used for bibliography management, so the current version of
-   ``compile_tex.sh`` will not resolve citation references correctly. You can
-   correctly compile an individual ``foo.tex`` source file to PDF by running
-   the commands ``pdflatex foo``, ``bibtex foo``, ``pdflatex foo``,
-   ``pdflatex foo``.
-
-.. __: http://www.bibtex.org/
-
-To compile the ``.tex`` files using the ``compile_tex.sh`` file, you will need
-to have `TeX Live`__ installed on your system. For Ubuntu users this can be
-downloaded using ``apt-get`` while it can take a bit more legwork for Windows
-and Mac users.
-
-If one is interested in viewing only a particular ``.tex`` file, call
+If one is interested in compiling to PDF only a particular ``.tex`` file, call
 ``compile_tex.sh`` with the name of the ``.tex`` file as an argument or use a
 graphical editor like `Texmaker`__ to view source and PDF side-by-side.
+
+``compile_tex.sh`` uses the standard chain of compilation commands, i.e.
+
+.. code::
+
+   pdflatex -> bibtex -> pdflatex -> pdflatex
 
 .. __: https://tug.org/texlive/
 
