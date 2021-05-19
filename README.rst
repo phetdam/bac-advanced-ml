@@ -57,8 +57,7 @@ graphical editor like `Texmaker`__ to view source and PDF side-by-side.
 
 ``compile_tex.sh`` uses the standard chain of compilation commands, i.e.
 ``pdflatex -> bibtex -> pdflatex -> pdflatex``. For detailed usage on how to
-use ``compile_tex.sh``, run ``./compile_tex.sh --help``, which will print out a
-help blurb to the screen.
+use ``compile_tex.sh``, run ``./compile_tex.sh --help`` for help output.
 
 .. __: https://tug.org/texlive/
 
