@@ -48,19 +48,19 @@ Compiling TeX source
 ====================
 
 To compile the ``.tex`` files to PDF using the ``compile_tex.sh`` file, you
-will need to have `TeX Live`__ installed on your system. For Ubuntu users this
-can be downloaded using ``apt-get`` while it can take a bit more legwork for
-Windows and Mac users.
+will need to have `TeX Live`__ installed on your system. Ubuntu users can use
+``apt-get``, but more legwork is needed for Windows and Mac users.
 
 If one is interested in compiling to PDF only a particular ``.tex`` file, call
 ``compile_tex.sh`` with the name of the ``.tex`` file as an argument or use a
 graphical editor like `Texmaker`__ to view source and PDF side-by-side.
 
 ``compile_tex.sh`` uses the standard chain of compilation commands, i.e.
+``pdflatex -> bibtex -> pdflatex -> pdflatex``.
 
-.. code::
+.. .. code::
 
-   pdflatex -> bibtex -> pdflatex -> pdflatex
+..   pdflatex -> bibtex -> pdflatex -> pdflatex
 
 .. __: https://tug.org/texlive/
 
