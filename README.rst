@@ -13,7 +13,13 @@ The source code in the repository is structured within a Python package.
 Contents
 ========
 
-TBA. This repository is a work in progress.
+   Announcement:
+
+   A lesson syllabus will be included soon.
+
+The repo contains both ``.tex`` source for lectures and exercises in
+``lessons`` as well as Python code containing reference implementations for
+some of the coding-related exercises in ``bac_advanced_ml``. :math:`\ell^1`
 
 
 Installing
