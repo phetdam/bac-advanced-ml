@@ -3,6 +3,7 @@
 .. image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/master/
    bac_logo1_small.png
    :alt: BAC logo 1 small
+   :align: center
 
 A repository containing lectures and exercises for the BAC Advanced Team's
 intro to machine learning curriculum.
