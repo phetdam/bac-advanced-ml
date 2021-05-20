@@ -65,7 +65,7 @@
 % title, author, date
 \title{Exercise 1}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{February 18, 2021}
+\date{May 20, 2021\thanks{Original version released on February 18, 2021.}}
 
 \begin{document}
 
@@ -79,49 +79,59 @@
 \subsection{Partition of $ \mathbb{R} $}
 
 A \textit{partition} $ P $ of a non-empty set $ A $ is a set of non-empty,
-disjoint sets $ A_1, A_2, \ldots \subset A $ such that
-$ \bigcup_{k = 1}^\infty A_k = A $. Give a partition of $ \mathbb{R} $ into
-half-open intervals whose endpoints are elements of $ 2\mathbb{Z} $, i.e. zero
-or even integers.
+disjoint sets $ A_{i_1}, A_{i_2}, \ldots \subset A $ such that
+\begin{equation*}
+    \bigcup_{k \in \mathcal{I}} A_k = A
+\end{equation*}
+
+Here $ \mathcal{I} \triangleq \{i_1, i_2, \ldots \} $ is an \textit{index set}, usually chosen to be a subset of $ \mathbb{N} $. Give a partition of the
+half-open unit interval $ [0, 1) $ into an infinite number of half-open
+intervals.
+
+\medskip
+
+\textit{Hint.} Consider infinite sequences or series that converge to 1.
 
 \subsection{Slicing the unit circle}
 
 The unit circle on $ \mathbb{R}^2 $ is the set
 $ U \triangleq \{\mathbf{x} \in \mathbb{R}^2 :
 \Vert\mathbf{x}\Vert_2 \le 1\} $. Define
-$ \tilde{U} \triangleq U \setminus A $ as the ``sliced'' unit circle, i.e. the
-subset of $ U $ where no points that lie on the $ x_1 $ or $ x_2 $ axes are
-included. Define $ A $.
+$ \tilde{U} \triangleq U \setminus A $, $ A \subset U $, as the ``sliced''
+unit circle, i.e. the subset of $ U $ where no points that lie on the $ x_1 $
+or $ x_2 $ axes are included. Define $ A $.
 
 \subsection{Countably infinite intersection}
 
 Suppose we have a sequence of sets $ \{A_k\}_{k \in \mathbb{N}} $ where
 $ A_k \triangleq \left(-e^{-k}, 1 + e^{-k}\right) $. What is
-$ \bigcap_{k = 1}^\infty A_k $?
+$ \bigcap_{k \in \mathbb{N}} A_k $?
 
 \medskip
 
 \textit{Remark.} $ \bigcap_{k = 1}^\infty A_k $ is \textit{closed} interval
 on $ \mathbb{R} $. Try to convince yourself why this is true.
 
-\subsection{$ \ell^p $-norm balls}
+\subsection{$ \ell^p $ norm balls}
 
-Define $ \bar{B}_{2, \ell^p}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
-\mathbb{R}^2 : \Vert\mathbf{x}' - \mathbf{x}\Vert_p \le r\} $ as the closed
-$ \ell^p $-norm ball in $ \mathbb{R}^2 $ centered at $ \mathbf{x}
-\in \mathbb{R}^2 $ with radius $ r \in (0, \infty) $. Recall that for
+Define $ \bar{B}_{n, \ell^p}(\mathbf{x}, r) \triangleq \{\mathbf{x}' \in
+\mathbb{R}^n : \Vert\mathbf{x}' - \mathbf{x}\Vert_p \le r\} $ as the closed
+$ \ell^p $ norm ball in $ \mathbb{R}^n $ centered at $ \mathbf{x}
+\in \mathbb{R}^n $ with radius $ r \in (0, \infty) $, for
+$ n \in \mathbb{N} + 1 $. Recall that for
 $ \mathbf{x} \triangleq [ \ x_1 \ \ldots \ x_n ]^\top \in \mathbb{R}^n $, its
-$ \ell^p $-norm $ \Vert\mathbf{x}\Vert_p $ is defined such that
+$ \ell^p $ norm $ \Vert\mathbf{x}\Vert_p $ is such that
 \begin{equation*}
     \Vert\mathbf{x}\Vert_p \triangleq
     \left(\sum_{k = 1}^n|x_k|^p\right)^{1 / p}
 \end{equation*}
 
-Consider the $ \ell^1 $-norm and the $ \ell^\infty $-norm, where
+Consider the $ \ell^1 $ norm and the $ \ell^\infty $ norm, where
 $ \Vert\mathbf{x}\Vert_\infty = \max\{x_1, \ldots x_n\} $, and define
-$ B_{2, \ell^1}(\mathbf{0}, 1) $, $ B_{2, \ell^\infty}(\mathbf{0}, 1) $.
+$ \bar{B}_{2, \ell^1}(\mathbf{0}, 1) $,
+$ \bar{B}_{2, \ell^\infty}(\mathbf{0}, 1) $.
 Which of these two sets includes the other and
-$ B_{2, \ell^2}(\mathbf{0}, 1) $?
+$ \bar{B}_{2, \ell^2}(\mathbf{0}, 1) $?
 
 \medskip
 
@@ -166,8 +176,7 @@ and note that the sample space $ \Omega \triangleq \{\text{H}, \text{T}\}^n $.
 
     \medskip
     
-    \textit{Hint.} Note that $ H_n \sim \operatorname{Binomial}(n, 1 / 2) $
-    and that $ H_n = \sum_{k = 1}^nX_k $, where i.i.d.
+    \textit{Hint.} Note that $ H_n = \sum_{k = 1}^nX_k $, where i.i.d.
     $ X_k \sim \operatorname{Bernoulli}(1 / 2) $.
 \end{enumerate}
 
