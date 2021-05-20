@@ -347,9 +347,9 @@ $ \Omega $ in the previous question.
     value of $ p $, (\ref{eq:unfair_breakeven}) gives the relationship between
     $ M_1, M_2 $ that would make the game fair, i.e. expected profit is zero.
 \end{enumerate}
-%
-%\subsection{The Black-Scholes underlying}
-%
+
+\subsection{The Black-Scholes underlying}
+
 %Under the Black-Scholes model, the terminal price $ S_T : \Omega \rightarrow
 %\mathbb{R} $ of the underlying conditional on its current price $ S_t \in
 %(0, \infty) $, denoted as $ S_T \mid S_t $ can be written such that for
@@ -360,25 +360,40 @@ $ \Omega $ in the previous question.
 %    }
 %\end{equation*}
 %$ r, \sigma \in (0, \infty) $ are the drift and diffusion terms of the
-%model under $ \mathbb{Q} $, the \textit{risk-neutral probability
-%measure}\footnotemark\footnotetext{
-%    If $ \mathbb{P} $ is the real-world probability measure, one can think of
-%    $ \mathbb{Q} $ as the probability measure corresponding to a world where
-%    all prices are risk-neutral. In more technical terms, it is a probability
-%    measure such that the discounted price processes of all risky assets are
-%    local martingales. For this problem, just replace any uses of
-%    $ \mathbb{P} $ with $ \mathbb{Q} $.
-%}.
-%\begin{enumerate}[label = \alph*.]
-%    \item
-%    Compute $ \mathbb{E}[S_T \mid S_t] $, which gives the risk-neutral
-%    expectation of $ S_T $ conditional on $ S_t $.
-%
-%    \medskip
-%    
-%    \textit{Hint.} You don't need to derive $ f_{S_T \mid S_t} $, the density
-%    of $ S_T \mid S_t $, to compute $ \mathbb{E}[S_T \mid  S_t] $.
-%
+%model under $ \mathbb{Q} $.
+\begin{enumerate}[label = \alph*.]
+    \item
+    \textit{Solution.} By the law of the unconscious statistician, since
+    $ Z \sim \mathcal{N}(0, 1) $, we can compute $ \mathbb{E}[S_T \mid S_t] $
+    by integrating over a standard normal density. Therefore, we may write
+    \begin{equation*}
+        \begin{split}
+        \mathbb{E}[S_T \mid S_t] & = \int_\mathbb{R}S_te^{
+            \left(r - \frac{1}{2}\sigma^2\right)(T - t) + \sigma\sqrt{T - t}z
+        }\frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}z^2}\,dz \\
+        & = S_te^{\left(r - \frac{1}{2}\sigma^2\right)(T - t)}
+        \int_\mathbb{R}\frac{1}{\sqrt{2\pi}}e^{
+            -\frac{1}{2}z^2 + \sigma\sqrt{T - t}z
+        }\,dz
+        \end{split}
+    \end{equation*}
+    Completing the square in the exponent, as $ z^2 - 2\sigma\sqrt{T - t}z =
+    \big(z - \sigma\sqrt{T - t}\big)^2 - \sigma^2(T - t) $, we have
+    \begin{equation*}
+        \begin{split}
+        \mathbb{E}[S_T \mid S_t] & = S_te^{
+            \left(r - \frac{1}{2}\sigma^2\right)(T - t) +
+            \frac{1}{2}\sigma^2(T - t)
+        }
+        \int_\mathbb{R}\frac{1}{\sqrt{2\pi}}e^{
+            -\frac{1}{2}(z - \sigma\sqrt{T - t})^2
+        }\,dz = S_te^{r(T - t)}
+        \end{split}
+    \end{equation*}
+    The last step follows from the fact that the function being integrated is
+    a Gaussian density, so by properties of density functions, its integral
+    over $ \mathbb{R} $ must be $ 1 $.
+
 %    \item
 %    Let $ P_1, P_2 \in (0, \infty) $, $ P_1 < P_2 $, be two price thresholds.
 %    What is $ \mathbb{Q}\{S_T \in (P_1, P_2) \mid S_t\} $? Write your answer
@@ -392,6 +407,6 @@ $ \Omega $ in the previous question.
 %    answer should be of the form $ \Phi(\zeta_2) - \Phi(\zeta_1) $, where
 %    $ \zeta_k $, $ k \in \{1, 2\} $, is a quantity involving $ S_t $, $ P_k $,
 %    and constants.
-%\end{enumerate}
+\end{enumerate}
 
 \end{document}
