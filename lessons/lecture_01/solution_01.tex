@@ -350,17 +350,6 @@ $ \Omega $ in the previous question.
 
 \subsection{The Black-Scholes underlying}
 
-%Under the Black-Scholes model, the terminal price $ S_T : \Omega \rightarrow
-%\mathbb{R} $ of the underlying conditional on its current price $ S_t \in
-%(0, \infty) $, denoted as $ S_T \mid S_t $ can be written such that for
-%$ Z \sim \mathcal{N}(0, 1) $, $ T > t $,
-%\begin{equation*}
-%    S_T \mid S_t \triangleq S_te^{
-%        \left(r - \frac{1}{2}\sigma^2\right)(T - t) + \sigma\sqrt{T - t}Z
-%    }
-%\end{equation*}
-%$ r, \sigma \in (0, \infty) $ are the drift and diffusion terms of the
-%model under $ \mathbb{Q} $.
 \begin{enumerate}[label = \alph*.]
     \item
     \textit{Solution.} By the law of the unconscious statistician, since
@@ -394,19 +383,44 @@ $ \Omega $ in the previous question.
     a Gaussian density, so by properties of density functions, its integral
     over $ \mathbb{R} $ must be $ 1 $.
 
-%    \item
-%    Let $ P_1, P_2 \in (0, \infty) $, $ P_1 < P_2 $, be two price thresholds.
-%    What is $ \mathbb{Q}\{S_T \in (P_1, P_2) \mid S_t\} $? Write your answer
-%    as the difference of two terms involving $ \Phi $, the normal cdf.
-%
-%    \medskip
-%
-%    \textit{Hint.} Note that $ \mathbb{Q}\{S_T \in (P_1, P_2)\} =
-%    \mathbb{Q}\{S_T < P_2\} - \mathbb{Q}\{S_T \le P_1\} $. Use the fact that
-%    inequalities are preserved under monotone and affine transforms. Your
-%    answer should be of the form $ \Phi(\zeta_2) - \Phi(\zeta_1) $, where
-%    $ \zeta_k $, $ k \in \{1, 2\} $, is a quantity involving $ S_t $, $ P_k $,
-%    and constants.
+    \item
+    \textit{Solution.} Since $ \mathbb{Q}\{S_t \in (P_1, P_2) \mid S_t\} =
+    \mathbb{Q}\{S_T < P_2 \mid S_t\} - \mathbb{Q}\{S_T \le P_1 \mid S_t\} $,
+    we seek an expression for $ \mathbb{Q}\{S_T \le P_k \mid S_t\} $,
+    $ k \in \{1, 2\} $. Recall that for $ Z \sim N(0, 1) $,
+    $ S_t \in (0, \infty) $, $ T > t $, we have
+    \begin{equation*}
+	    S_T \mid S_t \triangleq S_te^{
+	        \left(r - \frac{1}{2}\sigma^2\right)(T - t) + \sigma\sqrt{T - t}Z
+	    }
+	\end{equation*}
+    Since inequalities are preserved under monotone transforms, translations,
+    and positive scaling, we have
+    \begin{equation*}
+        \begin{split}
+        \mathbb{Q}\{S_T \le P_k \mid S_t\} & = \mathbb{Q}\left\{
+            S_te^{
+                \left(r - \frac{1}{2}\sigma^2\right)(T - t) +
+                \sigma\sqrt{T - t}Z
+            } \le P_k \ \middle\vert \ S_t
+        \right\} \\
+        & = \mathbb{Q}\left\{
+            Z \le \frac{
+                \log(P_k / S_t) - \left(r - \frac{1}{2}\sigma^2\right)(T - t)
+            }{\sigma\sqrt{T - t}} \ \middle\vert \ S_t
+        \right\} \\
+        & = \Phi(\zeta_k)
+	    \end{split}
+    \end{equation*}
+    Here we define $ \forall k \in \{1, 2\} $ the term $ \zeta_k $, which is
+    such that
+    \begin{equation*}
+        \zeta_k \triangleq \frac{
+            \log(P_k / S_t) - \left(r - \frac{1}{2}\sigma^2\right)(T - t)
+        }{\sigma\sqrt{T - t}}
+    \end{equation*}
+    Therefore, we have $ \mathbb{Q}\{S_T \in (P_1, P_2) \mid S_t\} =
+    \Phi(\zeta_2) - \Phi(\zeta_1) $.
 \end{enumerate}
 
 \end{document}
