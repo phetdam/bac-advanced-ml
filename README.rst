@@ -17,7 +17,7 @@
    %0A%5Cend%7Barray%7D
 
 .. image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/master/
-   bac_advanced_ml_logo.png
+   bac_logo1_small.png
    :alt: BAC Advanced ML logo
 
 A repository containing lectures and exercises for the BAC Advanced Team's
