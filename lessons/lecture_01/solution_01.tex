@@ -314,28 +314,39 @@ and note that the sample space $ \Omega \triangleq \{\text{H}, \text{T}\}^n $.
     Here we use the linearity of expectation and properties of variance.
 \end{enumerate}
 
-%\subsection{More sequences of coin flips}
-%
-%Consider sequences of $ n \in \mathbb{N} $ independent flips of an
-%\textit{unfair} coin, where the probability of getting heads is
-%$ p \in (0, 1) $. Note the sample space $ \Omega $ is the same as the
-%$ \Omega $ in the previous question.
-%\begin{enumerate}[label = \alph*.]
-%    \item
-%    Prove that when $ p \ne 1 / 2 $, $ \exists \omega_1, \omega_2 \in
-%    \Omega $, $ \omega_1 \ne \omega_2 $, that $ \mathbb{P}\{\omega_1\} \ne
-%    \mathbb{P}\{\omega_2\} $.
-%
-%    \item
-%    Define $ U_n \triangleq \sum_{k = 1}^nX_k $, where i.i.d.
-%    $ X_k $ pays off $ M_1 \in (0, \infty) $ units of cash if the $ k $th
-%    flip is heads and pays off $ -M_2 \in (-\infty, 0) $ of cash if the
-%    $ k $th flip is tails. Write $ \mathbb{E}[U_n] $ as a function of $ p $.
-%
-%    \item
-%    Suppose for a given value of $ p \in (0, 1) $ we have
-%    $ \mathbb{E}[U_n] = 0 $. Write $ M_1 $ as a function of $ M_2, p $.
-%\end{enumerate}
+\subsection{More sequences of coin flips}
+
+Consider sequences of $ n \in \mathbb{N} $ independent flips of an
+\textit{unfair} coin, where the probability of getting heads is
+$ p \in (0, 1) $. Note the sample space $ \Omega $ is the same as the
+$ \Omega $ in the previous question.
+\begin{enumerate}[label = \alph*.]
+    \item
+    \textit{Proof.} Let $ \omega_1 \in \Omega $ be the sequence where all
+    flips except the last are heads and $ \omega_2 \in \Omega $ be the
+    sequence where all flips except the last two are heads. Since the flips
+    are independent, it's clear that $ \mathbb{P}\{\omega_1\} =
+    p^{n - 1}(1 - p) \ne p^{n - 2}(1 - p)^2 = \mathbb{P}\{\omega_2\} $ since
+    $ p \ne 1 / 2 $.
+
+    \item
+    \textit{Solution.} Note that $ \mathbb{E}[X_k] = M_1p - M_2(1 - p) $.
+    Therefore, by linearity of expectation,
+    \begin{equation} \label{eq:unfair_coin_mean}
+        \mathbb{E}[U_n] = \sum_{k = 1}^n\mathbb{E}[X_k] = n(M_1p - M_2(1 - p))
+    \end{equation}
+
+    \item
+    \textit{Solution.} From (\ref{eq:unfair_coin_mean}), we know that
+    $ n(M_1p - M_2(1 - p)) = 0 $. Dividing out $ n $, we see that
+    \begin{equation} \label{eq:unfair_breakeven}
+        M_1 = \frac{M_2(1 - p)}{p}
+    \end{equation}
+
+    Supposing $ U_n $ represented the payoff of a betting game, given a fixed
+    value of $ p $, (\ref{eq:unfair_breakeven}) gives the relationship between
+    $ M_1, M_2 $ that would make the game fair, i.e. expected profit is zero.
+\end{enumerate}
 %
 %\subsection{The Black-Scholes underlying}
 %
