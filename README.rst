@@ -1,10 +1,6 @@
 .. README.rst for bac_advanced_ml
 
-.. use substitution definition for "inline" style of image
-
-|logo|
-
-.. |logo| image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/
+.. image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/
    master/bac_advanced_ml_logo.png
    :alt: BAC Advanced ML logo
 
