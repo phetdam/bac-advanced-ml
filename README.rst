@@ -1,16 +1,20 @@
 .. README.rst for bac_advanced_ml
 
-|bac_logo_1| |svm_dual|
+|bac_logo_1| |elastic_net_logreg|
 
 .. |bac_logo_1| image:: https://raw.githubusercontent.com/phetdam/
    bac_advanced_ml/master/bac_logo1_small.png
-..   :alt: BAC logo 1 small
 
-.. |svm_dual| image:: https://render.githubusercontent.com/render/math?math=
-   %5Cdisplaystyle+%5Cbegin%7Barray%7D%7Bll%7D%5Cdisplaystyle%5Cmin_%5C
-   mathbf%7Bp%7D+%26+%5Cmathbf%7Bp%7D%5E%5Ctop%5Clog%28%5Cmathbf%7Bp%7D%29+
-   %5C%5C+%5Ctext%7Bs.t.%7D+%26+%5Cmathbf%7B1%7D%5E%5Ctop%5Cmathbf%7Bp%7D+%3D+
-   1%0A%5Cend%7Barray%7D
+.. encoding courtesy of https://tex-image-link-generator.herokuapp.com/
+
+.. |elastic_net_logreg| image:: https://render.githubusercontent.com/render/
+   math?math=%5Cdisplaystyle+%5Cbegin%7Barray%7D%7Bll%7D%0A++++%5C
+   min_%7B%5Cmathbf%7Bw%7D%2C+b%7D+%26+%5Csum_%7Bk+%3D+1%7D%5EN%5C
+   log%5Cleft%281+%2B+e%5E%7B-y_k%28%5Cmathbf%7Bw%7D%5E%5Ctop%5C
+   mathbf%7Bx%7D_k+%2B+b%29%7D%5Cright%29+%5C%5C%0A++++%5Ctext%7Bs.t.
+   %7D+%26+%5Calpha%5CVert%5Cmathbf%7Bw%7D%5CVert_1+%2B+%5Cfrac%7B1+-+%5C
+   alpha%7D%7B2%7D%5CVert%5Cmathbf%7Bw%7D%5CVert_2%5E2+%5Cle+%5Ctau
+   %0A%5Cend%7Barray%7D
 
 A repository containing lectures and exercises for the BAC Advanced Team's
 intro to machine learning curriculum.
