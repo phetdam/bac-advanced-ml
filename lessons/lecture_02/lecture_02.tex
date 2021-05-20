@@ -20,7 +20,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{February 25, 2021}
+\date{May 20, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -281,7 +281,7 @@
             to linear system).
 
             \item
-            $ \operatorname{rk}(\mathbf{A}) = n $ (full rank).
+            $ \operatorname{rank}\mathbf{A} = n $ (full rank).
 
             \item
             All eigenvalues of $ \mathbf{A} $ are nonzero.
@@ -609,12 +609,11 @@
         \textit{Definition.} The \textit{rank} of $ \mathbf{A} \in
         \mathbb{F}^{m \times n} $ is the maximal number of linearly
         independent columns/rows of $ \mathbf{A} $, denoted as
-        $ \operatorname{rk}(\mathbf{A}) $ or
-        $ \operatorname{rank}(\mathbf{A}) $.
+        $ \operatorname{rank}\mathbf{A} $.
 
         \item
         \textit{Definition.} $ \mathbf{A} \in \mathbb{R}^{m \times n} $ is
-        \textit{full rank} if $ \operatorname{rk}(\mathbf{A}) = \min\{m, n\} $.
+        \textit{full rank} if $ \operatorname{rank}\mathbf{A} = \min\{m, n\} $.
 
         \item
         Rank can be thought of as a matrix's ``information content''.
@@ -626,17 +625,17 @@
             \textit{Feature redundancy.} Suppose $ \mathbf{X} \in
             \mathbb{R}^{N \times d} $, each $ k $th row a transposed data
             example $ \mathbf{x}_k^\top $. Assuming $ N > d $, if
-            $ \operatorname{rk}(\mathbf{X}) < d $, at least one column is
+            $ \operatorname{rank}\mathbf{X} < d $, at least one column is
             linearly dependent and can be safely removed.
 
             \item
             \textit{Square linear system.} Suppose $ \mathbf{A} \in
             \mathbb{R}^{n \times n} $, $ \mathbf{b} \in \mathbb{R}^n $. We
             want to find $ \mathbf{x} \in \mathbb{R}^n $ s.t. $ \mathbf{Ax} =
-            \mathbf{b} $. If $ \operatorname{rk}(\mathbf{A}) = n $, each row
+            \mathbf{b} $. If $ \operatorname{rank}\mathbf{A} = n $, each row
             (linear equation) helps to determine one of the $ n $ unknown
             elements of $ \mathbf{x} $. If
-            $ \operatorname{rk}(\mathbf{A}) < n $, there isn't enough
+            $ \operatorname{rank}\mathbf{A} < n $, there isn't enough
             information $ \Rightarrow  $ no solution or infinitely many
             solutions.
         \end{itemize}
