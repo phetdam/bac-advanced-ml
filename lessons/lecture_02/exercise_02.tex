@@ -65,7 +65,7 @@
 % title, author, date
 \title{Exercise 2}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{March 6, 2021\thanks{Original version released on February 25, 2021.}}
+\date{May 20, 2021\thanks{Original version released on February 25, 2021.}}
 
 \begin{document}
 
@@ -108,8 +108,8 @@ $ \mathbf{y} \in \mathbb{R}^n $, is $ \mathbf{xy}^\top \in
         \ x_my_1 & \ldots & x_my_n \
     \end{bmatrix}
 \end{equation*}
-Prove that $ \mathbf{xx}^\top $ is symmetric and that
-$ \operatorname{rk}\left(\mathbf{xx}^\top\right) = 1 $.
+Prove that $ \mathbf{xx}^\top $ is symmetric and that if $ \mathbf{x} \ne
+\mathbf{0} $, $ \operatorname{rank}\big(\mathbf{xx}^\top\big) = 1 $.
 
 \subsection{The $ \ell^0 $ ``norm''}
 
@@ -140,7 +140,7 @@ $ \mathbf{u}^\top\mathbf{v} = \Vert\mathbf{u}\Vert_2\Vert\mathbf{v}\Vert_2
 \subsection{QR decomposition linear least squares}
 
 The QR decomposition of a matrix $ \mathbf{A} \in \mathbb{R}^{m \times n} $
-where $ \operatorname{rk}(\mathbf{A}) = n $ factors $ \mathbf{A} $ such that
+where $ \operatorname{rank}(\mathbf{A}) = n $ factors $ \mathbf{A} $ such that
 \cite{bv_convex_opt}
 \begin{equation*}
     \mathbf{A} = \begin{bmatrix} \ \mathbf{Q}_1 & \mathbf{Q}_2 \ \end{bmatrix}
@@ -154,7 +154,7 @@ $ \mathbf{Q}_1^\top\mathbf{Q}_1 = \mathbf{I}_n $, and $ \mathbf{R} $ is
 \textit{upper triangular}, i.e. all nonzero elements are on the main diagonal
 and above, with nonzero diagonal elements. Given centered input data
 $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
-$ \operatorname{rk}(\mathbf{A}) = d $, each row a transposed data example
+$ \operatorname{rank}(\mathbf{A}) = d $, each row a transposed data example
 $ \mathbf{x}_k^\top $, and centered\footnotemark\footnotetext{
     If $ \mathbf{X}, \mathbf{y} $ are already centered, i.e.
     $ \mathbf{X}^\top\mathbf{1} = \mathbf{0} $,
@@ -212,7 +212,7 @@ $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ such that $ \forall \mathbf{x} \in
 \subsection{Ridge regression}
 
 Given centered input data $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
-$ \operatorname{rk}(\mathbf{X}) = d $, where each row is a transposed data
+$ \operatorname{rank}(\mathbf{X}) = d $, where each row is a transposed data
 example $ \mathbf{x}_k^\top $, centered response vector
 $ \mathbf{y} \in \mathbb{R}^N $, $ \lambda > 0 $, the ridge regression problem
 can be written in matrix-vector form as
