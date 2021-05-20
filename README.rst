@@ -19,10 +19,7 @@ Contents
 
 The repo contains both ``.tex`` source for lectures and exercises in
 ``lessons`` as well as Python code containing reference implementations for
-some of the coding-related exercises in ``bac_advanced_ml``. |ell1|
-
-.. |ell1| image:: https://render.githubusercontent.com/render/math?math=\ell^1
-
+some of the coding-related exercises in ``bac_advanced_ml``.
 
 Installing
 ==========
