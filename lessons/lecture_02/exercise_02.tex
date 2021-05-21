@@ -131,7 +131,7 @@ Recall that for $ \mathbf{u}, \mathbf{v} \in \mathbb{R}^n \setminus
     \theta = 0 $.
 
     \item
-    $ \mathbf{u}^\top\mathbf{v} = 0 \Leftrightarrow \theta = \pi / 2 $.
+    $ \mathbf{u}^\top\mathbf{v} = 0 \Leftrightarrow \theta = \frac{\pi}{2} $.
 \end{enumerate}
 
 % pushes footnote down a bit
@@ -212,8 +212,8 @@ $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ such that $ \forall \mathbf{x} \in
 \subsection{Ridge regression}
 
 Given centered input data $ \mathbf{X} \in \mathbb{R}^{N \times d} $,
-$ \operatorname{rank}(\mathbf{X}) = d $, where each row is a transposed data
-example $ \mathbf{x}_k^\top $, centered response vector
+$ \operatorname{rank}(\mathbf{X}) = d $, each row a transposed data example
+$ \mathbf{x}_k^\top $, centered response vector
 $ \mathbf{y} \in \mathbb{R}^N $, $ \lambda > 0 $, the ridge regression problem
 can be written in matrix-vector form as
 \begin{equation*}
