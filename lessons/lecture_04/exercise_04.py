@@ -173,8 +173,8 @@ class LogisticRegression(BaseEstimator):
 
 
 @pytest.fixture(scope="session")
-def blobcls():
-    """Generated blob classification problem with train/test split.
+def blob_bin():
+    """Generated two-class blob classification problem with train/test split.
 
     Returns
     -------
@@ -199,18 +199,18 @@ def blobcls():
     return X_train, X_test, y_train, y_test
 
 
-def test_res(blobcls):
+def test_res(blob_bin):
     """Check LogisticRegression is equivalent to sklearn for two-class case.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
 
     Parameters
     ----------
-    blobcls : tuple
+    blob_bin : tuple
         pytest fixture. See blobcls.
     """
     # unpack data from fixture
-    X_train, X_test, y_train, y_test = blobcls
+    X_train, X_test, y_train, y_test = blob_bin
     # hyperparameters to fix (in case defaults change)
     shared_params = dict(tol=1e-4, C=1., max_iter=100)
     # fit scikit-learn model and our model
