@@ -47,7 +47,7 @@ class LinearDiscriminantAnalysis(BaseEstimator):
     predict(X)
         Return predictions on given data X.
     score(X, y)
-        Return the accuracy of the predictions.
+        Return the accuracy of the predictions given true labels y.
     """
     def __init__(self, shrinkage=None):
         # check that shrinkage is valid
@@ -168,7 +168,7 @@ class LinearDiscriminantAnalysis(BaseEstimator):
         ]
 
     def score(self, X, y):
-        """Return the accuracy of the predictions.
+        """Return the accuracy of the predictions given true labels y.
 
         Parameters
         ----------

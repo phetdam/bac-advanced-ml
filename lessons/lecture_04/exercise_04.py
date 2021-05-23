@@ -70,7 +70,7 @@ class LogisticRegression(BaseEstimator):
     predict(X)
         Return predictions on given data X.
     score(X, y)
-        Return the accuracy of the predictions.
+        Return the accuracy of the predictions given true labels y.
     """
     def __init__(self, tol=1e-4, C=1., max_iter=100):
         if tol <= 0:
@@ -153,7 +153,7 @@ class LogisticRegression(BaseEstimator):
         ###########################
 
     def score(self, X, y):
-        """Return the accuracy of the predictions.
+        """Return the accuracy of the predictions given true labels y.
 
         Parameters
         ----------

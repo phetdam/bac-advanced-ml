@@ -38,7 +38,7 @@ class RidgeRegression(BaseEstimator):
     predict(X)
         Return predictions on given data X.
     score(X, y)
-        Return the :math:`R^2` of the predictions.
+        Return the :math:`R^2` of the predictions given true response y.
     """
     # allowable solvers
     _solvers = ("matmul", "lsqr")
@@ -108,7 +108,7 @@ class RidgeRegression(BaseEstimator):
         return X @ self.coef_ + self.intercept_
 
     def score(self, X, y):
-        """Return the :math:`R^2` of the predictions.
+        """Return the :math:`R^2` of the predictions given true response y.
 
         Parameters
         ----------
@@ -190,7 +190,7 @@ class LogisticRegression(BaseEstimator):
     Attributes
     ----------
     classes_ : numpy.ndarray
-        Array of class labels known to the classifier, shape (n_classes,)
+        Array of class labels known to the classifier, shape (2,)
     coef_ : numpy.ndarray
         Model coefficients of the fitted model, shape (n_features,)
     intercept_ : float
@@ -203,7 +203,7 @@ class LogisticRegression(BaseEstimator):
     predict(X)
         Return predictions on given data X.
     score(X, y)
-        Return the accuracy of the predictions.
+        Return the accuracy of the predictions given true labels y.
     """
     def __init__(self, tol=1e-4, C=1., max_iter=100):
         if tol <= 0:
@@ -287,7 +287,7 @@ class LogisticRegression(BaseEstimator):
         )
 
     def score(self, X, y):
-        """Return the accuracy of the predictions.
+        """Return the accuracy of the predictions given true labels y.
 
         Parameters
         ----------

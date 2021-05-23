@@ -37,7 +37,7 @@ class RidgeRegression(BaseEstimator):
     predict(X)
         Return predictions on given data X.
     score(X, y)
-        Return the :math:`R^2` of the predictions.
+        Return the :math:`R^2` of the predictions given true response y.
     """
     # allowable solvers
     _solvers = ("matmul", "lsqr")
@@ -101,7 +101,7 @@ class RidgeRegression(BaseEstimator):
         ###########################
 
     def score(self, X, y):
-        """Return the :math:`R^2` of the predictions.
+        """Return the :math:`R^2` of the predictions given true response y.
 
         Parameters
         ----------
