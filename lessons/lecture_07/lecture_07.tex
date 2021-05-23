@@ -1,0 +1,135 @@
+%%% BAT lecture 07 %%%
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% use boadilla theme
+\usetheme{Boadilla}
+% remove navigation symbols
+\usenavigationsymbolstemplate{}
+% get numbered figure captions
+\setbeamertemplate{caption}[numbered]
+% changes itemize to circle + other things
+\useoutertheme{split}
+\useinnertheme{circles}
+
+% command for the title string. change for each lecture
+\newcommand{\lecturetitle}{Intro to Optimization, Part 2}
+% allow automatic alert-highlighted references and hyperlinks
+\newcommand{\aref}[1]{\alert{\ref{#1}}}
+\newcommand{\ahref}[2]{\href{#1}{\alert{#2}}}
+% title page stuff. brackets content displayed in footer bar
+\title[\lecturetitle]{\lecturetitle}
+% metadata. content in brackets is displayed in footer bar
+\author[Derek Huang (BAC Advanced Team)]{Derek Huang}
+\institute{BAC Advanced Team}
+\date{May 21, 2021}
+
+% change "ball" bullet to numbered bullet and section title for section
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+% change ball to gray square (copied from stackoverflow; \par needed for break)
+\setbeamertemplate{subsection in toc}{        
+    \hspace{1.2em}{\color{gray}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par
+}
+% use default enumeration scheme
+\setbeamertemplate{enumerate items}[default]
+% required line that fixes the problem of \mathbf, \bf not working in beamer
+% for later (post-2019) TeX Live installations. see the issue on GitHub:
+% https://github.com/josephwright/beamer/issues/630
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+
+\begin{document}
+
+% title slide
+\begin{frame}
+    \titlepage
+    \centering
+    % relative path may need to be updated depending on .tex file location
+    \includegraphics[scale = 0.1]{../bac_logo1.png}
+\end{frame}
+
+% table of contents slide
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+% section
+\section{Line search methods}
+
+% content slide
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item
+        Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the centered input
+        matrix, $ \mathbf{y} \in \mathbb{R}^N $ the centered response
+        vector\footnote{
+            As a reminder, centering $ \mathbf{X} $, $ \mathbf{y} $ allows us
+            to fit an interceptless model.
+        }.
+        Suppose we want to fit a lasso model to $ \mathbf{X}, \mathbf{y} $.
+
+        \item
+        In Lagrangian form, for $ \lambda \in (0, \infty) $, we must solve
+        \begin{equation} \label{eq:lasso_obj}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{w} &
+                \Vert\mathbf{y} - \mathbf{Xw}\Vert_2^2 +
+                \lambda\Vert\mathbf{w}\Vert_1
+            \end{array}
+        \end{equation}
+
+        \item
+        Theory tells us (\aref{eq:lasso_obj}) is convex but not
+        differentiable. No closed form.
+
+        \item
+        Iterative methods exist to solve (\aref{eq:lasso_obj}) and similar
+        problems. Software exists, but as users, we want to know \textbf{what}
+        to use and \textbf{when}.
+
+        \item
+        \alert{We tailor our choice of algorithm to the problem at hand.}
+    \end{itemize}
+\end{frame}
+
+\subsection{Gradient descent}
+
+\begin{frame}{Gradient descent}
+    \begin{itemize}
+        \item
+        Consider the generic unconstrained\footnote{
+            Most machine learning problems are unconstrained problems.        
+        } minimization problem
+        \begin{equation} \label{eq:unconstrained_min}
+            \begin{array}{ll}
+                \displaystyle\min_\mathbf{x} & f(\mathbf{x})
+            \end{array}
+        \end{equation}
+        $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ is the objective. Let
+        $ \mathbf{x}_{t - 1} \in \mathbb{R}^n $ denote the parameter
+        estimate at the end of iteration $ t - 1 $, $ t \in \mathbb{N} $.
+
+        \item
+        Many algorithms for computing $ \mathbf{x}_t $ are
+        \textit{line search methods}, which compute a \textit{search direction}
+        $ \mathbf{d}_t \in \mathbb{R}^n $, \textit{step size}
+        $ \eta_t \in (0, \infty) $ s.t. \cite{nocedal_opt}
+        \begin{equation} \label{eq:line_search_eq}
+            \mathbf{x}_t = \mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t
+        \end{equation}
+
+        \item
+        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $.
+    \end{itemize}
+\end{frame}
+
+
+% BibTeX slide for references. should use either acm or ieeetr style
+\begin{frame}{References}
+    \bibliographystyle{acm}
+    % relative path may need to be updated depending on .tex file location
+    \bibliography{../master_bib}
+\end{frame}
+
+\end{document}
