@@ -1,4 +1,4 @@
-__doc__ = "Unit tests for the LogisticClassifier class."
+__doc__ = "Unit tests for the LogisticRegression class."
 
 import numpy as np
 import pytest
