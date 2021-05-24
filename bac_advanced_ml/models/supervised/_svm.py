@@ -81,7 +81,7 @@ class LinearSVC(BaseEstimator):
             raise ValueError("max_iter must be positive")
         # cannot have solver="subgrad" when dual=True
         if dual and solver == "subgrad":
-            raise ValueError("solver=\"subgrad\" cannot be used with dual=True")
+            raise ValueError("solver=\"subgrad\" cannot be used if dual=True")
         # assign attribtues
         self.solver = solver
         self.dual = dual
