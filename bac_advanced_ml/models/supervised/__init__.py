@@ -9,3 +9,4 @@ implementations are expected to be reasonably similar.
 # pylint: disable=import-error
 from ._discriminant_analysis import LinearDiscriminantAnalysis
 from ._linear import LogisticRegression, RidgeRegression
+from ._svm import LinearSVC
