@@ -138,9 +138,12 @@ class LinearSVC(BaseEstimator):
                 jac=dual_grad, hess=dual_hess, bounds=alpha_bounds,
                 constraints=alpha_cons, options=dict(gtol=self.tol)
             )
-            # compute primal weights and intercept from dual variables
+            # compute primal weights and intercept from dual variables. note
+            # we only average y_nmask - X @ weights for support vectors
             weights = ((y_mask * res.x).reshape(-1, 1) * X).sum(axis=0)
-            intercept = (y_mask - X @ weights).mean()
+            # get mask of support vectors before computing intercept
+            support_mask = np.logical_and(res.x > 0, res.x < self.C)
+            intercept = (support_mask * (y_mask - X @ weights)).mean()
         # else solving primal problem
         else:
             # if solver == "subgrad", use subgradient descent to solve
