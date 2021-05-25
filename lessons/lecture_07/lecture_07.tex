@@ -84,7 +84,9 @@
         differentiable. No closed form.
 
         \item
-        Iterative methods exist to solve (\aref{eq:lasso_obj}) and similar
+        Iterative methods exist\footnote{
+            Coordinate descent and proximal gradient descent are often used.
+        } to solve (\aref{eq:lasso_obj}) and similar
         problems. Software exists, but as users, we want to know \textbf{what}
         to use and \textbf{when}.
 
@@ -121,6 +123,8 @@
 
         \item
         Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $.
+        Usually, $ \mathbf{d}_t $ is chosen to be a \textit{descent direction},
+        i.e. so
     \end{itemize}
 \end{frame}
 
