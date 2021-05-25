@@ -188,7 +188,7 @@ class LinearSVC(BaseEstimator):
                             np.eye(n_samples)
                         )
                     ),
-                    0, np.inf
+                    1, np.inf
                 )
                 # bounds on variables. note n_features + 1 coefficients and
                 # intercept are unbounded while slack variables must be >= 0
