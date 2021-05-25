@@ -139,7 +139,7 @@ class LinearSVC(BaseEstimator):
                 constraints=alpha_cons, options=dict(gtol=self.tol)
             )
             # compute primal weights and intercept from dual variables. note
-            # we only average y_nmask - X @ weights for support vectors
+            # we only average y_mask - X @ weights for support vectors
             weights = ((y_mask * res.x).reshape(-1, 1) * X).sum(axis=0)
             # get mask of support vectors before computing intercept
             support_mask = np.logical_and(res.x > 0, res.x < self.C)
