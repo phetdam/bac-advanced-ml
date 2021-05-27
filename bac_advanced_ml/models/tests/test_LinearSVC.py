@@ -45,9 +45,8 @@ def test_res_dual(blob_bin, global_seed, C):
     )
 
 
-@pytest.mark.parametrize("solver", ["trust-constr"])
 @pytest.mark.parametrize("C", [0.1, 1., 5.])
-def test_res_primal(blob_bin, global_seed, C, solver):
+def test_res_primal(blob_bin, global_seed, C):
     """Check LinearSVC is equivalent to sklearn for two-class case, dual=False.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
@@ -60,8 +59,6 @@ def test_res_primal(blob_bin, global_seed, C, solver):
         pytest fixture. See conftest.py.
     C : float
         Inverse regularization parameter for the LinearSVC.
-    solver : str
-        Method uses to fit the linear SVM.
     """
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blob_bin
@@ -73,7 +70,7 @@ def test_res_primal(blob_bin, global_seed, C, solver):
     sklearn_params = dict(dual=False, C=C, intercept_scaling=100)
     # fit scikit-learn model and our model
     _svc = _LinearSVC(**sklearn_params).fit(X_train, y_train)
-    svc = LinearSVC(solver=solver, dual=False, C=C).fit(X_train, y_train)
+    svc = LinearSVC(dual=False, C=C).fit(X_train, y_train)
     # check that predictions are close. we don't check the actual coef_ and
     # intercept_ properties because the solvers give different results.
     np.testing.assert_allclose(_svc.predict(X_test), svc.predict(X_test))

@@ -14,9 +14,8 @@ class LinearSVC(BaseEstimator):
     """Linear support vector classifier for binary classification.
 
     Only provides hinge loss and L2 norm regularization. Either the primal or
-    dual formulation of the problem can be solved. The dual formulation is
-    solved using scipy's trust-constr implementation while the primal
-    formulation is solved using either subgradient descent or trust-constr.
+    dual formulation of the problem can be solved. Both primal and dual
+    problems are solved using scipy's trust-constr implementation.
 
     .. note::
 
@@ -28,9 +27,6 @@ class LinearSVC(BaseEstimator):
 
     Parameters
     ----------
-    solver : {"subgrad", "trust-constr"}, default="trust-constr"
-        Solver for model fitting. "subgrad" can only be used with dual=False,
-        while "trust-constr" can be used for dual=False and dual=True.
     dual : bool, default=True
         True to use dual formulation, False for primal formulation.
     tol : float, default=1e-8
@@ -63,14 +59,7 @@ class LinearSVC(BaseEstimator):
     score(X, y)
         Return the accuracy of the predictions given true labels y.
     """
-    # acceptable solvers
-    _solvers = ("subgrad", "trust-constr")
-
-    def __init__(
-        self, solver="trust-constr", dual=True, tol=1e-8, C=1., max_iter=1000
-    ):
-        if solver not in self._solvers:
-            raise ValueError(f"solver must be one of {self._solvers}")
+    def __init__(self, dual=True, tol=1e-8, C=1., max_iter=1000):
         if not isinstance(dual, (bool, np.bool_)):
             raise TypeError("dual must be bool")
         if tol <= 0:
@@ -79,11 +68,7 @@ class LinearSVC(BaseEstimator):
             raise ValueError("C must be positive")
         if max_iter < 1:
             raise ValueError("max_iter must be positive")
-        # cannot have solver="subgrad" when dual=True
-        if dual and solver == "subgrad":
-            raise ValueError("solver=\"subgrad\" cannot be used if dual=True")
-        # assign attribtues
-        self.solver = solver
+        # assign attributes
         self.dual = dual
         self.tol = tol
         self.C = C
@@ -146,70 +131,53 @@ class LinearSVC(BaseEstimator):
             intercept = (support_mask * (y_mask - X @ weights)).mean()
         # else solving primal problem
         else:
-            # if solver == "subgrad", use subgradient descent to solve
-            if self.solver == "subgrad":
-                pass
-            # else use trust-constr method in scipy.optimize.minimize
-            else:
-                # nonzero hessian elements
-                hess_vals = np.hstack(
-                    (np.ones(n_features), self.C * np.ones(n_samples))
-                )
-                # row, columns indices for nonzero hessian elements. these are
-                # the same since the hessian is diagonal
-                hess_idx = np.hstack(
-                    (
-                        np.arange(n_features),
-                        n_features + 1 + np.arange(n_samples)
-                    )
-                )
-                # compute hessian matrix, using coo to save memory
-                hess = coo_matrix(
-                    (hess_vals, (hess_idx, hess_idx)),
-                    shape=(
-                        n_samples + n_features + 1,
-                        n_samples + n_features + 1
-                    )
-                )
-                # functions for objective, gradient, hessian
-                primal_obj = lambda x: (
-                    0.5 * np.power(x[:n_features], 2).sum() +
-                    self.C * x[n_features + 1:].sum()
-                )
-                primal_grad = lambda x: np.hstack(
-                    (x[:n_features], 0, self.C * np.ones(n_samples))
-                )
-                primal_hess = lambda x: hess
-                # margin constraint
-                marg_cons = LinearConstraint(
-                    y_mask.reshape(-1, 1) * np.hstack(
-                        (
-                            X, np.ones(n_samples).reshape(-1, 1),
-                            np.eye(n_samples)
-                        )
-                    ),
-                    1, np.inf
-                )
-                # bounds on variables. note n_features + 1 coefficients and
-                # intercept are unbounded while slack variables must be >= 0
-                var_bounds = Bounds(
-                    np.hstack(
-                        (
-                            np.full(n_features + 1, -np.inf),
-                            np.full(n_samples, 0)
-                        )
-                    ),
-                    np.full(n_features + n_samples + 1, np.inf)
-                )
-                # solve for coefficients, intercept, slack using trust-constr
-                res = minimize(
-                    primal_obj, np.zeros(n_features + n_samples + 1),
-                    method="trust-constr", jac=primal_grad, hess=primal_hess,
-                    bounds=var_bounds, constraints=marg_cons,
-                    options=dict(gtol=self.tol)
-                )
-                # separate out weights and intercept
-                weights, intercept = res.x[:n_features], res.x[n_features]
+            # nonzero hessian elements
+            hess_vals = np.hstack(
+                (np.ones(n_features), self.C * np.ones(n_samples))
+            )
+            # row, columns indices for nonzero hessian elements. these are
+            # the same since the hessian is diagonal
+            hess_idx = np.hstack(
+                (np.arange(n_features), n_features + 1 + np.arange(n_samples))
+            )
+            # compute hessian matrix, using coo to save memory
+            hess = coo_matrix(
+                (hess_vals, (hess_idx, hess_idx)),
+                shape=(n_samples + n_features + 1, n_samples + n_features + 1)
+            )
+            # functions for objective, gradient, hessian
+            primal_obj = lambda x: (
+                0.5 * np.power(x[:n_features], 2).sum() +
+                self.C * x[n_features + 1:].sum()
+            )
+            primal_grad = lambda x: np.hstack(
+                (x[:n_features], 0, self.C * np.ones(n_samples))
+            )
+            primal_hess = lambda x: hess
+            # margin constraint
+            marg_cons = LinearConstraint(
+                y_mask.reshape(-1, 1) * np.hstack(
+                    (X, np.ones(n_samples).reshape(-1, 1), np.eye(n_samples))
+                ),
+                1, np.inf
+            )
+            # bounds on variables. note n_features + 1 coefficients and
+            # intercept are unbounded while slack variables must be >= 0
+            var_bounds = Bounds(
+                np.hstack(
+                    (np.full(n_features + 1, -np.inf), np.full(n_samples, 0))
+                ),
+                np.full(n_features + n_samples + 1, np.inf)
+            )
+            # solve for coefficients, intercept, slack using trust-constr
+            res = minimize(
+                primal_obj, np.zeros(n_features + n_samples + 1),
+                method="trust-constr", jac=primal_grad, hess=primal_hess,
+                bounds=var_bounds, constraints=marg_cons,
+                options=dict(gtol=self.tol)
+            )
+            # separate out weights and intercept
+            weights, intercept = res.x[:n_features], res.x[n_features]
         # # set attributes
         self.classes_ = labels
         self.coef_ = weights
