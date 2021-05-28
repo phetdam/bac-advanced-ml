@@ -55,7 +55,7 @@
 \end{frame}
 
 % section
-\section{Line search methods}
+\section{Unconstrained optimization}
 
 % content slide
 \begin{frame}{Motivation}
@@ -95,13 +95,14 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Gradient descent}
+\subsection{Line search methods}
 
-\begin{frame}{Gradient descent}
+\begin{frame}{Line search methods}
     \begin{itemize}
         \item
         Consider the generic unconstrained\footnote{
-            Most machine learning problems are unconstrained problems.        
+            Most machine learning problems can be written as unconstrained
+            problems.
         } minimization problem
         \begin{equation} \label{eq:unconstrained_min}
             \begin{array}{ll}
@@ -124,8 +125,15 @@
         \item
         Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $.
         Usually, $ \mathbf{d}_t $ is chosen to be a \textit{descent direction},
-        i.e. so
+        i.e. so $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
+        f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}. Note 
+        $ \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow $
+        for small enough $ \eta_t $, $ \mathbf{d}_t $ is a descent direction
+        \cite{nocedal_opt}.
     \end{itemize}
+
+    % more spacing for the footnote
+    \medskip
 \end{frame}
 
 
