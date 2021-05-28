@@ -109,9 +109,10 @@
                 \displaystyle\min_\mathbf{x} & f(\mathbf{x})
             \end{array}
         \end{equation}
-        $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ is the objective. Let
-        $ \mathbf{x}_{t - 1} \in \mathbb{R}^n $ denote the parameter
-        estimate at the end of iteration $ t - 1 $, $ t \in \mathbb{N} $.
+        $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ is a differentiable
+        objective. Let $ \mathbf{x}_{t - 1} \in \mathbb{R}^n $ denote the
+        parameter estimate at the end of iteration $ t - 1 $,
+        $ t \in \mathbb{N} $.
 
         \item
         Many algorithms for computing $ \mathbf{x}_t $ are
@@ -123,18 +124,84 @@
         \end{equation}
 
         \item
-        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $.
-        Usually, $ \mathbf{d}_t $ is chosen to be a \textit{descent direction},
+        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $, where
+        $ \mathbf{d}_t $ usually chosen to be a \textit{descent direction},
         i.e. so $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
-        f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}. Note 
-        $ \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow $
-        for small enough $ \eta_t $, $ \mathbf{d}_t $ is a descent direction
+        f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}.
+
+        \item
+        \textit{Lemma.} For small enough $ \eta_t $, $ \mathbf{d}_t^\top
+        \nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow \mathbf{d}_t $ is a
+        descent direction, i.e. angle between $ \mathbf{d}_t $,
+        $ -\nabla f(\mathbf{x}_{t - 1}) $ is less than $ \pi / 2 $
         \cite{nocedal_opt}.
     \end{itemize}
 
     % more spacing for the footnote
     \medskip
 \end{frame}
+
+\begin{frame}{Line search methods}
+    \begin{itemize}
+        \item
+        Assuming $ \mathbf{d}_t $ computed, the optimal choice of $ \eta_t $
+        is such that
+        \begin{equation} \label{eq:exact_line_search}
+            \eta_t = \arg\min_{\eta \in (0, \infty)}
+            f(\mathbf{x}_{t - 1} + \eta\mathbf{d}_t)
+        \end{equation}
+        Too expensive to compute in general, but simply requiring $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) < f(\mathbf{x}_{t - 1}) $ does not guarantee convergence \cite{nocedal_opt}.
+
+        \item
+        Instead, require ``sufficient decrease'' in $ f $ each iteration.
+        Popular condition is the \textit{Armijo condition}, which for
+        $ \alpha \in (0, 1) $, requires
+        \begin{equation} \label{eq:armijo_rule}
+            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) \le
+            f(\mathbf{x}_{t - 1}) + \alpha\eta_t\mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1})
+        \end{equation}
+        Note $ \mathbf{d}_t $ is a descent direction $ \Rightarrow \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $.
+
+        \item
+        For convex $ f $, $ \{\eta_t\}_{t \in \mathbb{N}} $ satisfying (\aref{eq:armijo_rule}) and descent directions $ \{\mathbf{d}_t\}_{t \in \mathbb{N}} $ guarantee that the global minimizer of $ f $ will be reached \cite{stat_learn_sparsity}.
+    \end{itemize}
+\end{frame}
+
+%\subsection{Gradient descent}
+%
+%\begin{frame}{Gradient descent}
+%    \begin{itemize}
+%        \item
+%        Consider
+%    \end{itemize}
+%\end{frame}
+%
+%\subsection{Newton's method}
+%
+%\begin{frame}{Newton's method}
+%    \begin{itemize}
+%        \item
+%        Suppose $ \forall \mathbf{x} \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $. Consider the Taylor expansion
+%        \begin{equation*}
+%            \begin{split}
+%            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) & =
+%                f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
+%                \nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\eta_t^2
+%                \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t \\
+%                & \quad + O(\eta_t^3)
+%            \end{split}
+%        \end{equation*}
+%        Keeping terms up to $ O(\eta_t^2) $, the estimate $ \hat{\mathbf{d}} $ for $ \eta_t\mathbf{d}_t $ solves
+%        \begin{equation} \label{eq:newton_descent_opt}
+%            \begin{array}{ll}
+%                \displaystyle\min_{\mathbf{d}} & \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\mathbf{d}^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}
+%            \end{array}
+%        \end{equation}
+%
+%        \item
+%        Since (\aref{eq:newton_descent_opt}) convex and $ \left|\nabla^2f(\mathbf{x}_{t - 1})\right| \ne 0 $, then $ \hat{\mathbf{d}} = \big(\nabla^2f(\mathbf{x}_{t - 1})\big)^{-1}\nabla f(\mathbf{x}_{t - 1}) $
+%    \end{itemize}
+%\end{frame}
 
 
 % BibTeX slide for references. should use either acm or ieeetr style
