@@ -14,3 +14,5 @@
 **/__pycache__
 # ignore big thomas bayes
 lessons/lecture_04/thomas_bayes_large.jpg
+# ignore random plotting script
+lessons/lecture_07/plot_descent_direction.py
