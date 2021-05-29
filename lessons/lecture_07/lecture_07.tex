@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{May 21, 2021}
+\date{May 29, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -54,10 +54,8 @@
     \tableofcontents
 \end{frame}
 
-% section
 \section{Unconstrained optimization}
 
-% content slide
 \begin{frame}{Motivation}
     \begin{itemize}
         \item
@@ -95,9 +93,9 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Line search methods}
+\subsection{Line search}
 
-\begin{frame}{Line search methods}
+\begin{frame}{Line search}
     \begin{itemize}
         \item
         Consider the generic unconstrained\footnote{
@@ -115,8 +113,8 @@
         $ t \in \mathbb{N} $.
 
         \item
-        Many algorithms for computing $ \mathbf{x}_t $ are
-        \textit{line search methods}, which compute a \textit{search direction}
+        Many algorithms for computing $ \mathbf{x}_t $ are based on
+        \textit{line search}, which computes a \textit{search direction}
         $ \mathbf{d}_t \in \mathbb{R}^n $, \textit{step size}
         $ \eta_t \in (0, \infty) $ s.t. \cite{nocedal_opt}
         \begin{equation} \label{eq:line_search_eq}
@@ -124,9 +122,11 @@
         \end{equation}
 
         \item
-        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $. Often
-        $ \mathbf{d}_t $ is required to be a \textit{descent direction},
-        i.e. so $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
+        Obvious question is how to choose $ \mathbf{d}_t $, $ \eta_t $. Often
+        $ \mathbf{d}_t $ is required to be a \textit{descent direction}, i.e.
+        $ \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $, where for small
+        enough $ \eta_t $, $ \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0
+        \Rightarrow f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
         f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}.
     \end{itemize}
 
@@ -134,34 +134,28 @@
     \medskip
 \end{frame}
 
-\begin{frame}{Line search methods}
+\begin{frame}{Line search}
     \begin{itemize}
         \item
-        \textit{Theorem.} For small enough $ \eta_t $, $ \mathbf{d}_t^\top
-        \nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow \mathbf{d}_t $ is a
-        descent direction. Also, angle between $ \mathbf{d}_t $,
-        $ -\nabla f(\mathbf{x}_{t - 1}) $ is less than $ \pi / 2 $
-        \cite{nocedal_opt}.
-
-        \item
-        \textit{Proof.} Consider a Taylor expansion around
-        $ \mathbf{x}_{t - 1} $, i.e.
+        \textit{Proof.} Consider Taylor expansion for $ f(\mathbf{x}_{t - 1} +
+        \eta_t\mathbf{d}_t) $ around $ \mathbf{x}_{t - 1} $
         \begin{equation*}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) =
             f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
             \nabla f(\mathbf{x}_{t - 1}) + O(\eta_t^2)
         \end{equation*}
+        To leading order, $ \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0
+        \Rightarrow f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
+        f(\mathbf{x}_{t - 1}) $, as long as $ \eta_t $ small enough,
+        i.e. $ \eta_t\mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) $ dominates
+        $ O(\eta_t^2) $ terms.
 
         \item
-        For small enough\footnote{
-            For small enough $ \eta_t $, $ \eta_t\mathbf{d}_t^\top
-            \nabla f(\mathbf{x}_{t - 1}) $ dominates $ O(\eta_t^2) $ terms.
-        } $ \eta_t $, $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
-        f(\mathbf{x}_{t - 1}) \Rightarrow \mathbf{d}_t^\top
-        \nabla f(\mathbf{x}_{t - 1}) < 0 $. $ 0 < -\mathbf{d}^\top
-        \nabla f(\mathbf{x}_{t - 1}) = \Vert\mathbf{d}_t\Vert_2
-        \Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2\cos\theta \Leftrightarrow
-        \theta \in [0, \pi / 2) $.
+        Geometrically, if $ \mathbf{d}_t $ is a descent direction, then the
+        angle $ \theta $ between $ \mathbf{d}_t $,
+        $ -\nabla f(\mathbf{x}_{t - 1}) $ is in $ [0, \pi / 2) $, i.e.
+        $ \theta $ is an acute angle.
+
         \item
         In practice, for $ \mathbf{H}_t \in \mathbb{R}^{n \times n} $,
         $ \mathbf{H}_t = \mathbf{H}_t^\top $, $ |\mathbf{H}_t| \ne 0 $, we
@@ -171,28 +165,29 @@
         \end{equation}
         Note when $ \mathbf{H}_t \succ \mathbf{0} $, $ \mathbf{d}_t^\top
         \nabla f(\mathbf{x}_{t - 1}) = -\nabla f(\mathbf{x}_{t - 1})^\top
-        \mathbf{H}_t^{-1}\nabla f(\mathbf{x}_{t - 1}) < 0 $, i.e.
-        $ \mathbf{d}_t $ is a descent direction, so
-        $ f(\mathbf{x}_t) < f(\mathbf{x}_{t - 1}) $.
+        \mathbf{H}_t^{-1}\nabla f(\mathbf{x}_{t - 1}) < 0 $. In other words,
+        $ \mathbf{H}_t \succ \mathbf{0} \Rightarrow \mathbf{d}_t $ is a
+        descent direction.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Line search methods}
+\begin{frame}{Line search}
     \begin{itemize}
         \item
         Assuming $ \mathbf{d}_t $ computed, the optimal choice of $ \eta_t $
         is such that
         \begin{equation} \label{eq:exact_line_search}
-            \eta_t = \arg\min_{\eta \in (0, \infty)}
+            \eta_t = \arg\min_{\eta > 0}
             f(\mathbf{x}_{t - 1} + \eta\mathbf{d}_t)
         \end{equation}
-        Too expensive to compute in general, but simply requiring
-        $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) < f(\mathbf{x}_{t - 1}) $
-        does not guarantee convergence \cite{nocedal_opt}.
+        Too expensive to compute in general, but simply choosing $ \eta_t $
+        s.t. $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
+        f(\mathbf{x}_{t - 1}) $ does \textbf{not} guarantee convergence
+        \cite{nocedal_opt}.
 
         \item
         Instead, require ``sufficient decrease'' in $ f $ each iteration.
-        Popular condition is the \textit{Armijo condition}, which for
+        A common condition is the \textit{Armijo condition}, which for
         $ \alpha \in (0, 1) $, requires
         \begin{equation} \label{eq:armijo_rule}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) \le
@@ -201,6 +196,8 @@
         \end{equation}
         Note $ \mathbf{d}_t $ is a descent direction $ \Rightarrow
         \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $.
+        (\aref{eq:armijo_rule}) stipulates $ f(\mathbf{x}_{t - 1} +
+        \eta_t\mathbf{d}_t) $ must fall under a damped linear approximation.
 
         \item
         For convex $ f $, $ \{\eta_t\}_{t \in \mathbb{N}} $ satisfying
@@ -210,15 +207,55 @@
     \end{itemize}
 \end{frame}
 
+%\begin{frame}{Line search}
+%    \begin{itemize}
+%        \item
+%        Although (\aref{eq:armijo_rule}) is not sufficient to ensure that the
+%        reasonable progress along $ \mathbf{d}_t $, it is sufficient if
+%        $ \eta_t $ chosen using \textit{backtracking} \cite{nocedal_opt}.
+%    \end{itemize}
+%    \begin{centering}
+%    \scalebox{0.9}{
+%	    \begin{algorithm}[H]
+%	        \KwIn{cheese}
+%	        \caption{Backtracking line search}
+%	    \end{algorithm}
+%	}
+%    \end{centering}
+%\end{frame}
+
 %\subsection{Gradient descent}
 %
 %\begin{frame}{Gradient descent}
 %    \begin{itemize}
 %        \item
-%        Consider
-%    \end{itemize}
-%\end{frame}
+%        \textit{Gradient descent} chooses $ \mathbf{d}_t = -\nabla f(\mathbf{x}_{t - 1}) $, i.e. $ \mathbf{H}_t = \mathbf{I} $. Consider a first-order Taylor approximation around $ \mathbf{x}_{t - 1} $ for small\footnote{
+%            Again, in the sense that $ \eta_t\mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) $ dominates $ O(\eta_t^2) $ terms.
+%        } $ \eta_t $, i.e.
+%        \begin{equation*}
+%            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}) \approx f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1})
+%        \end{equation*}
+%        The unit vector\footnote{
+%            If we don't constrain $ \Vert\mathbf{d}\Vert_2 $, (\aref{eq:grad_descent_opt}) is unbounded below.
+%        } $ \hat{\mathbf{d}} $ maximizing $ f(\mathbf{x}_{t - 1}) - f(\mathbf{x}_{t - 1} + \mathbf{d}) $ solves \cite{nocedal_opt}
+%        \begin{equation} \label{eq:grad_descent_opt}
+%            \begin{array}{ll}
+%                \displaystyle\min_{\mathbf{d}} & \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) \\
+%                \text{s.t.} & \Vert\mathbf{d}\Vert_2 = 1
+%            \end{array}
+%        \end{equation}
 %
+%        \item
+%        Since $ \forall \mathbf{d} \in \mathbb{R}^n $, $ \Vert\mathbf{d}\Vert_2 = 1 $, $ \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) = \Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2\cos\theta $, solution to (\aref{eq:grad_descent_opt}) results in $ \cos\theta = -1 \Leftrightarrow \theta = \pi \Leftrightarrow \hat{\mathbf{d}} = -\frac{\nabla f(\mathbf{x}_{t - 1})}{\Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2} $.
+%
+%        \item
+%        Gradient descent sometimes called the \textit{method of steepest descent} since $ \mathbf{d}_t \propto \hat{\mathbf{d}} $ giving the direction of greatest decrease in $ f $.
+%    \end{itemize}
+%
+%    % spacing for footnotes
+%    \medskip
+%\end{frame}
+
 %\subsection{Newton's method}
 %
 %\begin{frame}{Newton's method}
@@ -243,6 +280,12 @@
 %
 %        \item
 %        Since (\aref{eq:newton_descent_opt}) convex and $ \left|\nabla^2f(\mathbf{x}_{t - 1})\right| \ne 0 $, then $ \hat{\mathbf{d}} = \big(\nabla^2f(\mathbf{x}_{t - 1})\big)^{-1}\nabla f(\mathbf{x}_{t - 1}) $
+%
+%        \item
+%        \textit{Newton's method} chooses $ \mathbf{d}_t = -\nabla^2f(\mathbf{x}_{t - 1})^{-1}\nabla f(\mathbf{x}_{t - 1}) $, i.e. $ \mathbf{H}_t = \nabla^2f(\mathbf{x}_{t - 1}) $. $ \exists\nabla^2f $ must exist else we cannot use this choice.
+%
+%        \item
+%        $ \mathbf{d}_t $ is a descent direction $ \Leftrightarrow \forall \mathbf{x} \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $.
 %    \end{itemize}
 %\end{frame}
 
