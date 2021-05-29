@@ -89,7 +89,10 @@
         to use and \textbf{when}.
 
         \item
-        \alert{We tailor our choice of algorithm to the problem at hand.}
+        \alert{
+            No algorithm is the ``best'' choice for all problems, so we must
+            tailor our choice of algorithm to the problem at hand.
+        }
     \end{itemize}
 \end{frame}
 
@@ -114,7 +117,10 @@
 
         \item
         Many algorithms for computing $ \mathbf{x}_t $ are based on
-        \textit{line search}, which computes a \textit{search direction}
+        \textit{line search}\footnote{
+            We do not discuss the \textit{trust region} approach, the other
+            broad class of methods.
+        }, which computes a \textit{search direction}
         $ \mathbf{d}_t \in \mathbb{R}^n $, \textit{step size}
         $ \eta_t \in (0, \infty) $ s.t. \cite{nocedal_opt}
         \begin{equation} \label{eq:line_search_eq}
@@ -197,7 +203,7 @@
         Note $ \mathbf{d}_t $ is a descent direction $ \Rightarrow
         \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $.
         (\aref{eq:armijo_rule}) stipulates $ f(\mathbf{x}_{t - 1} +
-        \eta_t\mathbf{d}_t) $ must fall under a damped linear approximation.
+        \eta_t\mathbf{d}_t) $ must be under a damped linear extrapolation.
 
         \item
         For convex $ f $, $ \{\eta_t\}_{t \in \mathbb{N}} $ satisfying
