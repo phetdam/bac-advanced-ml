@@ -124,21 +124,57 @@
         \end{equation}
 
         \item
-        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $, where
-        $ \mathbf{d}_t $ usually chosen to be a \textit{descent direction},
+        Obvious question is how to compute $ \mathbf{d}_t $, $ \eta_t $. Often
+        $ \mathbf{d}_t $ is required to be a \textit{descent direction},
         i.e. so $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
         f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}.
-
-        \item
-        \textit{Lemma.} For small enough $ \eta_t $, $ \mathbf{d}_t^\top
-        \nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow \mathbf{d}_t $ is a
-        descent direction, i.e. angle between $ \mathbf{d}_t $,
-        $ -\nabla f(\mathbf{x}_{t - 1}) $ is less than $ \pi / 2 $
-        \cite{nocedal_opt}.
     \end{itemize}
 
     % more spacing for the footnote
     \medskip
+\end{frame}
+
+\begin{frame}{Line search methods}
+    \begin{itemize}
+        \item
+        \textit{Theorem.} For small enough $ \eta_t $, $ \mathbf{d}_t^\top
+        \nabla f(\mathbf{x}_{t - 1}) < 0 \Rightarrow \mathbf{d}_t $ is a
+        descent direction. Also, angle between $ \mathbf{d}_t $,
+        $ -\nabla f(\mathbf{x}_{t - 1}) $ is less than $ \pi / 2 $
+        \cite{nocedal_opt}.
+
+        \item
+        \textit{Proof.} Consider a Taylor expansion around
+        $ \mathbf{x}_{t - 1} $, i.e.
+        \begin{equation*}
+            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) =
+            f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
+            \nabla f(\mathbf{x}_{t - 1}) + O(\eta_t^2)
+        \end{equation*}
+
+        \item
+        For small enough\footnote{
+            For small enough $ \eta_t $, $ \eta_t\mathbf{d}_t^\top
+            \nabla f(\mathbf{x}_{t - 1}) $ dominates $ O(\eta_t^2) $ terms.
+        } $ \eta_t $, $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) <
+        f(\mathbf{x}_{t - 1}) \Rightarrow \mathbf{d}_t^\top
+        \nabla f(\mathbf{x}_{t - 1}) < 0 $. $ 0 < -\mathbf{d}^\top
+        \nabla f(\mathbf{x}_{t - 1}) = \Vert\mathbf{d}_t\Vert_2
+        \Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2\cos\theta \Leftrightarrow
+        \theta \in [0, \pi / 2) $.
+        \item
+        In practice, for $ \mathbf{H}_t \in \mathbb{R}^{n \times n} $,
+        $ \mathbf{H}_t = \mathbf{H}_t^\top $, $ |\mathbf{H}_t| \ne 0 $, we
+        often choose \cite{nocedal_opt}
+        \begin{equation} \label{eq:gen_descent_step}
+            \mathbf{d}_t = -\mathbf{H}_t^{-1}\nabla f(\mathbf{x}_{t - 1})
+        \end{equation}
+        Note when $ \mathbf{H}_t \succ \mathbf{0} $, $ \mathbf{d}_t^\top
+        \nabla f(\mathbf{x}_{t - 1}) = -\nabla f(\mathbf{x}_{t - 1})^\top
+        \mathbf{H}_t^{-1}\nabla f(\mathbf{x}_{t - 1}) < 0 $, i.e.
+        $ \mathbf{d}_t $ is a descent direction, so
+        $ f(\mathbf{x}_t) < f(\mathbf{x}_{t - 1}) $.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Line search methods}
@@ -150,7 +186,9 @@
             \eta_t = \arg\min_{\eta \in (0, \infty)}
             f(\mathbf{x}_{t - 1} + \eta\mathbf{d}_t)
         \end{equation}
-        Too expensive to compute in general, but simply requiring $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) < f(\mathbf{x}_{t - 1}) $ does not guarantee convergence \cite{nocedal_opt}.
+        Too expensive to compute in general, but simply requiring
+        $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) < f(\mathbf{x}_{t - 1}) $
+        does not guarantee convergence \cite{nocedal_opt}.
 
         \item
         Instead, require ``sufficient decrease'' in $ f $ each iteration.
@@ -158,12 +196,17 @@
         $ \alpha \in (0, 1) $, requires
         \begin{equation} \label{eq:armijo_rule}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) \le
-            f(\mathbf{x}_{t - 1}) + \alpha\eta_t\mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1})
+            f(\mathbf{x}_{t - 1}) + \alpha\eta_t\mathbf{d}_t^\top
+            \nabla f(\mathbf{x}_{t - 1})
         \end{equation}
-        Note $ \mathbf{d}_t $ is a descent direction $ \Rightarrow \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $.
+        Note $ \mathbf{d}_t $ is a descent direction $ \Rightarrow
+        \mathbf{d}_t^\top\nabla f(\mathbf{x}_{t - 1}) < 0 $.
 
         \item
-        For convex $ f $, $ \{\eta_t\}_{t \in \mathbb{N}} $ satisfying (\aref{eq:armijo_rule}) and descent directions $ \{\mathbf{d}_t\}_{t \in \mathbb{N}} $ guarantee that the global minimizer of $ f $ will be reached \cite{stat_learn_sparsity}.
+        For convex $ f $, $ \{\eta_t\}_{t \in \mathbb{N}} $ satisfying
+        (\aref{eq:armijo_rule}) and descent directions
+        $ \{\mathbf{d}_t\}_{t \in \mathbb{N}} $ \textbf{guarantee} that the
+        global minimizer of $ f $ will be reached \cite{stat_learn_sparsity}.
     \end{itemize}
 \end{frame}
 
