@@ -213,22 +213,59 @@
     \end{itemize}
 \end{frame}
 
-%\begin{frame}{Line search}
-%    \begin{itemize}
-%        \item
-%        Although (\aref{eq:armijo_rule}) is not sufficient to ensure that the
-%        reasonable progress along $ \mathbf{d}_t $, it is sufficient if
-%        $ \eta_t $ chosen using \textit{backtracking} \cite{nocedal_opt}.
-%    \end{itemize}
-%    \begin{centering}
-%    \scalebox{0.9}{
-%	    \begin{algorithm}[H]
-%	        \KwIn{cheese}
-%	        \caption{Backtracking line search}
-%	    \end{algorithm}
-%	}
-%    \end{centering}
-%\end{frame}
+\begin{frame}{Line search}
+    \begin{itemize}
+        \item
+        Although (\aref{eq:armijo_rule}) is not sufficient to ensure that the
+        reasonable progress along $ \mathbf{d}_t $, it is sufficient if
+        $ \eta_t $ chosen using \textit{backtracking} \cite{nocedal_opt}.
+
+        % more space for algorithm
+        \medskip
+
+	    \begin{centering}
+	    \scalebox{0.9}{
+		    \begin{algorithm}[H]
+		        % inputs
+		        \KwIn{%
+		            $ f : \mathbb{R}^n \rightarrow \mathbb{R} $,
+		            $ \mathbf{x}_{t - 1}, \mathbf{d}_t \in \mathbb{R}^n $,
+		            $ \eta_0 \in (0, \infty) $, $ \alpha, \gamma \in (0, 1) $%
+		        }
+		        % outputs
+		        \KwOut{$ \eta_t \in (0, \eta_0) $}
+		        %% pseudocode %%
+		        $ \eta_t \leftarrow \eta_0 $ \\
+		        \While{%
+		            $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) >
+		            f(\mathbf{x}_{t - 1}) + \alpha\eta_t\mathbf{d}_t^\top
+		            \nabla f(\mathbf{x}_{t - 1}) $%
+		        }{
+		            $ \eta_t \leftarrow \gamma\eta_t $ \\
+		        }
+		        \KwRet{$ \eta_t $}
+		        \label{algo:backtrack_line_search}
+		        \caption{Backtracking line search}
+		    \end{algorithm}
+		}
+	    \end{centering}
+
+        % more space for algorithm
+	    \medskip
+
+        \item
+        Algorithm \aref{algo:backtrack_line_search} guarantees a
+        $ \eta_t \in (0, \eta_0) $ that satisfies (\aref{eq:armijo_rule}). 
+        Since $ \eta_t $ is decreased from $ \eta_0 $ until $ \eta_t $
+        satisfies (\aref{eq:armijo_rule}), $ \eta_t $ is not ``too short''
+        \cite{nocedal_opt}.
+
+        \item
+        $ \alpha = 0.5 $, $ \gamma = 0.8 $ is reasonable
+        \cite{stat_learn_sparsity}, although \cite{bv_convex_opt} recommends
+        $ \alpha \in [0.01, 0.3] $, $ \gamma \in [0.1, 0.8] $ for convex $ f $.
+    \end{itemize}
+\end{frame}
 
 %\subsection{Gradient descent}
 %
