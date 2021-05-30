@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{May 29, 2021}
+\date{May 30, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -283,13 +283,12 @@
         \begin{equation*}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}) \approx
             f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}^\top
-            \nabla f(\mathbf{x}_{t - 1})
+            \nabla f(\mathbf{x}_{t - 1}) \triangleq \hat{f}(\eta_t\mathbf{d})
         \end{equation*}
         The unit vector\footnote{
             If we don't constrain $ \Vert\mathbf{d}\Vert_2 $,
             (\aref{eq:grad_descent_opt}) is unbounded below.
-        } $ \hat{\mathbf{d}} $ maximizing $ f(\mathbf{x}_{t - 1}) -
-        f(\mathbf{x}_{t - 1} + \mathbf{d}) $ solves \cite{nocedal_opt}
+        } $ \hat{\mathbf{d}} $ minimizing $ \hat{f} $ solves \cite{nocedal_opt}
         \begin{equation} \label{eq:grad_descent_opt}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{d}} &
@@ -358,38 +357,58 @@
     \medskip
 \end{frame}
 
-%\subsection{Newton's method}
-%
-%\begin{frame}{Newton's method}
-%    \begin{itemize}
-%        \item
-%        Suppose $ \forall \mathbf{x} \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $. Consider the Taylor expansion
-%        \begin{equation*}
-%            \begin{split}
-%            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) & =
-%                f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
-%                \nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\eta_t^2
-%                \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t \\
-%                & \quad + O(\eta_t^3)
-%            \end{split}
-%        \end{equation*}
-%        Keeping terms up to $ O(\eta_t^2) $, the estimate $ \hat{\mathbf{d}} $ for $ \eta_t\mathbf{d}_t $ solves
-%        \begin{equation} \label{eq:newton_descent_opt}
-%            \begin{array}{ll}
-%                \displaystyle\min_{\mathbf{d}} & \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\mathbf{d}^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}
-%            \end{array}
-%        \end{equation}
-%
-%        \item
-%        Since (\aref{eq:newton_descent_opt}) convex and $ \left|\nabla^2f(\mathbf{x}_{t - 1})\right| \ne 0 $, then $ \hat{\mathbf{d}} = \big(\nabla^2f(\mathbf{x}_{t - 1})\big)^{-1}\nabla f(\mathbf{x}_{t - 1}) $
-%
-%        \item
-%        \textit{Newton's method} chooses $ \mathbf{d}_t = -\nabla^2f(\mathbf{x}_{t - 1})^{-1}\nabla f(\mathbf{x}_{t - 1}) $, i.e. $ \mathbf{H}_t = \nabla^2f(\mathbf{x}_{t - 1}) $. $ \exists\nabla^2f $ must exist else we cannot use this choice.
-%
-%        \item
-%        $ \mathbf{d}_t $ is a descent direction $ \Leftrightarrow \forall \mathbf{x} \in \mathbb{R}^n $, $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $.
-%    \end{itemize}
-%\end{frame}
+\subsection{Newton's method}
+
+\begin{frame}{Newton's method}
+    \begin{itemize}
+        \item
+        Suppose $ \forall \mathbf{x} \in \mathbb{R}^n $,
+        $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $. By second-order Taylor
+        expansion around $ \mathbf{x}_{t - 1} $ for small\footnote{
+            In the sense that the $ O(\eta_t^3) $ terms are dominated by
+            leading order terms.        
+        } $ \eta_t $, we have $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d})
+        \approx \hat{f}(\eta_t\mathbf{d}) $, where
+        \begin{equation*}
+            \hat{f}(\eta_t\mathbf{d}) \triangleq
+                f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
+                \nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\eta_t^2
+                \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t
+        \end{equation*}
+        The vector $ \hat{\mathbf{d}} $ minimizing $ \hat{f} $ solves the
+        unconstrained QP
+        \begin{equation} \label{eq:newton_descent_opt}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{d}} &
+                    \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) +
+                    \frac{1}{2}\mathbf{d}^\top
+                    \nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}
+            \end{array}
+        \end{equation}
+
+        \item
+        (\aref{eq:newton_descent_opt}) convex,
+        $ \left|\nabla^2f(\mathbf{x}_{t - 1})\right| \ne 0 \Rightarrow
+        \hat{\mathbf{d}} = \nabla^2f(\mathbf{x}_{t - 1})^{-1}
+        \nabla f(\mathbf{x}_{t - 1}) $.
+
+        \item
+        \textit{Newton's method} chooses $ \mathbf{d}_t =
+        -\nabla^2f(\mathbf{x}_{t - 1})^{-1}\nabla f(\mathbf{x}_{t - 1}) $,
+        i.e. $ \mathbf{H}_t = \nabla^2f(\mathbf{x}_{t - 1}) $. Possible
+        $ \Leftrightarrow \exists\nabla^2f $,
+        $ \left|\nabla^2f(\mathbf{x})\right| \ne 0 $,
+        $ \forall \mathbf{x} \in \mathbb{R}^n $.
+
+        \item
+        From (\aref{eq:gen_descent_step}), $ \mathbf{d}_t $ is a descent
+        direction $ \Leftrightarrow \nabla^2f(\mathbf{x}_{t - 1}) \succ
+        \mathbf{0} $.
+    \end{itemize}
+
+    % again, more spacing for footnote
+    \medskip
+\end{frame}
 
 
 % BibTeX slide for references. should use either acm or ieeetr style
