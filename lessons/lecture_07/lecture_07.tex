@@ -364,6 +364,9 @@
 \begin{frame}{Newton's method}
     \begin{itemize}
         \item
+        Can we improve rate of convergence given more knowledge about $ f $?
+
+        \item
         Suppose $ \forall \mathbf{x} \in \mathbb{R}^n $,
         $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $. By second-order Taylor
         expansion around $ \mathbf{x}_{t - 1} $ for small\footnote{
@@ -378,7 +381,7 @@
                 \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t
         \end{equation*}
         The vector $ \hat{\mathbf{d}} $ minimizing $ \hat{f}_{t; T_2} $ solves
-        the unconstrained QP
+        the unconstrained convex QP
         \begin{equation} \label{eq:newton_descent_opt}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{d}} &
@@ -389,29 +392,22 @@
         \end{equation}
 
         \item
-        (\aref{eq:newton_descent_opt}) convex,
-        $ \left|\nabla^2f(\mathbf{x}_{t - 1})\right| \ne 0 \Rightarrow
-        \hat{\mathbf{d}} = \nabla^2f(\mathbf{x}_{t - 1})^{-1}
-        \nabla f(\mathbf{x}_{t - 1}) $.
-
-        \item
-        \textit{Newton's method} chooses $ \mathbf{d}_t =
-        -\nabla^2f(\mathbf{x}_{t - 1})^{-1}\nabla f(\mathbf{x}_{t - 1}) $,
-        i.e. $ \mathbf{H}_t = \nabla^2f(\mathbf{x}_{t - 1}) $. Possible
-        $ \Leftrightarrow \exists\nabla^2f $,
-        $ \left|\nabla^2f(\mathbf{x})\right| \ne 0 $,
+        Newton's method chooses $ \mathbf{d}_t =
+        -\nabla^2f(\mathbf{x}_{t - 1})^{-1}\nabla f(\mathbf{x}_{t - 1}) =
+        \hat{\mathbf{d}} $, i.e. $ \mathbf{H}_t =
+        \nabla^2f(\mathbf{x}_{t - 1}) $. Possible $ \Leftrightarrow
+        \exists\nabla^2f $, $ \left|\nabla^2f(\mathbf{x})\right| \ne 0 $,
         $ \forall \mathbf{x} \in \mathbb{R}^n $.
 
         \item
-        From (\aref{eq:gen_descent_step}), $ \mathbf{d}_t $ is a descent
-        direction $ \Leftrightarrow \nabla^2f(\mathbf{x}_{t - 1}) \succ
-        \mathbf{0} $.
+        From (\aref{eq:gen_descent_step}), the Newton $ \mathbf{d}_t $ is a
+        descent direction $ \Leftrightarrow \nabla^2f(\mathbf{x}_{t - 1})
+        \succ \mathbf{0} $.
     \end{itemize}
 
     % again, more spacing for footnote
     \medskip
 \end{frame}
-
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
