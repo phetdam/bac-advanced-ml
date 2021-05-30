@@ -268,37 +268,94 @@
     \end{itemize}
 \end{frame}
 
-%\subsection{Gradient descent}
-%
-%\begin{frame}{Gradient descent}
-%    \begin{itemize}
-%        \item
-%        \textit{Gradient descent} chooses $ \mathbf{d}_t = -\nabla f(\mathbf{x}_{t - 1}) $, i.e. $ \mathbf{H}_t = \mathbf{I} $. Consider a first-order Taylor approximation around $ \mathbf{x}_{t - 1} $ for small\footnote{
-%            Again, in the sense that $ \eta_t\mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) $ dominates $ O(\eta_t^2) $ terms.
-%        } $ \eta_t $, i.e.
-%        \begin{equation*}
-%            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}) \approx f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1})
-%        \end{equation*}
-%        The unit vector\footnote{
-%            If we don't constrain $ \Vert\mathbf{d}\Vert_2 $, (\aref{eq:grad_descent_opt}) is unbounded below.
-%        } $ \hat{\mathbf{d}} $ maximizing $ f(\mathbf{x}_{t - 1}) - f(\mathbf{x}_{t - 1} + \mathbf{d}) $ solves \cite{nocedal_opt}
-%        \begin{equation} \label{eq:grad_descent_opt}
-%            \begin{array}{ll}
-%                \displaystyle\min_{\mathbf{d}} & \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) \\
-%                \text{s.t.} & \Vert\mathbf{d}\Vert_2 = 1
-%            \end{array}
-%        \end{equation}
-%
-%        \item
-%        Since $ \forall \mathbf{d} \in \mathbb{R}^n $, $ \Vert\mathbf{d}\Vert_2 = 1 $, $ \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) = \Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2\cos\theta $, solution to (\aref{eq:grad_descent_opt}) results in $ \cos\theta = -1 \Leftrightarrow \theta = \pi \Leftrightarrow \hat{\mathbf{d}} = -\frac{\nabla f(\mathbf{x}_{t - 1})}{\Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2} $.
-%
-%        \item
-%        Gradient descent sometimes called the \textit{method of steepest descent} since $ \mathbf{d}_t \propto \hat{\mathbf{d}} $ giving the direction of greatest decrease in $ f $.
-%    \end{itemize}
-%
-%    % spacing for footnotes
-%    \medskip
-%\end{frame}
+\subsection{Gradient descent}
+
+\begin{frame}{Gradient descent}
+    \begin{itemize}
+        \item
+        Gradient descent chooses $ \mathbf{d}_t =
+        -\nabla f(\mathbf{x}_{t - 1}) $, i.e. $ \mathbf{H}_t = \mathbf{I} $.
+        By first-order Taylor approximation around $ \mathbf{x}_{t - 1} $ for
+        small enough\footnote{
+            Again, in the sense that $ \eta_t\mathbf{d}^\top
+            \nabla f(\mathbf{x}_{t - 1}) $ dominates $ O(\eta_t^2) $ terms.
+        } $ \eta_t $, we have
+        \begin{equation*}
+            f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}) \approx
+            f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}^\top
+            \nabla f(\mathbf{x}_{t - 1})
+        \end{equation*}
+        The unit vector\footnote{
+            If we don't constrain $ \Vert\mathbf{d}\Vert_2 $,
+            (\aref{eq:grad_descent_opt}) is unbounded below.
+        } $ \hat{\mathbf{d}} $ maximizing $ f(\mathbf{x}_{t - 1}) -
+        f(\mathbf{x}_{t - 1} + \mathbf{d}) $ solves \cite{nocedal_opt}
+        \begin{equation} \label{eq:grad_descent_opt}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{d}} &
+                    \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) \\
+                \text{s.t.} & \Vert\mathbf{d}\Vert_2 = 1
+            \end{array}
+        \end{equation}
+
+        \item
+        Since $ \forall \mathbf{d} \in \mathbb{R}^n $,
+        $ \Vert\mathbf{d}\Vert_2 = 1 $, $ \mathbf{d}^\top
+        \nabla f(\mathbf{x}_{t - 1}) = \Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2
+        \cos\theta $, solution to (\aref{eq:grad_descent_opt}) results in
+        $ \cos\theta = -1 \Leftrightarrow \theta = \pi \Leftrightarrow
+        \hat{\mathbf{d}} = -\frac{
+            \nabla f(\mathbf{x}_{t - 1})
+        }{\Vert\nabla f(\mathbf{x}_{t - 1})\Vert_2} $.
+
+        \item
+        $ -\nabla f(\mathbf{x}_{t - 1}) $ is thus called the
+        \textit{direction of steepest descent}.
+    \end{itemize}
+
+    % spacing for footnotes
+    \medskip
+\end{frame}
+
+\begin{frame}{Gradient descent}
+    \begin{itemize}
+        \item
+        Choosing $ \mathbf{d}_t = -\nabla f(\mathbf{x}_{t - 1}) $ leads to the
+        simplest gradient-based descent algorithm with the lowest computational
+        cost.
+
+        \item
+        However, gradient descent has a slow \textit{rate of convergence},
+        roughly meaning that error reduction per iteration is relatively slow.
+
+        \item
+        In general, if $ \exists \nabla^2f $ and gradient descent converges to
+        a local minimum $ \mathbf{x}^* $ where $ \nabla^2f(\mathbf{x}^*) \succ
+        \mathbf{0} $, $ \forall $ sufficiently large $ t $, we have
+        \begin{equation} \label{eq:grad_descent_conv}
+            f(\mathbf{x}_t) - f(\mathbf{x}^*) \le q^2(f(\mathbf{x}_{t - 1}) -
+            f(\mathbf{x}^*))
+        \end{equation}
+        Here $ q \in \left(\frac{\lambda_{\max} -
+        \lambda_{\min}}{\lambda_{\max} + \lambda_{\min}}, 1\right) $,
+        $ \lambda_{\max} $, $ \lambda_{\min} $ respectively the largest and
+        smallest eigenvalues of $ \nabla^2f(\mathbf{x}^*) $. 
+        (\aref{eq:grad_descent_conv}) indicates
+        $ Q $\textit{-linear convergence}.
+
+        \item
+        In other words, for large enough $ t $, the next estimate of
+        $ \mathbf{x}^* $ reduces the error by some constant dependent on the
+        \textit{condition}\footnote{
+            Since $ \nabla^2f(\mathbf{x}^*) \succ \mathbf{0} $, a larger
+            \textit{condition number} $ \kappa\big(\nabla^2f(\mathbf{x}^*)\big)
+            \Rightarrow \lambda_{\max} / \lambda_{\min} $ is larger.
+        } of $ \nabla^2 f(\mathbf{x}^*) $.
+    \end{itemize}
+
+    % more space for footnote
+    \medskip
+\end{frame}
 
 %\subsection{Newton's method}
 %
