@@ -283,12 +283,14 @@
         \begin{equation*}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}) \approx
             f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}^\top
-            \nabla f(\mathbf{x}_{t - 1}) \triangleq \hat{f}(\eta_t\mathbf{d})
+            \nabla f(\mathbf{x}_{t - 1}) \triangleq
+            \hat{f}_{t; T_1}(\eta_t\mathbf{d})
         \end{equation*}
         The unit vector\footnote{
             If we don't constrain $ \Vert\mathbf{d}\Vert_2 $,
             (\aref{eq:grad_descent_opt}) is unbounded below.
-        } $ \hat{\mathbf{d}} $ minimizing $ \hat{f} $ solves \cite{nocedal_opt}
+        } $ \hat{\mathbf{d}} $ minimizing $ \hat{f}_{t; T_1} $ solves
+        \cite{nocedal_opt}
         \begin{equation} \label{eq:grad_descent_opt}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{d}} &
@@ -367,16 +369,16 @@
         expansion around $ \mathbf{x}_{t - 1} $ for small\footnote{
             In the sense that the $ O(\eta_t^3) $ terms are dominated by
             leading order terms.        
-        } $ \eta_t $, we have $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d})
-        \approx \hat{f}(\eta_t\mathbf{d}) $, where
+        } $ \eta_t $, $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d})
+        \approx \hat{f}_{t; T_2}(\eta_t\mathbf{d}) $, where
         \begin{equation*}
-            \hat{f}(\eta_t\mathbf{d}) \triangleq
+            \hat{f}_{f; T_2}(\eta_t\mathbf{d}) \triangleq
                 f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
                 \nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\eta_t^2
                 \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t
         \end{equation*}
-        The vector $ \hat{\mathbf{d}} $ minimizing $ \hat{f} $ solves the
-        unconstrained QP
+        The vector $ \hat{\mathbf{d}} $ minimizing $ \hat{f}_{t; T_2} $ solves
+        the unconstrained QP
         \begin{equation} \label{eq:newton_descent_opt}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{d}} &
