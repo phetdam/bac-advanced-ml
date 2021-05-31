@@ -322,9 +322,8 @@
 \begin{frame}{Gradient descent}
     \begin{itemize}
         \item
-        Choosing $ \mathbf{d}_t = -\nabla f(\mathbf{x}_{t - 1}) $ leads to the
-        simplest gradient-based descent algorithm with the lowest computational
-        cost.
+        Choosing $ \mathbf{d}_t = -\nabla f(\mathbf{x}_{t - 1}) $ is simple
+        and computationally cheap.
 
         \item
         However, gradient descent has a slow \textit{rate of convergence},
@@ -333,7 +332,11 @@
         \item
         In general, if $ \exists \nabla^2f $ and gradient descent converges to
         a local minimum $ \mathbf{x}^* $ where $ \nabla^2f(\mathbf{x}^*) \succ
-        \mathbf{0} $, $ \forall $ sufficiently large $ t $, we have
+        \mathbf{0} $, $ \forall $ sufficiently large $ t $, we have\footnote{
+            (\aref{eq:grad_descent_conv}) assumes
+            $ \eta_t = \arg\min_{\eta > 0}f(\mathbf{x}_{t - 1} - \eta
+            \nabla f(\mathbf{x}_{t - 1})) $, i.e. \textit{exact} line search.
+        }
         \cite{nocedal_opt}
         \begin{equation} \label{eq:grad_descent_conv}
             f(\mathbf{x}_t) - f(\mathbf{x}^*) \le q^2(f(\mathbf{x}_{t - 1}) -
@@ -371,15 +374,15 @@
         Suppose $ \forall \mathbf{x} \in \mathbb{R}^n $,
         $ \nabla^2f(\mathbf{x}) \succ \mathbf{0} $. By second-order Taylor
         expansion around $ \mathbf{x}_{t - 1} $ for small\footnote{
-            In the sense that the $ O(\eta_t^3) $ terms are dominated by
-            leading order terms.        
-        } $ \eta_t $, $ f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d})
-        \approx \hat{f}_{t; T_2}(\eta_t\mathbf{d}) $, where
+            In the sense that the $ O(\Vert\mathbf{d}\Vert_2^3) $ terms are
+            dominated by leading order terms.        
+        } $ \mathbf{d} \in \mathbb{R}^n $, $ f(\mathbf{x}_{t - 1} +
+        \mathbf{d}) \approx \hat{f}_{t; T_2}(\mathbf{d}) $, where
         \begin{equation*}
-            \hat{f}_{f; T_2}(\eta_t\mathbf{d}) \triangleq
-                f(\mathbf{x}_{t - 1}) + \eta_t\mathbf{d}_t^\top
-                \nabla f(\mathbf{x}_{t - 1}) + \frac{1}{2}\eta_t^2
-                \mathbf{d}_t^\top\nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}_t
+            \hat{f}_{f; T_2}(\mathbf{d}) \triangleq f(\mathbf{x}_{t - 1}) +
+                \mathbf{d}^\top\nabla f(\mathbf{x}_{t - 1}) +
+                \frac{1}{2}\mathbf{d}^\top
+                \nabla^2f(\mathbf{x}_{t - 1})\mathbf{d}
         \end{equation*}
         The vector $ \hat{\mathbf{d}} $ minimizing $ \hat{f}_{t; T_2} $ solves
         the unconstrained convex QP
@@ -400,22 +403,58 @@
         \exists\nabla^2f $, $ \left|\nabla^2f(\mathbf{x})\right| \ne 0 $,
         $ \forall \mathbf{x} \in \mathbb{R}^n $.
 
+
         \item
         From (\aref{eq:gen_descent_step}), the Newton $ \mathbf{d}_t $ is a
         descent direction $ \Leftrightarrow \nabla^2f(\mathbf{x}_{t - 1})
-        \succ \mathbf{0} $.
+        \succ \mathbf{0} $\footnote{
+            If $ \nabla^2 f(\mathbf{x}_{t - 1}) \not\succ \mathbf{0} $,
+            sometimes $ \mathbf{d}_t \leftarrow \tilde{\mathbf{H}}_t^{-1}\nabla f(\mathbf{x}_{t - 1}) $, $ \tilde{\mathbf{H}}_t \succ \mathbf{0} $ based on $ \nabla^2f(\mathbf{x}_{t - 1}) $ \cite{nocedal_opt}.
+        }.
     \end{itemize}
 
     % again, more spacing for footnote
+    \bigskip
+\end{frame}
+
+\begin{frame}{Newton's method}
+    \begin{itemize}
+        \item
+        More assumptions on $ f $ are required to describe local convergence.
+
+        \item
+        % we can't use footmisc for multiple footnotes because hyperref does
+        % not really place nice with footmisc. the quick and acceptably dirty
+        % method is to use \textsuperscript{,} between footnotes.
+        Let $ \mathbf{x}^* $ be a local minimum s.t. $ \forall \mathbf{x}, \mathbf{z} \in \{\mathbf{x}' : \Vert\mathbf{x}' - \mathbf{x}^*\Vert_2 < r\} $, $ r > 0 $, $ \Vert\nabla^2f(\mathbf{x}) - \nabla^2f(\mathbf{z})\Vert_2 \le L\Vert\mathbf{x} - \mathbf{z}\Vert_2 $, $ \nabla^2f(\mathbf{x}^*) \succ \mathbf{0} $. Then\footnote{
+            The \textit{spectral norm} $ \Vert\mathbf{A}\Vert_2 $ of $ \mathbf{A} \in \mathbb{R}^{m \times n} $ gives the largest singular value of $ \mathbf{A} $.
+        }\textsuperscript{,}\footnote{
+            (\aref{eq:newton_conv}) requires $ \exists r^* > 0 $ s.t. $ \Vert\mathbf{x}_0  - \mathbf{x}^*\Vert_2 \le \min\big\{r^*, (2L\Vert\nabla^2f(\mathbf{x}^*)^{-1}\Vert_2)^{-1}\big\} $, $ \forall t \in \mathbb{N} $,
+            \begin{equation*}
+                \Vert\mathbf{x}_{t - 1} - \mathbf{x}^*\Vert_2 \le r^* \Rightarrow \big\Vert\nabla^2f(\mathbf{x}_{t - 1})^{-1}\big\Vert_2 \le 2\big\Vert\nabla^2f(\mathbf{x}^*)^{-1}\big\Vert_2
+            \end{equation*}
+            % remove excess empty space
+            \vspace{-10 pt}
+        } \cite{nocedal_opt},
+        \begin{equation} \label{eq:newton_conv}
+            \Vert\mathbf{x}_t - \mathbf{x}^*\Vert_2 \le L\left\Vert\nabla^2f(\mathbf{x}^*)^{-1}\right\Vert_2\Vert\mathbf{x}_{t - 1} - \mathbf{x}^*\Vert_2^2
+        \end{equation}
+        (\aref{eq:newton_conv}) indicates $ Q $\textit{-quadratic convergence}, much faster than $ Q $-linear.
+
+        \item
+        $ \forall $ large enough $ t $, $ \eta_t = 1 $, the ``natural'' step size, satisfies (\aref{eq:armijo_rule}) \cite{nocedal_opt}.
+
+        \item
+        Note that even if $ \exists \nabla^2 f $, $ \nabla^2f(\mathbf{x}) $ is expensive to compute and store for large $ n $. In supervised learning, often $ \nabla^2 f $ unknown and/or $ n $ large.
+    \end{itemize}
+
+    % make non-footnote text aligned better
     \medskip
 \end{frame}
 
-%\begin{frame}{Newton's method}
-%    \begin{itemize}
-%        \item
-%        
-%    \end{itemize}
-%\end{frame}
+\section{Extending gradient descent}
+
+\subsection{Proximal gradient descent}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
