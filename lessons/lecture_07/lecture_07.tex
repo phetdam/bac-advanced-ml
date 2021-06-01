@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{May 30, 2021}
+\date{June 1, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -514,22 +514,16 @@
 
         \item
         Since $ \not\exists\nabla f $, we cannot use methods that require
-        $ \nabla f $. However, consider the \textit{Moreau envelope}
-        $ M_{\eta h} $ of $ h $, $ \eta \in (0, \infty) $, where
-        \cite{prox_algos}
-        \begin{equation} \label{eq:moreau_envelope}
-            M_{\eta h}(\mathbf{x}) \triangleq \inf_\mathbf{z}\left\{
-                \frac{1}{2\eta}\Vert\mathbf{z} - \mathbf{x}\Vert_2^2 +
-                h(\mathbf{z})
-            \right\}
+        $ \nabla f $. However, we can use \textit{proximal gradient descent},
+        where given $ \mathbf{x}_{t - 1} $, $ \eta_t $, we have
+        \cite{stat_learn_sparsity}
+        \begin{equation} \label{eq:prox_grad_update}
+            \mathbf{x}_t = \operatorname{prox}_{\eta_t h}(\mathbf{x}_{t - 1} -
+            \eta_t\nabla g(\mathbf{x}_{t - 1}))
         \end{equation}
-        $ M_{\eta h} $ has the same minimizers as $ h $, continuous
-        $ \nabla M_{\eta h} $, and can be thought of as a smoothed or
-        regularized version of $ \eta h $ \cite{prox_algos}.
-
-        \item
-        The Moreau envelope motivates the \textit{proximal operator}
-        $ \operatorname{prox}_{\eta h} $, where
+        The \textit{proximal operator} $ \operatorname{prox}_{\eta h} $ of
+        convex $ h $, $ \eta \in (0, \infty) $, is s.t.
+        \cite{stat_learn_sparsity}
         \begin{equation} \label{eq:prox_operator}
             \operatorname{prox}_{\eta h}(\mathbf{x}) \triangleq
             \arg\min_\mathbf{z}\left\{
@@ -537,41 +531,119 @@
                 h(\mathbf{z})
             \right\}
         \end{equation}
-        $ \operatorname{prox}_{\eta h}(\mathbf{x}) $ returns the point
-        $ \mathbf{z}' $ that achieves the infimum $ M_{\eta h}(\mathbf{x}) $
-        \cite{prox_algos}.
+
+        \item
+        One possible\footnote{
+            \cite{prox_algos} provides alternative interpretations of
+            $ \operatorname{prox}_{\eta h} $ and proximal gradient descent.
+        } interpretation of proximal gradient descent is as a case of
+        \textit{majorization-minimization}, as described in \cite{prox_algos}.
     \end{itemize}
 
-    % squeeze text a bit for aesthetic
+    % more space for footnote
     \medskip
 \end{frame}
 
-%\begin{frame}{Proximal gradient descent}
-%    \begin{itemize}
-%        \item
-%        $ M_{\eta h} $, $ \operatorname{prox}_{\eta h} $ share many 
-%        relationships. In particular, we note that \cite{prox_algos}
-%        \begin{equation} \label{eq:prox_moreau_grad}
-%            \operatorname{prox}_{\eta h}(\mathbf{x}) = \mathbf{x} -
-%            \eta\nabla M_{\eta h}(\mathbf{x})
-%        \end{equation}
-%        Therefore, given an estimate $ \mathbf{x}_{t - 1} $ for a minimizer
-%        $ \mathbf{x}^* $ of $ M_{\eta h} $, also a minimizer for $ h $,
-%        $ \operatorname{prox}_{\eta h}(\mathbf{x}_{t - 1}) $ gives the
-%        gradient descent update \cite{prox_algos}.
-%
-%        \item
-%        \begin{equation} \label{eq:prox_grad_update}
-%            \mathbf{x}_t = \operatorname{prox}_{\eta_t h}(\mathbf{x}_{t - 1} -
-%            \eta_t\nabla g(\mathbf{x}_{t - 1}))
-%        \end{equation}
-%    \end{itemize}
-%\end{frame}
+\begin{frame}{Proximal gradient descent}
+    \begin{itemize}
+        \item
+        Given $ \mathbf{x}_{t - 1} $, majorization-minimization chooses
+        $ \mathbf{x}_t $ s.t. \cite{prox_algos}
+        \begin{equation} \label{eq:mm_update}
+            \mathbf{x}_t = \arg\min_\mathbf{x}\hat{f}(\mathbf{x},
+            \mathbf{x}_{t - 1})
+        \end{equation}
+        $ \hat{f} $ is called a \textit{majorizing function}\footnote{
+            One can also say that $ \hat{f} $ \textit{majorizes} $ f $.
+        } for $ f $, where $ \forall \mathbf{x}, \mathbf{z} \in \mathbb{R}^n $,
+        $ \hat{f}(\cdot, \mathbf{z}) $ is convex and
+        $ \hat{f}(\mathbf{x}, \mathbf{z}) \ge f(\mathbf{x}) $,
+        $ \hat{f}(\mathbf{x}, \mathbf{x}) = f(\mathbf{x}) $ \cite{prox_algos}.
+
+        \item
+        Majorization-minimization ``works'' since $ \forall t \in \mathbb{N} $,
+        (\aref{eq:mm_update}) guarantees that $ f(\mathbf{x}_t) \le
+        \hat{f}(\mathbf{x}_t, \mathbf{x}_{t - 1}) \le
+        \hat{f}(\mathbf{x}_{t - 1}, \mathbf{x}_{t - 1}) =
+        f(\mathbf{x}_{t - 1}) $ \cite{stat_learn_sparsity}.
+
+        \item
+        Suppose $ \forall \mathbf{x}, \mathbf{z} \in \mathbb{R}^n $,
+        $ \exists L > 0 $ s.t. $ \Vert\nabla g(\mathbf{x}) -
+        \nabla g(\mathbf{z})\Vert_2 \le L\Vert\mathbf{x} -
+        \mathbf{z}\Vert_2 $. Let
+        \begin{equation} \label{eq:prox_grad_mm_func}
+            \hat{f}_\eta(\mathbf{x}, \mathbf{z}) \triangleq f(\mathbf{z}) +
+            (\mathbf{x} - \mathbf{z})^\top\nabla g(\mathbf{z}) +
+            \frac{1}{2\eta}\Vert\mathbf{x} - \mathbf{z}\Vert_2^2 +
+            h(\mathbf{x})
+        \end{equation}
+        For $ \eta \in (0, 1 / L] $, $ \forall \mathbf{x} \in \mathbb{R}^n $,
+        $ \hat{f}_\eta $ is a majorizing function for $ f $ \cite{prox_algos}.
+    \end{itemize}
+
+    % aesthetic, push text up a bit
+    \medskip
+\end{frame}
+
+\begin{frame}{Proximal gradient descent}
+    \begin{itemize}
+        \item
+        Using $ \hat{f}_{\eta_t} $ from (\aref{eq:prox_grad_mm_func}), the
+        majorization-minimization update is actually identical\footnote{
+            For $ \eta_t > 1 / L $, $ \hat{f}_{\eta_t} $ no longer majorizes
+            $ f $, but the equivalence still holds.
+        } to the proximal gradient update in (\aref{eq:prox_grad_update})
+        \cite{prox_algos}, i.e.
+        \begin{equation} \label{eq:prox_mm_update_equiv}
+            \mathbf{x}_t = \arg\min_\mathbf{x}
+            \hat{f}_{\eta_t}(\mathbf{x}, \mathbf{x}_{t - 1}) =
+            \operatorname{prox}_{\eta_t h}(\mathbf{x}_{t - 1} -
+            \eta_t\nabla g(\mathbf{x}_{t - 1}))
+        \end{equation}
+        When $ h = 0 $, i.e. $ f = g $, (\aref{eq:prox_mm_update_equiv}) is
+        the gradient descent update for $ g $.
+
+        \item
+        In particular, when $ h = \lambda\Vert\cdot\Vert_1 $,
+        $ \lambda \in (0, \infty) $, (\aref{eq:prox_grad_update}) reduces to
+        \begin{equation} \label{eq:prox_grad_update_l1}
+            \mathbf{x}_t = \mathcal{S}_{\eta_t\lambda}(\mathbf{x}_{t - 1} -
+            \eta_t\nabla g(\mathbf{x}_{t - 1}))
+        \end{equation}
+        $ \mathcal{S}_\eta $ is the \textit{soft-thresholding operator}, with
+        $ j $th component \cite{stat_learn_sparsity}
+        \begin{equation} \label{eq:soft_threshold}
+            [\mathcal{S}_\eta(\mathbf{x})]_j =
+            \operatorname{sgn}(x_j)\max\{0, |x_j| - \eta\}        
+        \end{equation}
+
+        \item
+        $ \mathcal{S}_\eta $ is quite cheap\footnote{
+            For most $ h $ of interest in statistics,
+            $ \operatorname{prox}_{\eta h} $ is not too computationally
+            expensive \cite{stat_learn_sparsity}.
+        } to compute, making proximal gradient descent a useful method for
+        minimization with an $ \ell^1 $ norm penalty.
+    \end{itemize}
+
+    % spacing for footnotes
+    \bigskip
+\end{frame}
 
 
 %\subsection{Acceleration}
 %
 %\begin{frame}{Acceleration}
+%
+%\end{frame}
+
+%\appendix
+%\section{Appendix}
+%
+%\subsection{Proof of}
+%
+%\begin{frame}{Proof}
 %
 %\end{frame}
 
