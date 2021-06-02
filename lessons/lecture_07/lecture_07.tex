@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{June 1, 2021}
+\date{June 2, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -684,45 +684,42 @@
     \medskip
 \end{frame}
 
-%\begin{frame}{Nesterov's acceleration}
-%    \begin{itemize}
-%        \item
-%        Using the accelerated update in (\aref{eq:prox_grad_update_accel}),
-%        then $ \exists C_2 > 0 $ s.t. \cite{stat_learn_sparsity}
-%        \begin{equation} \label{eq:prox_grad_accel_conv}
-%            f(\mathbf{x}_t) - f(\mathbf{x}^*) \le \frac{C_2}{(t + 1)^2}
-%            \Vert\mathbf{x}_0 - \mathbf{x}^*\Vert_2
-%        \end{equation}
-%        The accelerated updates result in $ f(\mathbf{x}_t) - f(\mathbf{x}^*) $
-%        being $ O(1 / t^2) $, a significant improvement in estimation error
-%        over (\aref{eq:prox_grad_conv}).
-%
-%        \item
-%        Nesterov's acceleration reduces zig-zagging of
-%        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ on certain objectives
-%        \cite{stat_learn_sparsity}, e.g. convex $ g $ or $ g|_\mathcal{C} $
-%        with anisotropic sublevel sets\footnote{
-%            Roughly speaking, convex $ g $ or $ g|_\mathcal{C} $ that have
-%            highly elongated contours.
-%        } \cite{bv_convex_opt}.
-%
-%        \item
-%        (\aref{eq:prox_grad_update_accel_a}) shows that the gradient step in
-%        $ \operatorname{prox}_{\eta_t h} $ is evaluated at an
-%        \textbf{extrapolation} from $ \mathbf{x}_{t - 1} $ along
-%        $ \mathbf{x}_{t - 1} - \mathbf{x}_{t - 2} $.
-%
-%        \item
-%        Gradient steps are evaluated using
-%        $ \{\tilde{\mathbf{x}}_t\}_{t \in \mathbb{N}} $, which from
-%        (\aref{eq:prox_grad_update_accel_b}) zig-zags \textbf{more} than
-%        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $.
-%
-%        \item
-%        (\aref{eq:prox_grad_update_accel_b}) shows that the extrapolation
-%        increases with $ t $.
-%    \end{itemize}
-%\end{frame}
+\begin{frame}{Nesterov's acceleration}
+    \begin{itemize}
+        \item
+        Using the accelerated update in (\aref{eq:prox_grad_update_accel}),
+        then $ \exists C_2 > 0 $ s.t. \cite{stat_learn_sparsity}
+        \begin{equation} \label{eq:prox_grad_accel_conv}
+            f(\mathbf{x}_t) - f(\mathbf{x}^*) \le \frac{C_2}{(t + 1)^2}
+            \Vert\mathbf{x}_0 - \mathbf{x}^*\Vert_2
+        \end{equation}
+        The accelerated updates result in $ f(\mathbf{x}_t) - f(\mathbf{x}^*) $
+        being $ O(1 / t^2) $, a significant improvement in estimation error
+        over (\aref{eq:prox_grad_conv}).
+
+        \item
+        Nesterov's acceleration reduces zig-zagging of
+        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ on certain objectives
+        \cite{stat_learn_sparsity}, e.g. convex $ g $ or $ g|_\mathcal{C} $
+        with anisotropic sublevel sets\footnote{
+            Roughly speaking, convex $ g $ or $ g|_\mathcal{C} $ that have
+            highly elongated contours.
+        } \cite{bv_convex_opt}.
+
+        \item
+        Given $ \mathbf{x}_{t - 1} $, can interpret as first overshooting
+        along $ \mathbf{x}_{t - 1} - \mathbf{x}_{t - 2} $ (extrapolating)
+        before a correcting proximal gradient step.
+
+        \item
+        The gradient step opposes the overshoot, resulting in
+        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ zig-zagging less and more
+        efficient progress towards $ \mathbf{x}^* $.
+    \end{itemize}
+
+    % more spacing for footnote
+    \medskip
+\end{frame}
 
 %\appendix
 %\section{Appendix}
