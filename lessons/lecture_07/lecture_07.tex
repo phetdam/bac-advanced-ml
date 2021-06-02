@@ -589,8 +589,9 @@
 \begin{frame}{Proximal gradient descent}
     \begin{itemize}
         \item
-        Using $ \hat{f}_{\eta_t} $ from (\aref{eq:prox_grad_mm_func}), the
-        majorization-minimization update is actually identical\footnote{
+        Using $ \hat{f}_{\eta_t} $ from (\aref{eq:prox_grad_mm_func}),
+        $ \eta_t \in (0, 1 / L] $, the majorization-minimization update is
+        identical\footnote{
             For $ \eta_t > 1 / L $, $ \hat{f}_{\eta_t} $ no longer majorizes
             $ f $, but the equivalence still holds.
         } to the proximal gradient update in (\aref{eq:prox_grad_update})
