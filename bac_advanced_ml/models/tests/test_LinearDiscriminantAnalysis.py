@@ -2,8 +2,7 @@ __doc__ = "Unit tests for the LinearDiscriminantAnalysis class."
 
 import numpy as np
 import pytest
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as \
-    _LinearDiscriminantAnalysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as _LDA
 
 # pylint: disable=relative-beyond-top-level
 from ..supervised import LinearDiscriminantAnalysis
@@ -26,9 +25,7 @@ def test_res_binary(blob_bin, shrinkage):
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blob_bin
     # fit scikit-learn model and our model
-    _lc = _LinearDiscriminantAnalysis(solver="lsqr", shrinkage=shrinkage).fit(
-        X_train, y_train
-    )
+    _lc = _LDA(solver="lsqr", shrinkage=shrinkage).fit(X_train, y_train)
     lc = LinearDiscriminantAnalysis(shrinkage=shrinkage).fit(X_train, y_train)
     # check class labels, priors, means, covariance
     np.testing.assert_allclose(_lc.classes_, lc.classes_)
@@ -64,9 +61,7 @@ def test_res_multi(blob_multi, shrinkage):
     # unpack data from fixture
     X_train, X_test, y_train, y_test = blob_multi
     # fit scikit-learn model and our model
-    _lc = _LinearDiscriminantAnalysis(solver="lsqr", shrinkage=shrinkage).fit(
-        X_train, y_train
-    )
+    _lc = _LDA(solver="lsqr", shrinkage=shrinkage).fit(X_train, y_train)
     lc = LinearDiscriminantAnalysis(shrinkage=shrinkage).fit(X_train, y_train)
     # check class labels, priors, means, covariance
     np.testing.assert_allclose(_lc.classes_, lc.classes_)
