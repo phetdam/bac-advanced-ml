@@ -193,6 +193,7 @@ class LinearDiscriminantAnalysis(BaseEstimator):
 @pytest.fixture(scope="session")
 def blob_bin():
     """Generated two-class blob classification problem with train/test split.
+
     Returns
     -------
     X_train : numpy.ndarray
