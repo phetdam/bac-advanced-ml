@@ -126,7 +126,7 @@
             broad class of methods.
         }, which computes a \textit{search direction}
         $ \mathbf{d}_t \in \mathbb{R}^n $, \textit{step size}
-        $ \eta_t \in (0, \infty) $ s.t. \cite{nocedal_opt}
+        $ \eta_t > 0 $ s.t. \cite{nocedal_opt}
         \begin{equation} \label{eq:line_search_eq}
             \mathbf{x}_t = \mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t
         \end{equation}
@@ -553,10 +553,9 @@
             \mathbf{x}_t = \arg\min_\mathbf{x}\hat{f}(\mathbf{x},
             \mathbf{x}_{t - 1})
         \end{equation}
-        $ \hat{f} $ is called a \textit{majorizing function}\footnote{
-            One can also say that $ \hat{f} $ \textit{majorizes} $ f $.
-        } for $ f $, where $ \forall \mathbf{x}, \mathbf{z} \in \mathbb{R}^n $,
-        $ \hat{f}(\cdot, \mathbf{z}) $ is convex and
+        $ \hat{f} $ is called a \textit{majorizing function} for $ f $, or
+        \textit{majorizes} $ f $, where $ \forall \mathbf{x}, \mathbf{z} \in
+        \mathbb{R}^n $, $ \hat{f}(\cdot, \mathbf{z}) $ is convex and
         $ \hat{f}(\mathbf{x}, \mathbf{z}) \ge f(\mathbf{x}) $,
         $ \hat{f}(\mathbf{x}, \mathbf{x}) = f(\mathbf{x}) $ \cite{prox_algos}.
 
@@ -568,10 +567,12 @@
         f(\mathbf{x}_{t - 1}) $ \cite{stat_learn_sparsity}.
 
         \item
-        Suppose $ \forall \mathbf{x}, \mathbf{z} \in \mathbb{R}^n $,
-        $ \exists L > 0 $ s.t. $ \Vert\nabla g(\mathbf{x}) -
-        \nabla g(\mathbf{z})\Vert_2 \le L\Vert\mathbf{x} -
-        \mathbf{z}\Vert_2 $. Let
+        Suppose $ \nabla g $ is $ L $-Lipschitz\footnote{
+            $ \nabla g $ $ L $-Lipschitz $ \Rightarrow \exists L > 0 $ s.t.
+            $ \forall \mathbf{x}, \mathbf{z} \in \mathbb{R}^n $,
+            $ \Vert\nabla g(\mathbf{x}) - \nabla g(\mathbf{z})\Vert_2 \le
+            L\Vert\mathbf{x} - \mathbf{z}\Vert_2 $.
+        }. Define $ \hat{f}_\eta : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R} $, where
         \begin{equation} \label{eq:prox_grad_mm_func}
             \hat{f}_\eta(\mathbf{x}, \mathbf{z}) \triangleq f(\mathbf{z}) +
             (\mathbf{x} - \mathbf{z})^\top\nabla g(\mathbf{z}) +
@@ -582,7 +583,7 @@
         $ \hat{f}_\eta $ is a majorizing function for $ f $ \cite{prox_algos}.
     \end{itemize}
 
-    % aesthetic, push text up a bit
+    % more space for footnote
     \medskip
 \end{frame}
 
@@ -607,7 +608,7 @@
 
         \item
         In particular, when $ h = \lambda\Vert\cdot\Vert_1 $,
-        $ \lambda \in (0, \infty) $, (\aref{eq:prox_grad_update}) reduces to
+        $ \lambda > 0 $, (\aref{eq:prox_grad_update}) reduces to
         \begin{equation} \label{eq:prox_grad_update_l1}
             \mathbf{x}_t = \mathcal{S}_{\eta_t\lambda}(\mathbf{x}_{t - 1} -
             \eta_t\nabla g(\mathbf{x}_{t - 1}))
@@ -633,10 +634,93 @@
 \end{frame}
 
 
-%\subsection{Acceleration}
+\subsection{Nesterov's acceleration}
+
+\begin{frame}{Nesterov's acceleration}
+    \begin{itemize}
+        \item
+        Suppose $ \mathbf{x}_0 $, $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ lie
+        within convex $ \mathcal{C} \subset \mathbb{R}^n $, $ g|_\mathcal{C} $,
+        the restriction of $ g $ to $ \mathcal{C} $, is convex, $ \nabla g $
+        is $ L $-Lipschitz, and $ \mathbf{x}^* \in \mathcal{C} $ minimizes
+        $ g|_\mathcal{C} $\footnote{
+            Result originally stated in \cite{stat_learn_sparsity} for convex
+            $ g $ with $ L $-Lipschitz $ \nabla g $.
+        }.
+
+        \item
+        For $ \{\eta_t\}_{t \in \mathbb{N}} $ chosen by Armijo rule or fixed
+        to $ \tilde{\eta} \in (0, 1 / L] $, $ \exists C_1 > 0 $ s.t. under
+        proximal gradient descent, we have \cite{stat_learn_sparsity}
+        \begin{equation} \label{eq:prox_grad_conv}
+            f(\mathbf{x}_t) - f(\mathbf{x}^*) \le \frac{C_1}{t + 1}
+            \Vert\mathbf{x}_t - \mathbf{x}^*\Vert_2
+        \end{equation}
+        In other words, estimation error $ f(\mathbf{x}_t) - f(\mathbf{x}^*) $
+        is $ O(1 / t) $.
+
+        \item
+        However, we can modify (\aref{eq:prox_grad_update}) to incorporate
+        Nesterov's acceleration, i.e. for $ \tilde{\mathbf{x}}_0 =
+        \mathbf{x}_0 $, $ \{\tilde{\mathbf{x}}_t\}_{t \in \mathbb{N}} $, the
+        estimates $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ are s.t.
+        \cite{stat_learn_sparsity}
+        \begin{subequations} \label{eq:prox_grad_update_accel}
+            \begin{align}
+            \mathbf{x}_t & = \operatorname{prox}_{\eta_t h}(
+                \tilde{\mathbf{x}}_{t - 1} - \eta_t\nabla g(
+                    \tilde{\mathbf{x}}_{t - 1}
+                )
+            ) \label{eq:prox_grad_update_accel_a} \\
+            \tilde{\mathbf{x}}_t & = \mathbf{x}_t + \frac{t - 1}{t + 2}(
+                \mathbf{x}_t - \mathbf{x}_{t - 1}
+            ) \label{eq:prox_grad_update_accel_b}
+            \end{align}
+        \end{subequations}
+    \end{itemize}
+
+    % adjust spacing for footnote
+    \medskip
+\end{frame}
+
+%\begin{frame}{Nesterov's acceleration}
+%    \begin{itemize}
+%        \item
+%        Using the accelerated update in (\aref{eq:prox_grad_update_accel}),
+%        then $ \exists C_2 > 0 $ s.t. \cite{stat_learn_sparsity}
+%        \begin{equation} \label{eq:prox_grad_accel_conv}
+%            f(\mathbf{x}_t) - f(\mathbf{x}^*) \le \frac{C_2}{(t + 1)^2}
+%            \Vert\mathbf{x}_0 - \mathbf{x}^*\Vert_2
+%        \end{equation}
+%        The accelerated updates result in $ f(\mathbf{x}_t) - f(\mathbf{x}^*) $
+%        being $ O(1 / t^2) $, a significant improvement in estimation error
+%        over (\aref{eq:prox_grad_conv}).
 %
-%\begin{frame}{Acceleration}
+%        \item
+%        Nesterov's acceleration reduces zig-zagging of
+%        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $ on certain objectives
+%        \cite{stat_learn_sparsity}, e.g. convex $ g $ or $ g|_\mathcal{C} $
+%        with anisotropic sublevel sets\footnote{
+%            Roughly speaking, convex $ g $ or $ g|_\mathcal{C} $ that have
+%            highly elongated contours.
+%        } \cite{bv_convex_opt}.
 %
+%        \item
+%        (\aref{eq:prox_grad_update_accel_a}) shows that the gradient step in
+%        $ \operatorname{prox}_{\eta_t h} $ is evaluated at an
+%        \textbf{extrapolation} from $ \mathbf{x}_{t - 1} $ along
+%        $ \mathbf{x}_{t - 1} - \mathbf{x}_{t - 2} $.
+%
+%        \item
+%        Gradient steps are evaluated using
+%        $ \{\tilde{\mathbf{x}}_t\}_{t \in \mathbb{N}} $, which from
+%        (\aref{eq:prox_grad_update_accel_b}) zig-zags \textbf{more} than
+%        $ \{\mathbf{x}_t\}_{t \in \mathbb{N}} $.
+%
+%        \item
+%        (\aref{eq:prox_grad_update_accel_b}) shows that the extrapolation
+%        increases with $ t $.
+%    \end{itemize}
 %\end{frame}
 
 %\appendix
