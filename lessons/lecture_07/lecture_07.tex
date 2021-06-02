@@ -197,7 +197,7 @@
 
         \item
         Instead, require ``sufficient decrease'' in $ f $ each iteration.
-        A common condition is the \textit{Armijo condition}, which for
+        A common step size rule is the \textit{Armijo rule}, which for
         $ \alpha \in (0, 1) $, requires
         \begin{equation} \label{eq:armijo_rule}
             f(\mathbf{x}_{t - 1} + \eta_t\mathbf{d}_t) \le
@@ -554,9 +554,9 @@
             \mathbf{x}_{t - 1})
         \end{equation}
         $ \hat{f} $ is called a \textit{majorizing function} for $ f $, or
-        \textit{majorizes} $ f $, where $ \forall \mathbf{x}, \mathbf{z} \in
-        \mathbb{R}^n $, $ \hat{f}(\cdot, \mathbf{z}) $ is convex and
-        $ \hat{f}(\mathbf{x}, \mathbf{z}) \ge f(\mathbf{x}) $,
+        said to \textit{majorize} $ f $, where $ \forall \mathbf{x},
+        \mathbf{z} \in \mathbb{R}^n $, $ \hat{f}(\cdot, \mathbf{z}) $ is
+        convex and $ \hat{f}(\mathbf{x}, \mathbf{z}) \ge f(\mathbf{x}) $,
         $ \hat{f}(\mathbf{x}, \mathbf{x}) = f(\mathbf{x}) $ \cite{prox_algos}.
 
         \item
@@ -649,9 +649,10 @@
         }.
 
         \item
-        For $ \{\eta_t\}_{t \in \mathbb{N}} $ chosen by Armijo rule or fixed
-        to $ \tilde{\eta} \in (0, 1 / L] $, $ \exists C_1 > 0 $ s.t. under
-        proximal gradient descent, we have \cite{stat_learn_sparsity}
+        For $ \{\eta_t\}_{t \in \mathbb{N}} $ chosen by Armijo rule
+        (\aref{eq:armijo_rule}) or fixed to $ \tilde{\eta} \in (0, 1 / L] $,
+        $ \exists C_1 > 0 $ s.t. under proximal gradient descent, we have
+        \cite{stat_learn_sparsity}
         \begin{equation} \label{eq:prox_grad_conv}
             f(\mathbf{x}_t) - f(\mathbf{x}^*) \le \frac{C_1}{t + 1}
             \Vert\mathbf{x}_t - \mathbf{x}^*\Vert_2
