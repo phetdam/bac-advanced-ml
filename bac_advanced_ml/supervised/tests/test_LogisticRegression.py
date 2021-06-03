@@ -5,7 +5,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression as _LogisticRegression
 
 # pylint: disable=relative-beyond-top-level
-from ..supervised import LogisticRegression
+from .. import LogisticRegression
 
 
 @pytest.mark.parametrize("C", [0.1, 1., 5.])

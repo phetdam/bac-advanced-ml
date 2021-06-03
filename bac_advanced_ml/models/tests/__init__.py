@@ -1,1 +1,0 @@
-__doc__ = "__init__.py for model tests subpackage"

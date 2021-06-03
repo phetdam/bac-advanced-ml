@@ -1,20 +1,12 @@
-__doc__ = "Global fixtures for model testing."
+__doc__ = """pytest fixtures for bac_advanced_ml.supervised unit tests.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
 from sklearn.datasets import make_blobs, make_regression
 from sklearn.model_selection import train_test_split
-
-
-@pytest.fixture(scope="session")
-def global_seed():
-    """Universal seed value to be reused by all test methods.
-
-    Returns
-    -------
-    int
-    """
-    return 7
 
 
 @pytest.fixture(scope="session")

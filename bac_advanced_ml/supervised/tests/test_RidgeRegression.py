@@ -5,7 +5,7 @@ import pytest
 from sklearn.linear_model import Ridge
 
 # pylint: disable=relative-beyond-top-level
-from ..supervised import RidgeRegression
+from .. import RidgeRegression
 
 
 @pytest.mark.parametrize("alpha", [0.1, 1., 5.])

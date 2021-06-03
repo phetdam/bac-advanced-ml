@@ -5,7 +5,7 @@ import pytest
 from sklearn.svm import LinearSVC as _LinearSVC
 
 # pylint: disable=relative-beyond-top-level
-from ..supervised import LinearSVC
+from .. import LinearSVC
 
 
 @pytest.mark.parametrize("C", [0.1, 1., 5.])

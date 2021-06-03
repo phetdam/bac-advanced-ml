@@ -5,7 +5,7 @@ import pytest
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as _LDA
 
 # pylint: disable=relative-beyond-top-level
-from ..supervised import LinearDiscriminantAnalysis
+from .. import LinearDiscriminantAnalysis
 
 
 @pytest.mark.parametrize("shrinkage", [None, 0.2, 0.7])
