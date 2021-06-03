@@ -1,4 +1,4 @@
-__doc__ = """Linear regression and classfification models.
+__doc__ = """Linear regression and classification models.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """
