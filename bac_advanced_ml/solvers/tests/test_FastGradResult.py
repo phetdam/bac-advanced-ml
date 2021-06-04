@@ -9,7 +9,7 @@ import pytest
 from .._fast_gd import FastGradResult
 
 
-def test_lock():
+def test_fgr_lock():
     "Test locking (immutability) mechanism of the FastGradResult."
     # no input checking, so we can put dummy inputs. phrases spoken by tazawa
     # from ep 4 of otokojuku; see https://www.youtube.com/watch?v=exyMAumtgt8

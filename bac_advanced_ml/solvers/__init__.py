@@ -4,4 +4,4 @@ __doc__ = """__init__.py for solvers subpackage.
 """
 
 # pylint: disable=import-error
-from ._fast_gd import armijo_backtrack, FastGradResult, nag
+from ._fast_gd import FastGradResult, nag

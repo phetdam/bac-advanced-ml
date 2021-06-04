@@ -1,4 +1,4 @@
-__doc__ = """Global fixtures required by all unit test subpackages.
+__doc__ = """pytest fixtures required by all unit test subpackages.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

@@ -48,7 +48,7 @@ class FastGradResult:
 
 
 def _armijo_backtrack(
-    fobj, x, eta0=1., fgrad=None, args=None, arm_alpha=0.5, arm_gamma=0.8
+    fobj, x, eta0=1., fgrad=None, args=(), arm_alpha=0.5, arm_gamma=0.8
 ):
     """Compute step size using Armijo backtracking rule for gradient updates.
 
@@ -84,7 +84,7 @@ def _armijo_backtrack(
 
 
 def nag(
-    fobj, x0, fgrad=None, args=None, tol=1e-4, max_iter=200,
+    fobj, x0, fgrad=None, args=(), tol=1e-4, max_iter=200,
     learning_rate="backtrack", eta0=1., arm_alpha=0.5, arm_gamma=0.8
 ):
     """Nesterov's accelerated gradient descent for differentiable objectives.
@@ -98,7 +98,7 @@ def nag(
         (n_dims_1, n_dims_2) matching shape of the fgrad/fobj gradients.
     fgrad : function, default=None
         Gradient of the objective. If None, fobj must return (loss, grad).
-    args : tuple, default=None
+    args : tuple, default=()
         Additional positional arguments to pass to fobj, fgrad.
     tol : float, default=1e-4
         Stopping tolerance. Solving terminates when the norm of the gradient
@@ -124,9 +124,6 @@ def nag(
         gradient value, number of iterations, and fitting time. See
         FastGradResult docstring for details on the attributes.
     """
-    # if args is None, set to empty tuple
-    if args is None:
-        args= ()
     # can only use constant or backtracking strategies
     if learning_rate not in _learning_rates:
         raise ValueError(f"learning_rate must be one of {_learning_rates}")
