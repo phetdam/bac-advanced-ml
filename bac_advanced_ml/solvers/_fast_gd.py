@@ -12,7 +12,7 @@ _learning_rates = ("constant", "backtrack")
 
 
 class FastGradResult:
-    """Simple wrapper for the results of nag.
+    """Simple wrapper for the results of nag_solver.
 
     After initialization, object becomes "immutable".
 
@@ -52,7 +52,7 @@ def _armijo_backtrack(
 ):
     """Compute step size using Armijo backtracking rule for gradient updates.
 
-    See docstring of nag for details on unlisted parameters.
+    See docstring of nag_solver for details on unlisted parameters.
 
     Parameters
     ----------
@@ -83,8 +83,8 @@ def _armijo_backtrack(
     return eta
 
 
-def nag(
-    fobj, x0, fgrad=None, args=(), tol=1e-4, max_iter=200,
+def nag_solver(
+    fobj, x0, fgrad=None, args=(), tol=1e-4, max_iter=1000,
     learning_rate="backtrack", eta0=1., arm_alpha=0.5, arm_gamma=0.8
 ):
     """Nesterov's accelerated gradient descent for differentiable objectives.
@@ -103,7 +103,7 @@ def nag(
     tol : float, default=1e-4
         Stopping tolerance. Solving terminates when the norm of the gradient
         is less than tol * grad.size, i.e. tol * number of gradient elements.
-    max_iter : int, default=200
+    max_iter : int, default=1000
         Maximum number of iterations before convergence.
     learning_rate : {"constant", "backtrack"}, default="backtrack"
         Learning rate schedule. "constant" uses eta0 as a constant learning
