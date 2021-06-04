@@ -133,12 +133,11 @@ def nag(
     # gradients are only evaluated at nest_x, not x.
     x = x0
     nest_x = x0
-    # get initial values for loss + gradient. note nest_x = x = x0 here.
+    # get initial values for gradient. note nest_x = x = x0 here.
     if fgrad is None:
-        loss, grad = fobj(x, *args)
+        _, grad = fobj(nest_x, *args)
     else:
-        loss = fobj(x, *args)
-        grad = fgrad(x, *args)
+        grad = fgrad(nest_x, *args)
     # starting computing fit_time
     fit_time = perf_counter()
     # while not converged
@@ -148,24 +147,28 @@ def nag(
             eta = eta0
         elif learning_rate == "backtrack":
             eta = _armijo_backtrack(
-                fobj, x, eta0=eta0, fgrad=fgrad, args=args,
+                fobj, nest_x, eta0=eta0, fgrad=fgrad, args=args,
                 arm_alpha=arm_alpha, arm_gamma=arm_gamma
             )
         # new parameter estimate using a gradient step, evaluated at nest_x
         new_x = nest_x - eta * grad
-        # update nest_x using new_x and previous estimate x if n_iter >= 1
-        if n_iter >= 1:
-            nest_x = new_x + n_iter / (n_iter + 3) * (new_x - x)
-        # update parameter estimate
+        # update nest_x using new_x and previous x estimate
+        nest_x = new_x + n_iter / (n_iter + 3) * (new_x - x)
+        # update parameter estimate to new_x
         x = new_x
-        # compute new objective and gradient values
+        # compute new gradient value
         if fgrad is None:
-            loss, grad = fobj(x, *args)
+            _, grad = fobj(nest_x, *args)
         else:
-            loss = fobj(x, *args)
-            grad = fgrad(x, *args)
+            grad = fgrad(nest_x, *args)
         # update number of iterations
         n_iter += 1
+    # compute loss and gradient at final estimate
+    if fgrad is None:
+        loss, grad = fobj(x, *args)
+    else:
+        loss = fobj(x, *args)
+        grad = fgrad(x, *args)
     # set fit_time
     fit_time = perf_counter() - fit_time
     # return FastGradResult
