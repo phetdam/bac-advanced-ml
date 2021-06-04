@@ -47,7 +47,7 @@ class FastGradResult:
         object.__setattr__(self, name, value)
 
 
-def armijo_backtrack(
+def _armijo_backtrack(
     fobj, x, eta0=1., fgrad=None, args=None, arm_alpha=0.5, arm_gamma=0.8
 ):
     """Compute step size using Armijo backtracking rule for gradient updates.
@@ -150,7 +150,7 @@ def nag(
         if learning_rate == "constant":
             eta = eta0
         elif learning_rate == "backtrack":
-            eta = armijo_backtrack(
+            eta = _armijo_backtrack(
                 fobj, x, eta0=eta0, fgrad=fgrad, args=args,
                 arm_alpha=arm_alpha, arm_gamma=arm_gamma
             )
