@@ -16,6 +16,20 @@ _nag_learn_rates = [("backtrack", 1.), ("constant", 0.1)]
 
 @pytest.mark.parametrize("learning_rate,eta0", _nag_learn_rates)
 def test_nag_solver(convex_quad_min, learning_rate, eta0):
+    """Test nag_solver on convex QP defined by convex_quad_min.
+
+    Checks the fit, predict, and score methods, checking solution and accuracy.
+
+    Parameters
+    ----------
+    convex_quad_min : tuple
+        pytest fixture. See conftest.py.
+    learning_rate : str
+        Learning rate schedule to use, either "constant" or "backtrack".
+    eta0 : float
+        For learning_rate="constant", the learning rate to use, while for
+        learning_rate="backtrack", the learning rate upper search bound.
+    """
     # get objective, gradient, solution from convex_quad_min + dimensionality
     fobj, fgrad, _, sol = convex_quad_min
     n_dim = sol.size
