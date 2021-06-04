@@ -1,11 +1,14 @@
-__doc__ = "Unit tests for the LogisticClassifier class."
+__doc__ = """Unit tests for the LinearSVC class.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
 from sklearn.svm import LinearSVC as _LinearSVC
 
 # pylint: disable=relative-beyond-top-level
-from .. import LinearSVC
+from .._svm import LinearSVC
 
 
 @pytest.mark.parametrize("C", [0.1, 1., 5.])

@@ -1,11 +1,14 @@
-__doc__ = "Unit tests for the LinearDiscriminantAnalysis class."
+__doc__ = """Unit tests for the LinearDiscriminantAnalysis class.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as _LDA
 
 # pylint: disable=relative-beyond-top-level
-from .. import LinearDiscriminantAnalysis
+from .._discriminant_analysis import LinearDiscriminantAnalysis
 
 
 @pytest.mark.parametrize("shrinkage", [None, 0.2, 0.7])

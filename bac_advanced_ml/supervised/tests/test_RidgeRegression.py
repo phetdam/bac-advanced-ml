@@ -1,11 +1,14 @@
-__doc__ = "Unit tests for the LinearRegression class."
+__doc__ = """Unit tests for the RidgeRegression class.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
 from sklearn.linear_model import Ridge
 
 # pylint: disable=relative-beyond-top-level
-from .. import RidgeRegression
+from .._linear import RidgeRegression
 
 
 @pytest.mark.parametrize("alpha", [0.1, 1., 5.])

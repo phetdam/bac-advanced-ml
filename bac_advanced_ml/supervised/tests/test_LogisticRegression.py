@@ -1,11 +1,14 @@
-__doc__ = "Unit tests for the LogisticRegression class."
+__doc__ = """Unit tests for the LogisticRegression class.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression as _LogisticRegression
 
 # pylint: disable=relative-beyond-top-level
-from .. import LogisticRegression
+from .._linear import LogisticRegression
 
 
 @pytest.mark.parametrize("C", [0.1, 1., 5.])
