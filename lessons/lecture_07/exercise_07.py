@@ -149,6 +149,11 @@ def nag_solver(
         ### your code goes here ###
         ###########################
 
+        # compute new gradient value
+        if fgrad is None:
+            _, grad = fobj(nest_x, *args)
+        else:
+            grad = fgrad(nest_x, *args)
         # update number of iterations
         n_iter += 1
     # compute loss and gradient at final estimate
