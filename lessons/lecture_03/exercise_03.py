@@ -1,4 +1,7 @@
-__doc__ = "Week 3 exercise: implementation of ridge regression model"
+__doc__ = """Week 3 exercise: implementing ridge regression.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import math
 import numpy as np

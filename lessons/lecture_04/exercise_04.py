@@ -1,4 +1,7 @@
-__doc__ = "Week 4 exercise: implementation of regularized logistic regression."
+__doc__ = """Week 4 exercise: implementing regularized logistic regression.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest

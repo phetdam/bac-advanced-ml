@@ -1,4 +1,7 @@
-__doc__ = "Week 5 exercise: implementation of LDA with covariance shrinkage."
+__doc__ = """Week 5 exercise: implementing LDA with covariance shrinkage.
+
+.. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
+"""
 
 import numpy as np
 import pytest
