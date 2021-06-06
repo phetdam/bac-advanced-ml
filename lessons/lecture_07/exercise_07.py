@@ -165,7 +165,7 @@ def nag_solver(
 
 @pytest.fixture(scope="session")
 def convex_quad_min():
-    """Returns objective, gradient, and Hessian for convex quadratic function.
+    """Returns objective, gradient, Hessian, solution for a convex QP.
 
     Returns
     -------
