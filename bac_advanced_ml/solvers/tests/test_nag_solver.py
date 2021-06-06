@@ -18,8 +18,6 @@ _nag_learn_rates = [("backtrack", 1.), ("constant", 0.1)]
 def test_nag_solver(convex_quad_min, learning_rate, eta0):
     """Test nag_solver on convex QP defined by convex_quad_min.
 
-    Checks the fit, predict, and score methods, checking solution and accuracy.
-
     Parameters
     ----------
     convex_quad_min : tuple
