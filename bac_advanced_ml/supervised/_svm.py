@@ -22,8 +22,9 @@ class LinearSVC(BaseEstimator):
        This is a toy implementation and scales poorly when the number of
        examples is large. In particular, memory consumption using trust-constr
        will be O(n_samples ** 2) when dual=True due to the requirements of
-       storing a dense Hessian. When dual=False, the memory usage is linear
-       since COO sparse matrix can be used to store the primal Hessian.
+       storing a dense dual Hessian. When dual=False, the memory usage is
+       O(n_samples * (n_features + 1) + n_samples + n_features) since COO
+       sparse matrices are used to store the primal Hessian and constraints.
 
     Parameters
     ----------
@@ -38,8 +39,7 @@ class LinearSVC(BaseEstimator):
         Inverse regularization parameter/maximum Lagrange multiplier value in
         the dual formulation for the linear SVC.
     max_iter : int, default=1000
-        Maximum number of subgradient descent/trust-constr iterations.
-        Subgradient descent has slower convergence and often requires more.
+        Maximum number of trust-constr iterations.
 
     Attributes
     ----------
@@ -132,15 +132,11 @@ class LinearSVC(BaseEstimator):
         # else solving primal problem
         else:
             # nonzero hessian elements
-            hess_vals = np.hstack(
-                (np.ones(n_features), self.C * np.ones(n_samples))
-            )
+            hess_vals = np.ones(n_features)
             # row, columns indices for nonzero hessian elements. these are
             # the same since the hessian is diagonal
-            hess_idx = np.hstack(
-                (np.arange(n_features), n_features + 1 + np.arange(n_samples))
-            )
-            # compute hessian matrix, using coo to save memory
+            hess_idx = np.arange(n_features)
+            # build hessian matrix, using coo to save memory
             hess = coo_matrix(
                 (hess_vals, (hess_idx, hess_idx)),
                 shape=(n_samples + n_features + 1, n_samples + n_features + 1)
@@ -154,13 +150,43 @@ class LinearSVC(BaseEstimator):
                 (x[:n_features], 0, self.C * np.ones(n_samples))
             )
             primal_hess = lambda x: hess
-            # margin constraint
-            marg_cons = LinearConstraint(
-                y_mask.reshape(-1, 1) * np.hstack(
-                    (X, np.ones(n_samples).reshape(-1, 1), np.eye(n_samples))
-                ),
-                1, np.inf
+            # nonzero LinearConstraint matrix values. note for a 2D ndarray,
+            # ravel has the effect of pasting its rows end-to-end.
+            marg_vals = np.hstack(
+                (
+                    np.ravel(
+                        y_mask.reshape(-1, 1) * np.hstack(
+                            (X, np.ones(n_samples).reshape(-1, 1))
+                        )
+                    ),
+                    np.ones(n_samples)
+                )
             )
+            # row indices for nonzero LinearConstraint matrix values
+            marg_row_idx = np.hstack(
+                (
+                    np.hstack(
+                        [np.full(n_features + 1, i) for i in range(n_samples)]
+                    ),
+                    np.arange(n_samples)
+                )
+            )
+            # column indices for nonzero LinearConstraint matrix values
+            marg_col_idx = np.hstack(
+                (
+                    np.hstack(
+                        [np.arange(n_features + 1) for i in range(n_samples)]
+                    ),
+                    n_features + 1 +  np.arange(n_samples)
+                )
+            )
+            # build LinearConstraint matrix, using coo to save memory
+            X_marg = coo_matrix(
+                (marg_vals, (marg_row_idx, marg_col_idx)),
+                shape=(n_samples, n_samples + n_features + 1)
+            )
+            # linear margin constraint matrix + margin LinearConstraint
+            marg_cons = LinearConstraint(X_marg, 1, np.inf)
             # bounds on variables. note n_features + 1 coefficients and
             # intercept are unbounded while slack variables must be >= 0
             var_bounds = Bounds(
