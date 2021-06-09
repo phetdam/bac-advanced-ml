@@ -1,7 +1,7 @@
 __doc__ = """Week 8 exercise: implementation of primal and dual linear SVM.
 
-Unit tests may take around a minute to finish running, which belies the fact
-that training SVMs can be quite time consuming.
+Unit tests may take around a minute to finish running, which is representative
+of the fact that training SVMs can be quite time consuming.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """
@@ -158,7 +158,7 @@ class LinearSVC(BaseEstimator):
             ##############################
 
         # set attributes. self.coef_ must be set to variable containing weights
-        # and self.intercept_ must be variable containing intercept.
+        # and self.intercept_ must be set to variable containing intercept.
         self.classes_ = labels
 
         ###########################
