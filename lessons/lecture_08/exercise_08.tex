@@ -109,8 +109,11 @@ The goal of this exercise is to implement a hinge loss linear support vector cla
 
 The \texttt{exercise\_08.py} file contains the \texttt{LinearSVC} class, unit
 tests, and \pytest{} fixtures. Complete the \texttt{fit} method of the 
-\texttt{LinearSVC} class by replacing the
-\texttt{\#\#\# your code goes here \#\#\#} comment blocks with code.
+\texttt{LinearSVC} class by replacing
+\texttt{\#\#\# your code goes here \#\#\#} comment blocks with appropriate
+Python code. Note that some comment blocks inside \texttt{if} statements may
+contain the \texttt{pass} statement, which is included only to silence
+language parser/linter complaints about improper block indentation.
 
 \medskip
 
@@ -212,6 +215,12 @@ One can see that $ f $ is also convex, in particular that $ \mathbf{D} \succeq
 
 \begin{enumerate}
     % need to add more important tips later
+
+    \item
+    \href{%
+        https://numpy.org/doc/stable/reference/generated/numpy.hstack.html%
+    }{\texttt{numpy.hstack}} is very useful for creating matrices from smaller blocks. For example, let $ \mathbf{A} \in \mathbb{R}^{m \times n_1} $ be represented by \texttt{A}, a \texttt{numpy.ndarray} with shape \texttt{(m, n1)}, and let $ \mathbf{N} \in \mathbb{R}^{m \times n_2} $ be represented by \texttt{B}, a \texttt{numpy.ndarray} with shape \texttt{(m, n2)}. Then, \texttt{numpy.hstack((A, B))} returns a \texttt{numpy.ndarray} shape \texttt{(m, n1 + n2)} representing the block matrix $ \begin{bmatrix} \ \mathbf{A} & \mathbf{B} \ \end{bmatrix} $.
+
     \item
     Use NumPy functions whenever possible for efficiency, brevity, and ease
     of debugging.

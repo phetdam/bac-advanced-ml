@@ -49,7 +49,7 @@ def test_res_dual(blob_bin, global_seed, C):
 
 
 @pytest.mark.parametrize("C", [0.1, 1., 5.])
-def test_res_primal(blob_bin, global_seed, C):
+def test_res_primal(blob_bin, C):
     """Check LinearSVC is equivalent to sklearn for two-class case, dual=False.
 
     Checks the fit, predict, and score methods, checking solution and accuracy.
@@ -57,8 +57,6 @@ def test_res_primal(blob_bin, global_seed, C):
     Parameters
     ----------
     blob_bin : tuple
-        pytest fixture. See conftest.py.
-    global_seed : int
         pytest fixture. See conftest.py.
     C : float
         Inverse regularization parameter for the LinearSVC.
