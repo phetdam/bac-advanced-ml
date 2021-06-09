@@ -37,7 +37,7 @@ class LinearSVC(BaseEstimator):
         Squaring the norm loosens the convergence criteria.
     C : float, default=1.
         Inverse regularization parameter/maximum Lagrange multiplier value in
-        the dual formulation for the linear SVC.
+        the primal/dual linear SVC formulation.
     max_iter : int, default=1000
         Maximum number of trust-constr iterations.
 
