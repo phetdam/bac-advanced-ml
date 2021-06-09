@@ -204,7 +204,7 @@ class LinearSVC(BaseEstimator):
             )
             # separate out weights and intercept
             weights, intercept = res.x[:n_features], res.x[n_features]
-        # # set attributes
+        # set attributes
         self.classes_ = labels
         self.coef_ = weights
         self.intercept_ = intercept
