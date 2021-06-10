@@ -321,10 +321,13 @@ must be paid attention to in order to ensure correctness and efficiency.
     example \coomatrix, and have $ \nabla^2 f $ simply return a reference to
     $ \mathbf{D} $. The memory required by $ \mathbf{D} $ is $ O(d) $ if
     $ \mathbf{D} $ is stored as a \coomatrix\footnote{
-        Although COO sparse matrices do not directly support arithmetic
-        operations, \minimizetrustconstr{} introduces a wrapper for the
-        Hessian that converts sparse matrices to CSR sparse matrix format,
-        which does support arithmetic.
+        COO sparse matrices do not support sparse arithmetic
+        operations, but \minimizetrustconstr{} introduces a \href{%
+            https://github.com/scipy/scipy/blob/master/scipy/optimize/%
+            % need to escape the # but not the _
+            _differentiable_functions.py\#L162-L185%
+        }{wrapper for the Hessian} that converts sparse matrices to CSR
+        sparse matrices, which do support sparse arithmetic.
     }, but is $ O((d + N + 1)^2) $ if $ \mathbf{D} $ is stored as a
     \texttt{numpy.ndarray}. Note that both $ f $, $ \nabla f $ can be
     evaluated without $ \mathbf{D} $.
