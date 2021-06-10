@@ -7,14 +7,11 @@
 \setlength{\parindent}{0 pt}
 % allow section.equation numbering
 \numberwithin{equation}{section}
-% allows you to copy-paste code segments. requires pygments, which can be
-% installed from PyPI with pip install Pygments.
-% warning: minted does NOT work with Texmaker if you have TeX Live installed
-% on WSL but Texmaker installed natively on Windows!
-%\usepackage{minted}
-% alternative to minted that does not require Python, LaTeX only. listings is
-% however disgusting out of the box and some setup is required.
-\usepackage{listings, xcolor}
+% allows you to copy-paste code segments. requires pygments to be installed
+% natively, i.e. not just in a Python venv! for example, on WSL Ubuntu you
+% need to sudo apt-get install python3-pygments (unfortunately, the version
+% will be a bit dated) and cannot rely on your venv Pygments version.
+\usepackage{minted}
 % makes clickable links to sections
 \usepackage{hyperref}
 % make the link colors blue, as well as cite colors. urls are magenta
@@ -36,37 +33,10 @@
 % remove decorative line in the fancy header
 \renewcommand{\headrulewidth}{0 pt}
 
-% color definitions for listings syntax highlighting. uses colors borrowed
-% from the VS Code Dark+ and Abyss standard themes.
-\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
-\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
-\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
-\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
-
-% general listings configuration for all languages
-\lstset{
-    % change keyword, identifier, comment, string colors
-    keywordstyle = \color{KwColor},
-    commentstyle = \color{CmtColor},
-    identifierstyle = \color{VarColor},
-    stringstyle = \color{StrColor},
-    % no spaces in strings
-    showstringspaces = false,
-    % monospace font by default
-    basicstyle = \ttfamily,
-    % tabsize 8 by default, this is not the 1960s
-    tabsize = 4,
-    % add line numbers to the left with gray typewriter font
-    numbers = left,
-    numberstyle = \color{gray}\ttfamily,
-    % change distance from code block from 10 pt to 5 pt
-    numbersep = 5 pt
-}
-
 % title, author + thanks, date
 \title{Exercise 8}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
-\date{June 8, 2021}
+\date{June 10, 2021}
 
 % shortcut commands. the % strips additional spacing.
 \newcommand{\pytest}{\href{https://docs.pytest.org/en/stable/}{pytest}}
@@ -79,11 +49,29 @@
         scipy.optimize.minimize.html%
     }{\texttt{scipy.optimize.minimize}}%
 }
+\newcommand{\minimizetrustconstr}{%
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/optimize.%
+        minimize-trustconstr.html%
+    }{\texttt{minimize(method="trust-constr")}}%
+}
 \newcommand{\coomatrix}{%
     \href{%
         https://docs.scipy.org/doc/scipy/reference/generated/%
         scipy.sparse.coo_matrix.html%
     }{\texttt{scipy.sparse.coo\_matrix}}%
+}
+\newcommand{\Bounds}{%
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/generated/%
+        scipy.optimize.Bounds.html%
+    }{\texttt{Bounds}}%
+}
+\newcommand{\LinearConstraint}{%
+    \href{%
+        https://docs.scipy.org/doc/scipy/reference/generated/%
+        scipy.optimize.LinearConstraint.html%
+    }{\texttt{LinearConstraint}}%
 }
 
 \begin{document}
@@ -122,7 +110,95 @@ Your code \textbf{must} be written in the areas marked by these blocks. Do
 $ \Leftrightarrow $ \texttt{pytest /path/to/exercise\_08.py} executes with
 zero test failures.
 
-%\subsection{Using \texttt{trust-constr}}
+\subsection{Using \texttt{trust-constr}}
+
+For this exercise, we solve both the primal and dual linear SVC problems
+using \minimize{}, the \textit{de facto} standard Python open-source
+minimization routine, using a trust region method\footnote{
+    We did not cover trust region methods last lecture, but knowledge of how
+    they work is not needed for this exercise.
+} for constrained optimization, i.e. the \texttt{trust-constr} solver, with
+analytical gradient and Hessian. To do so, there are a few things that must
+be done when invoking \minimize.
+
+\begin{enumerate}
+    \item
+    \texttt{"trust-constr"} must be passed to the \texttt{method} keyword
+    argument of \minimize.
+
+    \item
+    A function that returns the gradient of the required objective
+    \texttt{fun} must be passed to the \texttt{jac} keyword argument and a
+    function that returns the Hessian of \texttt{fun} must be passed to the
+    \texttt{hess} keyword argument.
+
+    \item
+    Bounds on the optimization variable must be specified. When using an
+    instance of the \Bounds{} class, the recommended practice, as the
+    \Bounds{} class provides an easier way to express bounds compared to a
+    list of tuples, \texttt{keep\_feasible} should not be specified and left
+    to take its default value \texttt{False}.
+
+    \item
+    Problem constraints must be specified. Written in matrix-vector form as
+    a function of the optimization variable, both primal and dual constraints
+    are linear and can thus be expressed with a single \LinearConstraint{}
+    instance with \texttt{keep\_feasible=False}.
+
+    \item
+    Solver convergence options must be specified if necessary, passed as a
+    \texttt{dict} to the \texttt{options} keyword argument. The documentation
+    for \minimizetrustconstr{} enumerates the key-value pairs that can be
+    specified in the \texttt{dict} passed to \texttt{options} when
+    \texttt{method="trust-constr"}.
+\end{enumerate}
+
+Here we show an example of using \minimize{} with
+\texttt{method="trust-constr"} to solve a mean-variance portfolio
+optimization problem, i.e. finding the portfolio
+$ \mathbf{w}^* \in \mathbb{R}^n $ that solves the convex QP
+\begin{equation} \label{eq:max_norm_port_opt}
+    \begin{array}{ll}
+        \displaystyle\min_{\mathbf{w}} &
+            \frac{1}{2}\mathbf{w}^\top\mathbf{Cw} \\
+        \text{s.t.} & \mathbf{1}^\top\mathbf{w} = 1 \\
+            & \Vert\mathbf{w}\Vert_\infty \le \tau
+    \end{array}
+\end{equation}
+
+Here $ \mathbf{C} \succ \mathbf{0} \in \mathbb{R}^{n \times n} $ is the
+covariance matrix of the asset returns and $ \tau > 0 $ limits the maximum
+fraction of wealth that can be invested in any asset. Assume that
+$ \mathbf{C} $, represented in code by \texttt{cov}, has already been
+computed and has shape \texttt{(n\_assets, n\_assets)} and that $ \tau $,
+represented in code with \texttt{thres}, has been set to some positive value.
+Furthermore, suppose that we want \texttt{trust-constr} to run for only 800
+iterations with \texttt{gtol=1e-7} and initial guess $ \frac{1}{n}\mathbf{1}
+\in \mathbb{R}^n $. We can then appropriately solve
+(\ref{eq:max_norm_port_opt}) numerically using
+
+\begin{minted}[autogobble]{python3}
+import numpy as np
+from scipy.optimize import Bounds, LinearConstraint, minimize
+# objective, gradient, hessian
+fobj = lambda w: 0.5 * w @ cov @ w
+fgrad = lambda w: cov @ w
+fhess = lambda w: cov
+# linear equality constraint, max norm constraint expressed using Bounds
+eq_cons = LinearConstraint(np.ones(n_assets), 1, 1)
+norm_bd = Bounds(-thres, thres)
+# get optimization result and print computed portfolio
+res = minimize(
+    fobj, np.ones(n_assets) / n_assets, method="trust-constr", jac=fgrad,
+    hess=fhess, bounds=norm_bd, constraints=eq_cons,
+    options=dict(gtol=1e-7, maxiter=800)
+)
+print(res.x)
+\end{minted}
+
+However, since the linear SVC primal problem requires minimization over
+multiple variables, we must reformulate the primal in order to solve using
+\minimize.
 
 \subsection{Primal reformulation}
 
@@ -153,53 +229,78 @@ $ \mathbf{Z} $ defined in (\ref{eq:signed_X}) as
 Here we are jointly optimizing over $ \mathbf{w} \in \mathbb{R}^d $,
 $ b \in \mathbb{R} $, $ \xi \in \mathbb{R}^N $, where $ \xi $ is the vector
 of slack variables. However, we cannot directly send (\ref{eq:primal_svc_opt})
-to \minimize, as it requires that the objective be a function of a single
-variable, say $ \beta $. However, we can define $ \beta \in
+to \minimize, as the routine requires that the objective be a function of a
+single variable, say $ \beta $, but we can define $ \beta \in
 \mathbb{R}^{d + N + 1} $ such that $ \beta^\top \triangleq
 \begin{bmatrix} \ \mathbf{w}^\top & b & \xi^\top \ \end{bmatrix} $. Letting
 $ f : \mathbb{R}^{d + N + 1} \rightarrow \mathbb{R} $ be the objective, a
-function of $ \beta $, we thus have that $ \forall \beta \in
+function of $ \beta $, we have that $ \forall \beta \in
 \mathbb{R}^{d + N + 1} $,
 \begin{equation} \label{eq:primal_obj_joint}
     f(\beta) \triangleq \frac{1}{2}\beta^\top\mathbf{D}\beta +
-    C\beta^\top\begin{bmatrix}
-        \ \mathbf{0}_{d + 1} \ \\ \ \mathbf{1}_N \
-    \end{bmatrix}
+    \mathbf{a}^\top\beta
 \end{equation}
 
 Here the diagonal matrix $ \mathbf{D} \in \mathbb{R}^{(d + N + 1) \times
-(d + N + 1)} $ is such that
-\begin{equation}
+(d + N + 1)} $ and vector $ \mathbf{a} \in \mathbb{R}^{d + N + 1} $ are such
+that
+\begin{equation*} %\label{eq:hessian_and_linear}
     \mathbf{D} \triangleq \begin{bmatrix}
         \ \mathbf{I}_d & \mathbf{0}_{d \times (N + 1)} \ \\
         \ \mathbf{0}_{(N + 1) \times d} & \mathbf{0}_{(N + 1) \times (N + 1)} \
+    \end{bmatrix} \quad\quad \mathbf{a} \triangleq \begin{bmatrix}
+        \ \mathbf{0}_{d + 1} \ \\ \ C\mathbf{1}_N \
+    \end{bmatrix}
+\end{equation*}
+
+From (\ref{eq:primal_obj_joint}), it's then clear that $ f $ is a
+convex\footnote{
+    Since $ f $ is quadratic, it is convex $ \Leftrightarrow \mathbf{D}
+    \succeq \mathbf{0} $. We know that $ \mathbf{D} \succeq \mathbf{0} $ since
+    $ \forall \beta \in \mathbb{R}^{d + N + 1} $, we have
+	\begin{equation*}
+	    \beta^\top\mathbf{D}\beta = \begin{bmatrix}
+	        \ \mathbf{w}^\top & b & \xi^\top \    
+	    \end{bmatrix}\begin{bmatrix}
+	        \ \mathbf{w} \ \\ \ 0 \ \\ \ \mathbf{0}_N \
+	    \end{bmatrix} = \Vert\mathbf{w}\Vert_2^2 \ge 0
+	\end{equation*}
+} quadratic function of $ \beta $, so $ \nabla f $ and $ \nabla^2 f $ are
+such that
+\begin{equation} \label{eq:primal_grad_hess_joint}
+    \nabla f(\beta) \triangleq \mathbf{D}\beta + \mathbf{a} \quad\quad
+    \nabla^2f(\beta) \triangleq \mathbf{D}
+\end{equation}
+
+Now, having reformulated the objective, gradient, and Hessian of
+(\ref{eq:primal_svc_opt}) to be functions of $ \beta \in
+\mathbb{R}^{d + N + 1} $, we can also write the linear constraint in
+(\ref{eq:primal_svc_opt}) in terms of $ \beta $. Putting the optimization
+variables on one side, the constraint in terms of $ \mathbf{w} $, $ b $,
+$ \xi $ is $ \mathbf{Zw} + b\mathbf{y} + \xi \succeq \mathbf{1} $, which in
+terms of $ \beta $ can be written as $ \mathbf{A}\beta \succeq \mathbf{1} $,
+where the linear constraint coefficient matrix $ \mathbf{A} \in
+\mathbb{R}^{N \times (d + N + 1)} $ is such that
+\begin{equation} \label{eq:primal_cons_mat_joint}
+    \mathbf{A} \triangleq \begin{bmatrix}
+        \ \mathbf{Z} & \mathbf{y} & \mathbf{I}_N \
     \end{bmatrix}
 \end{equation}
 
-From (\ref{eq:primal_obj_joint}), it's clear that $ f $ is a quadratic function
-of $ \beta $. Furthermore, $ \nabla f $ and $ \nabla^2 f $ are such that
-\begin{equation*}
-    \nabla f(\beta) \triangleq \mathbf{D}\beta + \begin{bmatrix}
-        \ \mathbf{0}_{d + 1} \ \\ \ \mathbf{1}_N \
-    \end{bmatrix} \quad\quad \nabla^2f(\beta) \triangleq \mathbf{D}
-\end{equation*}
-
-One can see that $ f $ is also convex, in particular that $ \mathbf{D} \succeq
-\mathbf{0} $, since $ \forall \mathbf{u} \in \mathbb{R}^{d + N + 1} $, we have
-\begin{equation*}
-    \mathbf{u}^\top\mathbf{D}\mathbf{u} = \mathbf{u}^\top\begin{bmatrix}
-        \ u_1 \ \\ \ \vdots \ \\ \ u_d \ \\ \ \mathbf{0}_{N + 1} \
-    \end{bmatrix} = \sum_{j = 1}^du_j^2 \ge 0
-\end{equation*}
-
-%The linear constraint in the primal problem can be written as
-%$ \begin{bmatrix} \ \mathbf{Z} & \mathbf{y} & \mathbf{I}_N \ \end{bmatrix}\beta
-%\succeq \mathbf{1} $.
+Note that only $ \xi $ is bounded, in particular (\ref{eq:primal_svc_opt})
+requires $ \xi \succeq \mathbf{0} $, while $ \mathbf{w} $, $ b $ are unbounded.
+Although there is no easy way to express partial bounding of $ \beta $
+mathematically, it is not hard to use the \Bounds{} class to require only the
+$ \xi $ block of $ \beta $ to be nonnegative while leaving the $ \mathbf{w} $,
+$ b $ blocks unbounded.
 
 %Furthermore, since $ \mathbf{D} $ is very sparse, we can save memory by
 %storing its nonzero elements using a sparse matrix type, for example
 %\coomatrix.
 
+%\subsection{Solving the primal}
+
+%\subsection{Solving the dual}
 
 %The linear SVC dual problem can be written as
 %\begin{equation*}

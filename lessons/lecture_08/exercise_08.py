@@ -108,7 +108,7 @@ class LinearSVC(BaseEstimator):
         # if solving dual problem (with trust-constr)
         if self.dual:
             # compute hessian matrix, define objective, gradient, hessian,
-            # define bounds on lagrange multipliers and linear constraint
+            # define bounds on lagrange multipliers, define linear constraint
 
             ###########################
             ### your code goes here ###
@@ -125,12 +125,7 @@ class LinearSVC(BaseEstimator):
         # else solving primal problem
         else:
             # build hessian matrix (optionally using sparse coo_matrix type)
-
-            ###########################
-            ### your code goes here ###
-            ###########################
-
-            # functions for objective, gradient, hessian
+            # and define functions for objective, gradient, hessian
 
             ###########################
             ### your code goes here ###
