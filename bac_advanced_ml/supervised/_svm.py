@@ -39,7 +39,8 @@ class LinearSVC(BaseEstimator):
         Inverse regularization parameter/maximum Lagrange multiplier value in
         the primal/dual linear SVC formulation.
     max_iter : int, default=1000
-        Maximum number of trust-constr iterations.
+        Maximum number of trust-constr iterations, passed to the
+        scipy.optimize.minimize trust-constr solver method's maxiter option.
 
     Attributes
     ----------
@@ -120,8 +121,9 @@ class LinearSVC(BaseEstimator):
             # solve for lagrange multipliers using trust-constr
             res = minimize(
                 dual_obj, np.zeros(n_samples), method="trust-constr",
-                jac=dual_grad, hess=dual_hess, bounds=alpha_bounds,
-                constraints=alpha_cons, options=dict(gtol=self.tol)
+                jac=dual_grad, hess=dual_hess,
+                bounds=alpha_bounds, constraints=alpha_cons,
+                options=dict(gtol=self.tol, maxiter=self.max_iter)
             )
             # compute primal weights and intercept from dual variables. note
             # we only average y_mask - X @ weights for support vectors
@@ -200,7 +202,7 @@ class LinearSVC(BaseEstimator):
                 primal_obj, np.zeros(n_features + n_samples + 1),
                 method="trust-constr", jac=primal_grad, hess=primal_hess,
                 bounds=var_bounds, constraints=marg_cons,
-                options=dict(gtol=self.tol)
+                options=dict(gtol=self.tol, maxiter=self.max_iter)
             )
             # separate out weights and intercept
             weights, intercept = res.x[:n_features], res.x[n_features]
