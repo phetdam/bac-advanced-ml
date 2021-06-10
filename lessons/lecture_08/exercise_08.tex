@@ -200,7 +200,7 @@ However, since the linear SVC primal problem requires minimization over
 multiple variables, we must reformulate the primal in order to solve using
 \minimize.
 
-\subsection{Primal reformulation}
+\subsection{Primal reformulation} \label{sec:primal_reform}
 
 Let $ \mathbf{X} \in \mathbb{R}^{N \times d} $ be the matrix of training
 points, where $ \mathbf{x}_k^\top $ is the $ k $th row, and let
@@ -244,14 +244,14 @@ function of $ \beta $, we have that $ \forall \beta \in
 Here the diagonal matrix $ \mathbf{D} \in \mathbb{R}^{(d + N + 1) \times
 (d + N + 1)} $ and vector $ \mathbf{a} \in \mathbb{R}^{d + N + 1} $ are such
 that
-\begin{equation*} %\label{eq:hessian_and_linear}
+\begin{equation} \label{eq:primal_hess_and_lin_joint}
     \mathbf{D} \triangleq \begin{bmatrix}
         \ \mathbf{I}_d & \mathbf{0}_{d \times (N + 1)} \ \\
         \ \mathbf{0}_{(N + 1) \times d} & \mathbf{0}_{(N + 1) \times (N + 1)} \
     \end{bmatrix} \quad\quad \mathbf{a} \triangleq \begin{bmatrix}
         \ \mathbf{0}_{d + 1} \ \\ \ C\mathbf{1}_N \
     \end{bmatrix}
-\end{equation*}
+\end{equation}
 
 From (\ref{eq:primal_obj_joint}), it's then clear that $ f $ is a
 convex\footnote{
@@ -294,11 +294,54 @@ mathematically, it is not hard to use the \Bounds{} class to require only the
 $ \xi $ block of $ \beta $ to be nonnegative while leaving the $ \mathbf{w} $,
 $ b $ blocks unbounded.
 
-%Furthermore, since $ \mathbf{D} $ is very sparse, we can save memory by
-%storing its nonzero elements using a sparse matrix type, for example
-%\coomatrix.
+\subsection{Solving the primal}
 
-%\subsection{Solving the primal}
+To solve the reformulation of (\ref{eq:primal_svc_opt}) described in
+\nameref{sec:primal_reform} using \minimize, there are a few particulars that
+must be paid attention to in order to ensure correctness and efficiency.
+
+\medskip
+
+\begin{enumerate}
+    \item
+    The initial guess $ \beta_0 \in \mathbb{R}^{d + N + 1} $ provided to the
+    \texttt{x0} positional argument of \minimize{} should be $ \mathbf{0} $,
+    i.e. a \texttt{numpy.ndarray} shape
+    \texttt{(n\_features + n\_samples + 1,)} filled with zeroes.
+
+    \item
+    $ f $, $ \nabla f $ involve the inverse regularization parameter $ C $,
+    which corresponds to \texttt{self.C}.
+
+    \item
+    The primal Hessian $ \mathbf{D} $ defined in
+    (\ref{eq:primal_hess_and_lin_joint}) is very sparse, as only the first
+    $ d $ diagonal elements, which are all ones, are nonzero. We can save
+    memory by storing its nonzero elements using a sparse matrix type, for
+    example \coomatrix, and have $ \nabla^2 f $ simply return a reference to
+    $ \mathbf{D} $. The memory required by $ \mathbf{D} $ is $ O(d) $ if
+    $ \mathbf{D} $ is stored as a \coomatrix\footnote{
+        Although COO sparse matrices do not directly support arithmetic
+        operations, \minimizetrustconstr{} introduces a wrapper for the
+        Hessian that converts sparse matrices to CSR sparse matrix format,
+        which does support arithmetic.
+    }, but is $ O((d + N + 1)^2) $ if $ \mathbf{D} $ is stored as a
+    \texttt{numpy.ndarray}. Note that both $ f $, $ \nabla f $ can be
+    evaluated without $ \mathbf{D} $.
+
+    \item
+    The linear constraint coefficient matrix $ \mathbf{A} $ defined in
+    (\ref{eq:primal_cons_mat_joint}) is also sparse, as only $ N(d + 2) $
+    elements out of $ N(d + N + 1) $ are nonzero, so memory can be saved by
+    storing $ \mathbf{A} $ as a \coomatrix. The linear constraint
+    $ \mathbf{A}\beta \succeq \mathbf{1} $ can be easily expressed as a
+    \LinearConstraint{} with $ \mathbf{A} $ passed to \texttt{A}.
+
+    \item
+    \texttt{self.tol} and \texttt{self.max\_iter} must be respectively paired
+    with the \texttt{gtol} and \texttt{maxiter} keys of the \texttt{dict} sent
+    to the \texttt{options} keyword argument of \minimize.
+\end{enumerate}
 
 %\subsection{Solving the dual}
 
