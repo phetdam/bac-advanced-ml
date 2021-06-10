@@ -7,14 +7,11 @@
 \setlength{\parindent}{0 pt}
 % allow section.equation numbering
 \numberwithin{equation}{section}
-% allows you to copy-paste code segments. requires pygments, which can be
-% installed from PyPI with pip install Pygments.
-% warning: minted does NOT work with Texmaker if you have TeX Live installed
-% on WSL but Texmaker installed natively on Windows!
-%\usepackage{minted}
-% alternative to minted that does not require Python, LaTeX only. listings is
-% however disgusting out of the box and some setup is required.
-\usepackage{listings, xcolor}
+% allows you to copy-paste code segments. requires pygments to be installed
+% natively, i.e. not just in a Python venv! for example, on WSL Ubuntu you
+% need to sudo apt-get install python3-pygments (unfortunately, the version
+% will be a bit dated) and cannot rely on your venv Pygments version.
+\usepackage{minted}
 % makes clickable links to sections
 \usepackage{hyperref}
 % make the link colors blue, as well as cite colors. urls are magenta
@@ -36,39 +33,12 @@
 % remove decorative line in the fancy header
 \renewcommand{\headrulewidth}{0 pt}
 
-% color definitions for listings syntax highlighting. uses colors borrowed
-% from the VS Code Dark+ and Abyss standard themes.
-\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
-\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
-\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
-\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
-
-% general listings configuration for all languages
-\lstset{
-    % change keyword, identifier, comment, string colors
-    keywordstyle = \color{KwColor},
-    commentstyle = \color{CmtColor},
-    identifierstyle = \color{VarColor},
-    stringstyle = \color{StrColor},
-    % no spaces in strings
-    showstringspaces = false,
-    % monospace font by default
-    basicstyle = \ttfamily,
-    % tabsize 8 by default, this is not the 1960s
-    tabsize = 4,
-    % add line numbers to the left with gray typewriter font
-    numbers = left,
-    numberstyle = \color{gray}\ttfamily,
-    % change distance from code block from 10 pt to 5 pt
-    numbersep = 5 pt
-}
-
 % title, author + thanks, date
 \title{Exercise -1}
 \author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
 % the extra thanks is also useful for making notes about previous versions.
 % you can remove this thanks if there are no version revisions.
-\date{March 6, 2021\thanks{Original version released on February 23, 2021.}}
+\date{June 9, 2021\thanks{Original version released on February 23, 2021.}}
 
 \begin{document}
 
@@ -97,9 +67,9 @@ matrices $ \mathbf{W} \in \mathbb{R}^{d \times d},
 
     \item
     The columns of $ \mathbf{W} $ are eigenvectors of the sample covariance
-    matrix $ \mathbf{C}_\mathbf{X} \triangleq \frac{1}{N}\mathbf{X}^\top\mathbf{X} $
-    ordered in descending order by the magnitude of their corresponding
-    eigenvalue.
+    matrix $ \mathbf{C}_\mathbf{X} \triangleq \frac{1}{N}
+    \mathbf{X}^\top\mathbf{X} $ ordered in descending order by the magnitude
+    of their corresponding eigenvalue.
 
     \item
     $ \mathbf{X} = \mathbf{ZW}^\top $, i.e. for each data point
@@ -139,7 +109,7 @@ Consider the C function using the \href{
     https://numpy.org/devdocs/reference/c-api/array.html
 }{NumPy C array API} shown on the next page.
 
-\begin{lstlisting}[language = C]
+\begin{minted}{c}
 static PyObject *
 npy_sigmoid(PyObject *self, PyObject *args)
 {
@@ -158,7 +128,7 @@ npy_sigmoid(PyObject *self, PyObject *args)
     }
     Py_RETURN_NONE;
 }
-\end{lstlisting}
+\end{minted}
 
 Why is this code dangerous? What flags must \texttt{ar} satisfy in particular
 for it to be safe?
