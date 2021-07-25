@@ -1,4 +1,4 @@
-__doc__ = """Unit tests for the FastGradResult solver result class.
+"""Unit tests for the FastGradResult solver result class.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

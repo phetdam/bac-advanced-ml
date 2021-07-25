@@ -1,4 +1,4 @@
-__doc__ = """Nesterov's accelerated gradient descent.
+"""Implementation of Nesterov's accelerated gradient descent.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

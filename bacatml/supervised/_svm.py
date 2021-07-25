@@ -1,4 +1,4 @@
-__doc__ = """Support vector classification.
+"""Support vector classification.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

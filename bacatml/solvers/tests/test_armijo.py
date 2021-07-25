@@ -1,4 +1,4 @@
-__doc__ = """Unit tests for the _armijo_backtrack backtracking implementation.
+"""Unit tests for the _armijo_backtrack backtracking implementation.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

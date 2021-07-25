@@ -1,4 +1,4 @@
-__doc__ = """__init__.py for bac_advanced_ml.supervised subpackage.
+"""__init__.py for bac_advanced_ml.supervised subpackage.
 
 Contains reference implementations of supervised learning models. Student
 implementations are expected to be reasonably similar.

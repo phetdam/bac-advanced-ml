@@ -1,4 +1,4 @@
-__doc__ = """Unit tests for the nag solver.
+"""Unit tests for the nag solver.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

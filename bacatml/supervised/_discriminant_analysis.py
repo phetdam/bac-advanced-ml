@@ -1,4 +1,4 @@
-__doc__ = """Discriminant-based generative classifiers.
+"""Discriminant-based generative classifiers.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

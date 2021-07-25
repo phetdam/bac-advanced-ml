@@ -1,4 +1,4 @@
-__doc__ = """pytest fixtures for bac_advanced_ml.solvers unit tests.
+"""pytest fixtures for bac_advanced_ml.solvers unit tests.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """

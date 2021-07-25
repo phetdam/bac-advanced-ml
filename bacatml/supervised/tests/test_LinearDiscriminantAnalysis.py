@@ -1,4 +1,4 @@
-__doc__ = """Unit tests for the LinearDiscriminantAnalysis class.
+"""Unit tests for the LinearDiscriminantAnalysis class.
 
 .. codeauthor:: Derek Huang <djh458@stern.nyu.edu>
 """
