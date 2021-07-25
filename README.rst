@@ -1,6 +1,6 @@
-.. README.rst for bac_advanced_ml
+.. README.rst for bac-advanced-ml
 
-.. image:: https://raw.githubusercontent.com/phetdam/bac_advanced_ml/
+.. image:: https://raw.githubusercontent.com/phetdam/bac-advanced-ml/
    master/bac_advanced_ml_logo.png
    :alt: BAC Advanced ML logo
 
@@ -21,7 +21,7 @@ Contents
 
 The repo contains both ``.tex`` source for lectures and exercises in
 ``lessons`` as well as Python code containing reference implementations for
-some of the coding-related exercises in ``bac_advanced_ml``.
+some of the coding-related exercises in ``bac-advanced-ml``.
 
 Installing
 ==========
