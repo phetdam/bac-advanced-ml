@@ -1,4 +1,4 @@
-"""setup.py to build/install the bac_advanced_ml supporting code.
+"""setup.py to build/install the bac-advanced-ml supporting code.
 
 .. note::
 
@@ -9,7 +9,7 @@
 
 from setuptools import find_packages, setup
 
-from bacatml import __version__
+from bacaml import __version__
 
 # formal package name, different from the imported package name
 _PACKAGE_NAME = "bac-advanced-ml"
@@ -18,15 +18,6 @@ _SHORT_DESC = (
     "A Python package containing lecture materials and exercises for the NYU "
     "Stern BAC Advanced Team's intro to machine learning curriculum."
 )
-
-
-# reads requirements.txt and returns list for install_requires. usually not the
-# best idea if the requirements are complex but ours are pretty simple.
-def _read_reqs():
-    # read requirements and split out newlines for return
-    with open("requirements.txt") as f:
-        reqs = f.read()
-    return reqs.split("\n")
 
 
 def _setup():
@@ -43,7 +34,7 @@ def _setup():
         author="Derek Huang",
         author_email="djh458@stern.nyu.edu",
         license="MIT",
-        url="https://github.com/phetdam/bac_advanced_ml",
+        url="https://github.com/phetdam/bac-advanced-ml",
         classifiers=[
             "License :: OSI Approved :: MIT License",
             "Operating System :: POSIX :: Linux",
@@ -52,11 +43,13 @@ def _setup():
             "Programming Language :: Python :: 3.8"
         ],
         project_urls={
-            "Source": "https://github.com/phetdam/bac_advanced_ml"
+            "Source": "https://github.com/phetdam/bac-advanced-ml"
         },
         python_requires=">=3.6",
-        # read from rqeuirements.txt
-        install_requires=_read_reqs(),
+        install_requires=[
+            "numpy>=1.19.1", "scipy>=1.5.2", "scikit-learn>=0.23.2"
+        ],
+        extras_require={"tests": ["pytest>=6.0.1"]},
         packages=find_packages()
     )
 
