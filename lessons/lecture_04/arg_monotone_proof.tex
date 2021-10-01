@@ -1,0 +1,144 @@
+%%% BAC exercise template %%%
+% template modified by Derek Huang, original by Sean Cox.
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, enumitem, fancyhdr, tikz}
+% get rid of paragraph indent
+\setlength{\parindent}{0 pt}
+% allow section.equation numbering
+\numberwithin{equation}{section}
+% allows you to copy-paste code segments. requires pygments, which can be
+% installed from PyPI with pip install Pygments.
+% warning: minted does NOT work with Texmaker if you have TeX Live installed
+% on WSL but Texmaker installed natively on Windows!
+%\usepackage{minted}
+% alternative to minted that does not require Python, LaTeX only. listings is
+% however disgusting out of the box and some setup is required.
+\usepackage{listings, xcolor}
+% makes clickable links to sections
+\usepackage{hyperref}
+% make the link colors blue, as well as cite colors. urls are magenta
+\hypersetup{
+    colorlinks, linkcolor = blue, citecolor = blue, urlcolor = magenta
+}
+% fancy pagestyle so we can use fancyhdr for fancy headers/footers
+\pagestyle{fancy}
+% add logo in right of header. note that you will have to adjust logo path!
+\fancyhead[R]{\includegraphics[scale = 0.15]{../bac_logo1.png}}
+% don't show anything in the left and center header
+\fancyhead[L, C]{}
+% give enough space for logo by reducing top margin height, head separator,
+% increasing headerheight. see Figure 1 in the fancyhdr documentation. if
+% \topmargin + \headheight + \headsep = 0, original text margins unchanged.
+\setlength{\topmargin}{-60 pt}
+\setlength{\headheight}{50 pt}
+\setlength{\headsep}{10 pt}
+% remove decorative line in the fancy header
+\renewcommand{\headrulewidth}{0 pt}
+
+% color definitions for listings syntax highlighting. uses colors borrowed
+% from the VS Code Dark+ and Abyss standard themes.
+\definecolor{KwColor}{RGB}{153, 102, 184}     % keyword color
+\definecolor{VarColor}{RGB}{86, 156, 214}     % variables/identifier color
+\definecolor{StrColor}{RGB}{209, 105, 105}    % string color
+\definecolor{CmtColor}{RGB}{106, 153, 85}     % comment color
+
+% general listings configuration for all languages
+\lstset{
+    % change keyword, identifier, comment, string colors
+    keywordstyle = \color{KwColor},
+    commentstyle = \color{CmtColor},
+    identifierstyle = \color{VarColor},
+    stringstyle = \color{StrColor},
+    % no spaces in strings
+    showstringspaces = false,
+    % monospace font by default
+    basicstyle = \ttfamily,
+    % tabsize 8 by default, this is not the 1960s
+    tabsize = 4,
+    % add line numbers to the left with gray typewriter font
+    numbers = left,
+    numberstyle = \color{gray}\ttfamily,
+    % change distance from code block from 10 pt to 5 pt
+    numbersep = 5 pt
+}
+
+% title, author + thanks, date
+\title{Useful $ \arg\max $, $ \arg\min $ properties}
+\author{Derek Huang\thanks{NYU Stern 2021, BAC Advanced Team.}}
+% the extra thanks is also useful for making notes about previous versions.
+% you can remove this thanks if there are no version revisions.
+\date{March 14, 2021}
+
+\begin{document}
+
+\maketitle
+% need to include this after making title to undo the automatic
+% \thispagestyle{plain} command that is issued.
+\thispagestyle{fancy}
+
+\section{Introduction}
+
+The $ \arg\max $, $ \arg\min $ operators are widely used in the context of
+unconstrained optimization and have several useful properties that allow one
+to replace an objective $ f $ with a simpler objective $ g $ under certain
+conditions. Here we list and prove several of these properties to demonstrate
+why they are true.
+
+\section{Properties}
+
+Let $ f : \mathbb{R}^n \rightarrow \mathbb{R} $ be a function that attains its
+maximum at $ \mathbf{x}_\uparrow $ and its minimum at
+$ \mathbf{x}_\downarrow $\footnote{
+    The properties still hold if $ f $ attains its maximum at any point in
+    nonempty $ X_\uparrow \subseteq \mathbb{R}^n $ and its maximum at any point
+    in nonempty $ X_\downarrow \subseteq \mathbb{R}^n $. For example, consider
+    $ f(\mathbf{x}) \triangleq c $, $ c \in \mathbb{R} $. Here $ X_\uparrow =
+    X_\downarrow = \mathbb{R}^n $.
+}.
+
+\medskip
+
+\textit{Proposition.} For $ g : \mathbb{R} \rightarrow \mathbb{R} $,
+$ g(y) = ay + b $, $ a \in (0, \infty), b \in \mathbb{R} $,
+\begin{equation*}
+    \begin{split}
+        \arg\max_\mathbf{x}f(\mathbf{x}) & =
+        \arg\max_\mathbf{x}g(f(\mathbf{x})) \\
+        \arg\min_\mathbf{x}f(\mathbf{x}) & =
+        \arg\min_\mathbf{x}g(f(\mathbf{x}))
+    \end{split}
+\end{equation*}
+
+\medskip
+
+\textit{Proof.} Let $ \tilde{\mathbf{x}} =
+\arg\max_\mathbf{x}g(f(\mathbf{x})) $. By definition, $ \forall \mathbf{x}
+\in \mathbb{R}^n $,
+\begin{equation*}
+    g(\tilde{\mathbf{x}}) \ge g(\mathbf{x}) \Rightarrow
+    af(\tilde{\mathbf{x}}) + b \ge af(\mathbf{x}) + b \Leftrightarrow
+    f(\tilde{\mathbf{x}}) \ge f(\mathbf{x}) \Rightarrow
+    f(\tilde{\mathbf{x}}) \ge f(\mathbf{x}_\uparrow)
+\end{equation*}
+
+By definition, $ \forall \mathbf{x} \in \mathbb{R}^n $,
+$ f(\mathbf{x}_\uparrow) \ge f(\mathbf{x}) \Rightarrow
+f(\mathbf{x}_\uparrow) \ge f(\tilde{\mathbf{x}}) $. $ f(\mathbf{x}_\uparrow)
+\ge f(\tilde{\mathbf{x}}) $, $ f(\tilde{\mathbf{x}}) \ge
+f(\mathbf{x}_\uparrow) \Rightarrow
+f(\mathbf{x}_\uparrow) = f(\tilde{\mathbf{x}}) $. $ f $ attains a unique
+maximum at $ \hat{\mathbf{x}} \Rightarrow
+\mathbf{x}_\uparrow = \tilde{\mathbf{x}} $. Therefore,
+$\arg\max_\mathbf{x}f(\mathbf{x}) = \mathbf{x}_\uparrow = \tilde{\mathbf{x}} =
+\arg\max_\mathbf{x}g(f(\mathbf{x})) $.
+
+\bigskip
+
+\begin{enumerate}
+    \item \label{ppp}
+    \textit{Proposition.} \ref{ppp}
+\end{enumerate}
+
+
+\end{document}

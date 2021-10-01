@@ -124,9 +124,9 @@ class LinearDiscriminantAnalysis(BaseEstimator):
         # compute intercept(s)
         if n_classes == 2:
             self.intercept_ = (
-                -0.5 * (
-                    means[1] @ cov_i @ means[1] - means[0] @ cov_i @ means[0]
-                ) + np.log(priors[1] / priors[0])
+                -0.5 *
+                (means[1] @ cov_i @ means[1] - means[0] @ cov_i @ means[0]) +
+                np.log(priors[1] / priors[0])
             )
         else:
             self.intercept_ = (
@@ -208,12 +208,18 @@ def blob_bin():
     # generate noisy classification problem using isotropic Gaussian blobs
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples=600, n_features=10, centers=2, random_state=_seed
+        n_samples=600,
+        n_features=10,
+        centers=2,
+        random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=_seed
+        X,
+        y,
+        test_size=0.2,
+        random_state=_seed
     )
     # return split data, coef, and bias
     return X_train, X_test, y_train, y_test
@@ -234,11 +240,17 @@ def blob_multi():
     _seed = 7
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples=600, n_features=10, centers=4, random_state=_seed
+        n_samples=600,
+        n_features=10,
+        centers=4,
+        random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=_seed
+        X,
+        y,
+        test_size=0.2,
+        random_state=_seed
     )
     return X_train, X_test, y_train, y_test
 
@@ -275,7 +287,8 @@ def test_res_binary(blob_bin, shrinkage):
     np.testing.assert_allclose(_lc.predict(X_test), lc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _lc.score(X_test, y_test), lc.score(X_test, y_test)
+        _lc.score(X_test, y_test),
+        lc.score(X_test, y_test)
     )
 
 
@@ -310,5 +323,6 @@ def test_res_multi(blob_multi, shrinkage):
     np.testing.assert_allclose(_lc.predict(X_test), lc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _lc.score(X_test, y_test), lc.score(X_test, y_test)
+        _lc.score(X_test, y_test),
+        lc.score(X_test, y_test)
     )

@@ -237,12 +237,18 @@ def blob_bin():
     # generate noisy classification problem using isotropic Gaussian blobs
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples=600, n_features=10, centers=2, random_state=_seed
+        n_samples=600,
+        n_features=10,
+        centers=2,
+        random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=_seed
+        X,
+        y,
+        test_size=0.2,
+        random_state=_seed
     )
     # return split data, coef, and bias
     return X_train, X_test, y_train, y_test
@@ -268,8 +274,11 @@ def test_res_dual(blob_bin, C):
     # reduce the regularization. furthermore, the liblinear implementation uses
     # PRNG when performing cyclic coordinate descent on dual, so we fix seed.
     sklearn_params = dict(
-        dual=True, loss="hinge", C=C,
-        intercept_scaling=100, random_state=_seed
+        dual=True,
+        loss="hinge",
+        C=C,
+        intercept_scaling=100,
+        random_state=_seed
     )
     # fit scikit-learn model and our model
     _svc = _LinearSVC(**sklearn_params).fit(X_train, y_train)
@@ -279,7 +288,8 @@ def test_res_dual(blob_bin, C):
     np.testing.assert_allclose(_svc.predict(X_test), svc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _svc.score(X_test, y_test), svc.score(X_test, y_test)
+        _svc.score(X_test, y_test),
+        svc.score(X_test, y_test)
     )
 
 
@@ -310,5 +320,6 @@ def test_res_primal(blob_bin, C):
     np.testing.assert_allclose(_svc.predict(X_test), svc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _svc.score(X_test, y_test), svc.score(X_test, y_test)
+        _svc.score(X_test, y_test),
+        svc.score(X_test, y_test)
     )

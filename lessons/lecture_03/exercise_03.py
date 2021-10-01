@@ -137,8 +137,12 @@ def linreg():
     # generate noisy regression problem
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_regression(
-        n_samples=600, n_features=10, n_informative=10,
-        bias=7, noise=1, random_state=_seed
+        n_samples=600,
+        n_features=10,
+        n_informative=10,
+        bias=7,
+        noise=1,
+        random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return it
@@ -173,7 +177,8 @@ def test_res_matmul(linreg, alpha):
     # check that R^2 is close
     # pylint: disable=no-member
     np.testing.assert_allclose(
-        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+        _lr.score(X_test, y_test),
+        lr.score(X_test, y_test)
     )
     # pylint: enable=no-member
 
@@ -208,6 +213,7 @@ def test_res_lsqr(linreg, alpha):
     # check that R^2 is close
     # pylint: disable=no-member
     np.testing.assert_allclose(
-        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+        _lr.score(X_test, y_test),
+        lr.score(X_test, y_test)
     )
     # pylint: enable=no-member

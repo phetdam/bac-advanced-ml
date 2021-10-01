@@ -118,8 +118,11 @@ class LogisticRegression(BaseEstimator):
         y_mask[y == labels[1]] = 1
         # solve for coefficients and intercept
         res = scipy.optimize.minimize(
-            _logistic_loss_grad, np.zeros(n_features + 1),
-            method="L-BFGS-B", jac=True, args=(X, y_mask, 1. / self.C),
+            _logistic_loss_grad,
+            np.zeros(n_features + 1),
+            method="L-BFGS-B",
+            jac=True,
+            args=(X, y_mask, 1. / self.C),
             options=dict(gtol=self.tol, maxiter=self.max_iter)
         )
         weights = res.x
@@ -191,12 +194,18 @@ def blob_bin():
     # generate noisy classification problem using isotropic Gaussian blobs
     # pylint: disable=unbalanced-tuple-unpacking
     X, y = make_blobs(
-        n_samples=600, n_features=10, centers=2, random_state=_seed
+        n_samples=600,
+        n_features=10,
+        centers=2,
+        random_state=_seed
     )
     # pylint: enable=unbalanced-tuple-unpacking
     # split the data with train_test_split and return
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=_seed
+        X,
+        y,
+        test_size=0.2,
+        random_state=_seed
     )
     # return split data, coef, and bias
     return X_train, X_test, y_train, y_test
@@ -230,5 +239,6 @@ def test_res(blob_bin, C):
     np.testing.assert_allclose(_lc.predict(X_test), lc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _lc.score(X_test, y_test), lc.score(X_test, y_test)
+        _lc.score(X_test, y_test),
+        lc.score(X_test, y_test)
     )
