@@ -39,7 +39,8 @@ def test_res_matmul(linreg, alpha):
     # check that R^2 is close
     # pylint: disable=no-member
     np.testing.assert_allclose(
-        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+        _lr.score(X_test, y_test),
+        lr.score(X_test, y_test)
     )
     # pylint: enable=no-member
 
@@ -69,11 +70,13 @@ def test_res_lsqr(linreg, alpha):
     # pylint: enable=no-member
     # check that predictions are close (need lower rtol, default is 1e-7)
     np.testing.assert_allclose(
-        _lr.predict(X_test), lr.predict(X_test), rtol=1e-6
+        _lr.predict(X_test),
+        lr.predict(X_test), rtol=1e-6
     )
     # check that R^2 is close
     # pylint: disable=no-member
     np.testing.assert_allclose(
-        _lr.score(X_test, y_test), lr.score(X_test, y_test)
+        _lr.score(X_test, y_test),
+        lr.score(X_test, y_test)
     )
     # pylint: enable=no-member

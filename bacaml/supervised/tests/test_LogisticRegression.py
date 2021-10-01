@@ -39,5 +39,6 @@ def test_res(blob_bin, C):
     np.testing.assert_allclose(_lc.predict(X_test), lc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _lc.score(X_test, y_test), lc.score(X_test, y_test)
+        _lc.score(X_test, y_test),
+        lc.score(X_test, y_test)
     )

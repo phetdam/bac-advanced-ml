@@ -44,7 +44,8 @@ def test_res_dual(blob_bin, global_seed, C):
     np.testing.assert_allclose(_svc.predict(X_test), svc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _svc.score(X_test, y_test), svc.score(X_test, y_test)
+        _svc.score(X_test, y_test),
+        svc.score(X_test, y_test)
     )
 
 
@@ -77,5 +78,6 @@ def test_res_primal(blob_bin, C):
     np.testing.assert_allclose(_svc.predict(X_test), svc.predict(X_test))
     # accuracy should be the same
     np.testing.assert_allclose(
-        _svc.score(X_test, y_test), svc.score(X_test, y_test)
+        _svc.score(X_test, y_test),
+        svc.score(X_test, y_test)
     )

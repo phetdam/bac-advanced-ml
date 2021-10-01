@@ -48,7 +48,13 @@ class FastGradResult:
 
 
 def _armijo_backtrack(
-    fobj, x, eta0=1., fgrad=None, args=(), arm_alpha=0.5, arm_gamma=0.8
+    fobj,
+    x,
+    eta0=1.,
+    fgrad=None,
+    args=(),
+    arm_alpha=0.5,
+    arm_gamma=0.8
 ):
     """Compute step size using Armijo backtracking rule for gradient updates.
 
@@ -84,8 +90,16 @@ def _armijo_backtrack(
 
 
 def nag_solver(
-    fobj, x0, fgrad=None, args=(), tol=1e-4, max_iter=1000,
-    learning_rate="backtrack", eta0=1., arm_alpha=0.5, arm_gamma=0.8
+    fobj,
+    x0,
+    fgrad=None,
+    args=(),
+    tol=1e-4,
+    max_iter=1000,
+    learning_rate="backtrack",
+    eta0=1.,
+    arm_alpha=0.5,
+    arm_gamma=0.8
 ):
     """Nesterov's accelerated gradient descent for differentiable objectives.
 
@@ -147,8 +161,13 @@ def nag_solver(
             eta = eta0
         elif learning_rate == "backtrack":
             eta = _armijo_backtrack(
-                fobj, nest_x, eta0=eta0, fgrad=fgrad, args=args,
-                arm_alpha=arm_alpha, arm_gamma=arm_gamma
+                fobj,
+                nest_x,
+                eta0=eta0,
+                fgrad=fgrad,
+                args=args,
+                arm_alpha=arm_alpha,
+                arm_gamma=arm_gamma
             )
         # new parameter estimate using a gradient step, evaluated at nest_x
         new_x = nest_x - eta * grad

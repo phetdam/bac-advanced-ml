@@ -73,13 +73,16 @@ class RidgeRegression(BaseEstimator):
         # delegate coefficient computation to different solving methods
         if self.solver == "matmul":
             # compute coefficients using matrix inversion on centered problem
-            self.coef_ = np.linalg.inv(
-                X_c.T @ X_c + self.alpha * np.eye(X_c.shape[1])
-            ) @ X_c.T @ y
+            self.coef_ = (
+                np.linalg.inv(X_c.T @ X_c + self.alpha * np.eye(X_c.shape[1])) @
+                X_c.T @ y
+            )
         elif self.solver == "lsqr":
             # use scipy.sparse.linalg.lsqr to get augmented weights
             self.coef_ = scipy.sparse.linalg.lsqr(
-                X_c, y, damp=math.sqrt(self.alpha)
+                X_c,
+                y,
+                damp=math.sqrt(self.alpha)
             )[0]
         # compute intercept
         self.intercept_ = y.mean() - x_mean @ self.coef_
@@ -248,8 +251,11 @@ class LogisticRegression(BaseEstimator):
         y_mask[y == labels[1]] = 1
         # solve for coefficients and intercept
         res = scipy.optimize.minimize(
-            _logistic_loss_grad, np.zeros(n_features + 1),
-            method="L-BFGS-B", jac=True, args=(X, y_mask, 1. / self.C),
+            _logistic_loss_grad,
+            np.zeros(n_features + 1),
+            method="L-BFGS-B",
+            jac=True,
+            args=(X, y_mask, 1. / self.C),
             options=dict(gtol=self.tol, maxiter=self.max_iter)
         )
         weights = res.x

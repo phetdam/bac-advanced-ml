@@ -60,6 +60,7 @@ class LinearSVC(BaseEstimator):
     score(X, y)
         Return the accuracy of the predictions given true labels y.
     """
+
     def __init__(self, dual=True, tol=1e-8, C=1., max_iter=1000):
         if not isinstance(dual, (bool, np.bool_)):
             raise TypeError("dual must be bool")
@@ -120,9 +121,13 @@ class LinearSVC(BaseEstimator):
             alpha_cons = LinearConstraint(y_mask, 0, 0)
             # solve for lagrange multipliers using trust-constr
             res = minimize(
-                dual_obj, np.zeros(n_samples), method="trust-constr",
-                jac=dual_grad, hess=dual_hess,
-                bounds=alpha_bounds, constraints=alpha_cons,
+                dual_obj,
+                np.zeros(n_samples),
+                method="trust-constr",
+                jac=dual_grad,
+                hess=dual_hess,
+                bounds=alpha_bounds,
+                constraints=alpha_cons,
                 options=dict(gtol=self.tol, maxiter=self.max_iter)
             )
             # compute primal weights and intercept from dual variables. note
@@ -157,9 +162,8 @@ class LinearSVC(BaseEstimator):
             marg_vals = np.hstack(
                 (
                     np.ravel(
-                        y_mask.reshape(-1, 1) * np.hstack(
-                            (X, np.ones(n_samples).reshape(-1, 1))
-                        )
+                        y_mask.reshape(-1, 1) *
+                        np.hstack((X, np.ones(n_samples).reshape(-1, 1)))
                     ),
                     np.ones(n_samples)
                 )
@@ -179,7 +183,7 @@ class LinearSVC(BaseEstimator):
                     np.hstack(
                         [np.arange(n_features + 1) for i in range(n_samples)]
                     ),
-                    n_features + 1 +  np.arange(n_samples)
+                    n_features + 1 + np.arange(n_samples)
                 )
             )
             # build LinearConstraint matrix, using coo to save memory
@@ -199,9 +203,13 @@ class LinearSVC(BaseEstimator):
             )
             # solve for coefficients, intercept, slack using trust-constr
             res = minimize(
-                primal_obj, np.zeros(n_features + n_samples + 1),
-                method="trust-constr", jac=primal_grad, hess=primal_hess,
-                bounds=var_bounds, constraints=marg_cons,
+                primal_obj,
+                np.zeros(n_features + n_samples + 1),
+                method="trust-constr",
+                jac=primal_grad,
+                hess=primal_hess,
+                bounds=var_bounds,
+                constraints=marg_cons,
                 options=dict(gtol=self.tol, maxiter=self.max_iter)
             )
             # separate out weights and intercept

@@ -35,8 +35,13 @@ def test_nag_solver(convex_quad_min, learning_rate, eta0):
     x0 = np.zeros(n_dim)
     # get FastGradResult using nag_solver
     res = nag_solver(
-        fobj, x0, fgrad=fgrad, learning_rate=learning_rate,
-        eta0=eta0, tol=1e-8, max_iter=2000
+        fobj,
+        x0,
+        fgrad=fgrad,
+        learning_rate=learning_rate,
+        eta0=eta0,
+        tol=1e-8,
+        max_iter=2000
     )
     # check that res.loss is more or less the same as the optimal fobj value
     np.testing.assert_allclose(res.loss, fobj(sol))

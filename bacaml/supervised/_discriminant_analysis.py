@@ -49,6 +49,7 @@ class LinearDiscriminantAnalysis(BaseEstimator):
     score(X, y)
         Return the accuracy of the predictions given true labels y.
     """
+
     def __init__(self, shrinkage=None):
         # check that shrinkage is valid
         if shrinkage is None:
@@ -119,9 +120,9 @@ class LinearDiscriminantAnalysis(BaseEstimator):
         # compute intercept(s)
         if n_classes == 2:
             self.intercept_ = (
-                -0.5 * (
-                    means[1] @ cov_i @ means[1] - means[0] @ cov_i @ means[0]
-                ) + np.log(priors[1] / priors[0])
+                -0.5 *
+                (means[1] @ cov_i @ means[1] - means[0] @ cov_i @ means[0]) +
+                np.log(priors[1] / priors[0])
             )
         else:
             self.intercept_ = (
