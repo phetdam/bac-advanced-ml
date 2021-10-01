@@ -47,7 +47,9 @@ def _setup():
         },
         python_requires=">=3.6",
         install_requires=[
-            "numpy>=1.19.1", "scipy>=1.5.2", "scikit-learn>=0.23.2"
+            "numpy>=1.19.1",
+            "scipy>=1.5.2",
+            "scikit-learn>=0.23.2"
         ],
         extras_require={"tests": ["pytest>=6.0.1"]},
         packages=find_packages()
