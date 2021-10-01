@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{April 20, 2021}
+\date{October 1, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -81,8 +81,9 @@
         \end{equation*}
 
         \item
-        In linear regression, we directly modeled $ p(y \mid \mathbf{x} \mid
-        \theta) $, positing $ Y \mid X \sim \mathcal{N}(\mathbf{w}^\top X + b,
+        In linear regression, we directly modeled
+        $ p(y \mid \mathbf{x}, \theta) $, positing
+        $ Y \mid X \sim \mathcal{N}(\mathbf{w}^\top X + b,
         \sigma^2) $, for $ \mathbf{w} \in \mathbb{R}^d $,
         $ b \in \mathbb{R} $, $ \sigma \in (0, \infty) $.
 
@@ -97,7 +98,8 @@
 \begin{frame}{Conditioning on class}
     \begin{itemize}
         \item
-        We can apply Bayes' rule to $ p(\mathcal{D} \mid \theta) $ to see that
+        We can apply conditional Bayes' rule to $ p(\mathcal{D} \mid \theta) $
+        to see that
         \begin{equation*}
             p(\mathcal{D} \mid \theta) =
             \prod_{k = 1}^Np(y_k, \mathbf{x}_k \mid \theta) =
@@ -422,7 +424,7 @@
                 \frac{1}{2}\left(
                     \hat{\mu}_{C_a}^\top
                     \hat{\mathbf{\Sigma}}_{C_a}^{-1}\hat{\mu}_{C_a} -
-                    \hat{\mu}_b^\top
+                    \hat{\mu}_{C_b}^\top
                     \hat{\mathbf{\Sigma}}_{C_b}^{-1}\hat{\mu}_{C_b} +
                     \log\frac{
                         |\hat{\mathbf{\Sigma}}_{C_a}|
