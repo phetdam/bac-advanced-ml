@@ -46,7 +46,7 @@
     \titlepage
     \centering
     % relative path may need to be updated depending on .tex file location
-    \includegraphics[scale = 0.1]{../bac_logo1.png}
+    \includegraphics[scale=0.1]{../bac_logo1.png}
 \end{frame}
 
 % table of contents slide
@@ -66,7 +66,7 @@
         provide probabilistic models of [class-]conditional distributions.
 
         \item
-        Suppose we have convex sets $ A, B \subseteq \mathbb{R}^d $. There are
+        Suppose we have convex sets $ A, B \subset \mathbb{R}^d $. There are
         several ways to draw a distribution-free ``line'' (hyperplane) between
         them.
 
@@ -79,12 +79,46 @@
     \end{itemize}
 \end{frame}
 
-%\begin{frame}{Maximum margin hyperplanes}
-%    \begin{itemize}
-%        \item
-%        
-%    \end{itemize}
-%\end{frame}
+\begin{frame}{Maximum margin hyperplanes}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{hyperplane} in $ \mathbb{R}^d $ with
+        \textit{normal vector} $ \mathbf{a} \in \mathbb{R}^d $ is the affine
+        set
+        $ \{\mathbf{x} \in \mathbb{R}^d : \mathbf{a}^\top\mathbf{x} = b \} $,
+        where $ \mathbf{a} \ne \mathbf{0} $, $ b \in \mathbb{R} $
+        \cite{bv_convex_opt}.
+
+        \item
+        A hyperplane is the solution set for a nontrivial linear equation with
+        a \textit{normal vector} $ \mathbf{a} $, which in 2D is orthogonal
+        to the plane.
+
+        \begin{figure}
+            \centering
+            \includegraphics[scale=0.2]{hyperplane.png}
+            \vspace{-5 pt}
+            \caption{
+                A hyperplane with normal vector $ \mathbf{a} \in
+                \mathbb{R}^2 $. Note $ \mathbf{a}^\top(\mathbf{x} -
+                \mathbf{x}_0) = 0 $\footnote{
+                    Figure 2.6 from Boyd and Vandenberghe's
+                    \textit{Convex Optimization}.                
+                }.
+            }
+            \label{fig:hyperplane}
+            \vspace{-5 pt}
+        \end{figure}
+
+        \item
+        As seen in Figure \aref{fig:hyperplane}, for hyperplane
+        $ L \triangleq \{\mathbf{x} \in \mathbb{R}^n :
+        \mathbf{a}^\top\mathbf{x} = b \} $,
+        $ \forall \mathbf{x}, \mathbf{y} \in L $,
+        $ \mathbf{a}^\top(\mathbf{x} - \mathbf{y}) = 0 \Rightarrow \mathbf{a} $
+        is orthogonal to vectors parallel to $ L $.
+    \end{itemize}
+\end{frame}
 %
 %\subsection{Primal formulation}
 %
