@@ -112,11 +112,120 @@
 
         \item
         As seen in Figure \aref{fig:hyperplane}, for hyperplane
-        $ L \triangleq \{\mathbf{x} \in \mathbb{R}^n :
+        $ L \triangleq \{\mathbf{x} \in \mathbb{R}^d :
         \mathbf{a}^\top\mathbf{x} = b \} $,
         $ \forall \mathbf{x}, \mathbf{y} \in L $,
         $ \mathbf{a}^\top(\mathbf{x} - \mathbf{y}) = 0 \Rightarrow \mathbf{a} $
         is orthogonal to vectors parallel to $ L $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum margin hyperplanes}
+    \begin{itemize}
+        \item
+        \textit{Definition.} A \textit{closed halfspace} in $ \mathbb{R}^d $
+        with normal vector $ \mathbf{a} \in \mathbb{R}^d $ is a set of the form
+        $ \{\mathbf{x} \in \mathbb{R}^d : \mathbf{a}^\top\mathbf{x} \le b\} $
+        or $ \{\mathbf{x} \in \mathbb{R}^d : \mathbf{a}^\top\mathbf{x} \ge
+        b\} $ \cite{bv_convex_opt}. If we use strict inequalities, the sets
+        are \textit{open halfspaces}.
+
+        \item
+        By setting $ b $ to $ -b $, we can equivalently define hyperplanes
+        with $ \mathbf{a}^\top\mathbf{x} + b = 0 $ and closed halfspaces with
+        $ \mathbf{a}^\top\mathbf{x} + b \le 0 $,
+        $ \mathbf{a}^\top\mathbf{x} + b \ge 0 $.
+
+        \item
+        Note that $ \forall \mathbf{x}' \in \mathbb{R}^d $, given hyperplane
+        $ L \triangleq \{\mathbf{x} \in \mathbb{R}^d :
+        \mathbf{w}^\top\mathbf{x} + b = 0 \} $,
+        $ \mathbf{w}^\top\mathbf{x} + b $ is the signed distance of
+        $ \mathbf{x}' $ from $ L $ \cite{esl}.
+
+        \item
+        Therefore, $ \mathbf{w}^\top\mathbf{x}' + b \ne 0 \Rightarrow
+        \mathbf{x}' $ belongs in one of the open halfspaces defined by $ L $,
+        which naturally induces the two-class classification rule
+        \begin{equation} \label{eq:svm_classifier}
+            G(\mathbf{x}) \triangleq \operatorname{sgn}\big(
+                \mathbf{w}^\top\mathbf{x} + b
+            \big)
+        \end{equation}
+
+        \item
+        That is, we label points in $ \{\mathbf{x} \in \mathbb{R}^d :
+        \mathbf{w}^\top\mathbf{x} + b > 0\} $ with $ 1 $ and label points in
+        $ \{\mathbf{x} \in \mathbb{R}^d : \mathbf{w}^\top\mathbf{x} + b < 0\} $
+        with $ -1 $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum margin hyperplanes}
+    \begin{itemize}
+        \item
+        Now consider the training data $ \mathcal{D} \triangleq
+        \{(\mathbf{x}_1, y_1), \ldots (\mathbf{x}_N, y_N)\} $, where $ \forall
+        k \in \{1, \ldots N\} $, $ \mathbf{x}_k \in \mathbb{R}^d $,
+        $ y_k \in \{-1, 1\} $. Furthermore, suppose that the positive class
+        $ \mathcal{X}_+ \triangleq \{\mathbf{x} \in \mathbb{R}^d :
+        (\mathbf{x}, y) \in \mathcal{D}, y = 1\} $ and the negative class
+        $ \mathcal{X}_* \triangleq \{\mathbf{x} \in \mathbb{R}^d :
+        (\mathbf{x}, y) \in \mathcal{D}, y = -1\} $ are linearly separable.
+
+        \item
+        We thus know $ \exists L_\mathcal{D} \triangleq
+        \{\mathbf{x}' \in \mathbb{R}^d : \mathbf{w}^\top\mathbf{x}' + b = 0\} $
+        s.t. $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
+        $ y = G(\mathbf{x}) $, where $ G $ is the classification rule defined
+        in (\aref{eq:svm_classifier})\footnote{
+            More precisely, the existence of the hyperplane $ L_\mathcal{D} $
+            exists is guaranteed by the separating hyperplane theorem when
+            $ \mathcal{X}_+, \mathcal{X}_* $ are convex \cite{bv_convex_opt}.
+        }.
+
+        \item
+        Since $ \mathcal{X}_+, \mathcal{X}_* $ separable, $ \forall
+        (\mathbf{x}, y) \in \mathcal{D} $, $ y(\mathbf{w}^\top\mathbf{x} +
+        b) > 0 $ \cite{esl}. But to find the \textit{maximum margin hyperplane},
+        we want $ \tilde{\mathbf{w}} \in \mathbb{R}^d,
+        \Vert\tilde{\mathbf{w}}\Vert_2 = 1, \tilde{b} \in \mathbb{R} $ s.t.
+        $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
+        $ y\big(\tilde{\mathbf{w}}^\top\mathbf{x} + \tilde{b}\big) \ge M $,
+        $ M \ge 0 $ the eponymous \textit{margin}\footnote{
+            We can let $ \Vert\tilde{\mathbf{w}}\Vert_2 = 1 $ as
+            $ \forall c \in (0, \infty) $,
+            $ \forall \mathbf{x} \in L_\mathcal{D} $,
+            $ \mathbf{x} \in \big\{\mathbf{x}' \in \mathbb{R}^d :
+            c\big(\mathbf{w}^\top\mathbf{x}' + b\big) = 0\big\} $.
+        }.
+
+        \item
+        Naturally, margin maximization is an optimization problem.
+
+        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum margin hyperplanes}
+    \begin{itemize}
+        \item
+        For brevity of notation, let $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \
+        \ldots \ \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
+        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
+        \{-1, 1\}^N $, $ \mathbf{Z} \triangleq [ \ y_1\mathbf{x}_1 \ \ldots \
+        y_N\mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $.
+
+        \item
+        The problem of margin maximization can thus be formulated as
+        \begin{equation} \label{eq:max_margin}
+            \begin{array}{ll}
+                \displaystyle\max_{\mathbf{w}, b, M} & M \\
+                \text{s.t.} &
+                \mathbf{Z}\mathbf{w} + b\mathbf{y} \succeq M\mathbf{1} \\
+                & \Vert\mathbf{w}\Vert_2 = 1
+            \end{array}
+        \end{equation}
     \end{itemize}
 \end{frame}
 %
