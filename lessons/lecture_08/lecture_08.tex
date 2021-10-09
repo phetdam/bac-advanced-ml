@@ -66,9 +66,9 @@
         provide probabilistic models of [class-]conditional distributions.
 
         \item
-        Suppose we have convex sets $ A, B \subset \mathbb{R}^d $. There are
-        several ways to draw a distribution-free ``line'' (hyperplane) between
-        them.
+        Suppose we have disjoint convex sets $ A, B \subset \mathbb{R}^d $.
+        There are several ways to draw a distribution-free ``line''
+        (hyperplane) between them.
 
         \item
         Intuitively, the optimal hyperplane is furthest away from both
@@ -118,6 +118,9 @@
         $ \mathbf{a}^\top(\mathbf{x} - \mathbf{y}) = 0 \Rightarrow \mathbf{a} $
         is orthogonal to vectors parallel to $ L $.
     \end{itemize}
+
+    % spacing for footnote
+    \medskip
 \end{frame}
 
 \begin{frame}{Maximum margin hyperplanes}
@@ -140,7 +143,8 @@
         Note that $ \forall \mathbf{x}' \in \mathbb{R}^d $, given hyperplane
         $ L \triangleq \{\mathbf{x} \in \mathbb{R}^d :
         \mathbf{w}^\top\mathbf{x} + b = 0 \} $,
-        $ \mathbf{w}^\top\mathbf{x} + b $ is the signed distance of
+        $ \frac{1}{\Vert\mathbf{w}\Vert_2}
+        \big(\mathbf{w}^\top\mathbf{x} + b\big) $ is the signed distance of
         $ \mathbf{x}' $ from $ L $ \cite{esl}.
 
         \item
@@ -167,9 +171,11 @@
         Now consider the training data $ \mathcal{D} \triangleq
         \{(\mathbf{x}_1, y_1), \ldots (\mathbf{x}_N, y_N)\} $, where $ \forall
         k \in \{1, \ldots N\} $, $ \mathbf{x}_k \in \mathbb{R}^d $,
-        $ y_k \in \{-1, 1\} $. Furthermore, suppose that the positive class
-        $ \mathcal{X}_+ \triangleq \{\mathbf{x} \in \mathbb{R}^d :
-        (\mathbf{x}, y) \in \mathcal{D}, y = 1\} $ and the negative class
+        $ y_k \in \{-1, 1\} $.
+
+        \item        
+        Furthermore, suppose $ \mathcal{X}_+ \triangleq \{\mathbf{x} \in
+        \mathbb{R}^d : (\mathbf{x}, y) \in \mathcal{D}, y = 1\} $ and
         $ \mathcal{X}_* \triangleq \{\mathbf{x} \in \mathbb{R}^d :
         (\mathbf{x}, y) \in \mathcal{D}, y = -1\} $ are linearly separable.
 
@@ -192,22 +198,18 @@
         \Vert\tilde{\mathbf{w}}\Vert_2 = 1, \tilde{b} \in \mathbb{R} $ s.t.
         $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
         $ y\big(\tilde{\mathbf{w}}^\top\mathbf{x} + \tilde{b}\big) \ge M $,
-        $ M \ge 0 $ the eponymous \textit{margin}\footnote{
-            We can let $ \Vert\tilde{\mathbf{w}}\Vert_2 = 1 $ as
-            $ \forall c \in (0, \infty) $,
-            $ \forall \mathbf{x} \in L_\mathcal{D} $,
-            $ \mathbf{x} \in \big\{\mathbf{x}' \in \mathbb{R}^d :
-            c\big(\mathbf{w}^\top\mathbf{x}' + b\big) = 0\big\} $.
-        }.
+        $ 2M \ge 0 $ the eponymous \textit{margin}.
 
         \item
-        Naturally, margin maximization is an optimization problem.
-
-        
+        In other words, we want to maximize the signed distance of the points
+        from the hyperplane defined by $ \tilde{\mathbf{w}}, \tilde{b} $, an
+        optimization problem.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Maximum margin hyperplanes}
+\subsection{Primal formulation}
+
+\begin{frame}{Primal formulation}
     \begin{itemize}
         \item
         For brevity of notation, let $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \
@@ -228,7 +230,23 @@
                 & \Vert\mathbf{w}\Vert_2 = 1
             \end{array}
         \end{equation}
+
+        (\aref{eq:max_margin}) is convex, with linear objective, linear and
+        convex constraints.
+
+        \item
+        However, we can rewrite (\aref{eq:max_margin}) in a more convenient
+        form. If we drop the norm constraint on $ \mathbf{w} $, we can rewrite
+        the linear constraints as \cite{esl}
+        \begin{equation*}
+            \frac{1}{\Vert\mathbf{w}\Vert_2}(\mathbf{Zw} + b\mathbf{y})
+            \succeq M\mathbf{1}
+        \end{equation*}
+        Here we redefine $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $.
     \end{itemize}
+
+    % spacing for footnote
+    \medskip
 \end{frame}
 %
 %\subsection{Primal formulation}
