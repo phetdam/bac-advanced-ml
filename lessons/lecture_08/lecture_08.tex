@@ -262,12 +262,12 @@
 \begin{frame}{Margin maximization}
     \begin{itemize}
         \item
-        Now suppose $ \mathbf{w}^*, b^*, M^* $ solve (\aref{eq:max_margin_orig}),
-        i.e. $ \mathbf{Zw}^* + b^*\mathbf{y} \succeq
-        M^*\Vert\mathbf{w}^*\Vert_2\mathbf{1} $. Let $ \hat{\kappa} \triangleq
-        1 / M^*\Vert\mathbf{w}^*\Vert_2 $, $ \hat{\mathbf{w}} \triangleq
-        \hat{\kappa}\mathbf{w}^* $, $ \hat{b} \triangleq \hat{\kappa}b^* $.
-        Note that
+        Now suppose $ \mathbf{w}^*, b^*, M^* $ satisfy
+        (\aref{eq:neo_margin_cons}), i.e. $ \mathbf{Zw}^* + b^*\mathbf{y}
+        \succeq M^*\Vert\mathbf{w}^*\Vert_2\mathbf{1} $. Let $ \hat{\kappa}
+        \triangleq 1 / M^*\Vert\mathbf{w}^*\Vert_2 $, $ \hat{\mathbf{w}}
+        \triangleq \hat{\kappa}\mathbf{w}^* $, $ \hat{b} \triangleq
+        \hat{\kappa}b^* $. Note that
         \begin{equation*}
             \mathbf{Z}\hat{\mathbf{w}} + \hat{b}\mathbf{y} =
             \hat{\kappa}(\mathbf{Zw}^* + b^*\mathbf{y}) \succeq
