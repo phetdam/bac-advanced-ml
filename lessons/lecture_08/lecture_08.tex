@@ -219,6 +219,14 @@
 \begin{frame}{Optimal separating hyperplanes}
     \begin{itemize}
         \item
+        Let $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \ \ldots \
+        \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
+        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
+        \{-1, 1\}^N $. Also, let $ \mathbf{Z} \triangleq [ \ y_1\mathbf{x}_1 \
+        \ldots \ y_N\mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
+        the ``signed'' data matrix.
+
+        \item
         The margin maximization problem can be concisely written as\footnote{
             (\aref{eq:max_margin_orig}) has a global solution as it is a convex
             problem.        
@@ -231,12 +239,6 @@
                 & \Vert\mathbf{w}\Vert_2 = 1
             \end{array}
         \end{equation}
-        Here $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \ \ldots \
-        \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
-        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
-        \{-1, 1\}^N $, $ \mathbf{Z} \triangleq [ \ y_1\mathbf{x}_1 \ \ldots \
-        y_N\mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $, $ \mathbf{Z} $
-        the ``signed'' data matrix.
 
         \item
         However, if we drop the $ \mathbf{w} $ norm constraint and redefine
