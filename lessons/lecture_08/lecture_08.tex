@@ -1,7 +1,7 @@
 %%% lecture 08 %%%
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx}
+\usepackage{algorithm2e, amsmath, amssymb, amsfonts, graphicx, hyperref}
 % allow section.equation numbering
 \numberwithin{equation}{section}
 % use boadilla theme
@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{August 14, 2021}
+\date{October 12, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -55,9 +55,9 @@
 \end{frame}
 
 
-\section{Linear SVMs}
+\section{Separating hyperplanes}
 
-\subsection{Maximum margin hyperplanes}
+\subsection{Hyperplanes and halfspaces}
 
 \begin{frame}{Motivation}
     \begin{itemize}
@@ -79,7 +79,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Maximum margin hyperplanes}
+\begin{frame}{Hyperplanes and halfspaces}
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{hyperplane} in $ \mathbb{R}^d $ with
@@ -123,7 +123,7 @@
     \medskip
 \end{frame}
 
-\begin{frame}{Maximum margin hyperplanes}
+\begin{frame}{Hyperplanes and halfspaces}
     \begin{itemize}
         \item
         \textit{Definition.} A \textit{closed halfspace} in $ \mathbb{R}^d $
@@ -165,7 +165,9 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Maximum margin hyperplanes}
+\subsection{Optimal separating hyperplanes}
+
+\begin{frame}{Optimal separating hyperplanes}
     \begin{itemize}
         \item
         Now consider the training data $ \mathcal{D} \triangleq
@@ -174,55 +176,54 @@
         $ y_k \in \{-1, 1\} $.
 
         \item        
-        Furthermore, suppose $ \mathcal{X}_+ \triangleq \{\mathbf{x} \in
-        \mathbb{R}^d : (\mathbf{x}, y) \in \mathcal{D}, y = 1\} $ and
-        $ \mathcal{X}_* \triangleq \{\mathbf{x} \in \mathbb{R}^d :
-        (\mathbf{x}, y) \in \mathcal{D}, y = -1\} $ are linearly separable.
-
-        \item
-        We thus know $ \exists L_\mathcal{D} \triangleq
-        \{\mathbf{x}' \in \mathbb{R}^d : \mathbf{w}^\top\mathbf{x}' + b = 0\} $
-        s.t. $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
-        $ y = G(\mathbf{x}) $, where $ G $ is the classification rule defined
-        in (\aref{eq:svm_classifier})\footnote{
-            More precisely, the existence of the hyperplane $ L_\mathcal{D} $
-            exists is guaranteed by the separating hyperplane theorem when
-            $ \mathcal{X}_+, \mathcal{X}_* $ are convex \cite{bv_convex_opt}.
+        Furthermore, suppose $ \mathcal{X}_\mathcal{D}^+ \triangleq
+        \{\mathbf{x} \in \mathbb{R}^d : (\mathbf{x}, y) \in \mathcal{D},
+        y = 1\} $ and $ \mathcal{X}_\mathcal{D}^- \triangleq
+        \{\mathbf{x} \in \mathbb{R}^d : (\mathbf{x}, y) \in \mathcal{D},
+        y = -1\} $ are linearly separable\footnote{
+            In other words, $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
+            the scaled signed distance
+            $ y(\mathbf{w}^\top\mathbf{x} + b) > 0 $.
         }.
 
         \item
-        Since $ \mathcal{X}_+, \mathcal{X}_* $ separable, $ \forall
-        (\mathbf{x}, y) \in \mathcal{D} $, $ y(\mathbf{w}^\top\mathbf{x} +
-        b) > 0 $ \cite{esl}. But to find the \textit{maximum margin hyperplane},
-        we want $ \tilde{\mathbf{w}} \in \mathbb{R}^d,
-        \Vert\tilde{\mathbf{w}}\Vert_2 = 1, \tilde{b} \in \mathbb{R} $ s.t.
-        $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
-        $ y\big(\tilde{\mathbf{w}}^\top\mathbf{x} + \tilde{b}\big) \ge M $,
-        $ 2M \ge 0 $ the eponymous \textit{margin}.
+        We thus know $ \exists \{\mathbf{x}' \in \mathbb{R}^d :
+        \mathbf{w}^\top\mathbf{x}' + b = 0\} $ s.t. $ \forall (\mathbf{x}, y)
+        \in \mathcal{D} $, $ y = G(\mathbf{x}) $, where $ G $ is the
+        classification rule defined in (\aref{eq:svm_classifier})\footnote{
+            More precisely, the existence of a separating hyperplane is
+            guaranteed by the separating hyperplane theorem when the sets
+            $ \mathcal{X}_\mathcal{D}^+, \mathcal{X}_\mathcal{D}^- $ are
+            convex \cite{bv_convex_opt}.
+        }.
 
         \item
-        In other words, we want to maximize the signed distance of the points
-        from the hyperplane defined by $ \tilde{\mathbf{w}}, \tilde{b} $, an
-        optimization problem.
+        Sadly, the problem of finding \alert{any} separating hyperplane has
+        many solutions. However, consider the hyperplane with
+        $ \tilde{\mathbf{w}} \in \mathbb{R}^d $,
+        $ \Vert\tilde{\mathbf{w}}\Vert_2 = 1 $, $ \tilde{b} \in \mathbb{R} $
+        s.t. $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
+        $ y\big(\tilde{\mathbf{w}}^\top\mathbf{x} + \tilde{b}\big) \ge M $,
+        $ M \ge 0 $ maximized.
+
+        \item
+        The $ \tilde{\mathbf{w}}, \tilde{b} $ hyperplane is the \alert{unique}
+        \textit{optimal separating hyperplane} due to Vapnik that maximizes
+        the quantity $ 2M $, the eponymous \textit{margin}.
     \end{itemize}
+
+    % realign text given footnotes
+    \medskip
 \end{frame}
 
-\subsection{Primal formulation}
-
-\begin{frame}{Primal formulation}
+\begin{frame}{Optimal separating hyperplanes}
     \begin{itemize}
         \item
-        For brevity of notation, let $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \
-        \ldots \ \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
-        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
-        \{-1, 1\}^N $, $ \mathbf{Z} \triangleq [ \ y_1\mathbf{x}_1 \ \ldots \
-        y_N\mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $\footnote{
-            $ \mathbf{Z} $ can be interpreted as a ``signed'' data matrix.        
-        }.
-
-        \item
-        The problem of margin maximization can thus be formulated as
-        \begin{equation} \label{eq:max_margin}
+        The margin maximization problem can be concisely written as\footnote{
+            (\aref{eq:max_margin_orig}) has a global solution as it is a convex
+            problem.        
+        }
+        \begin{equation} \label{eq:max_margin_orig}
             \begin{array}{ll}
                 \displaystyle\max_{\mathbf{w}, b, M} & M \\
                 \text{s.t.} &
@@ -230,24 +231,80 @@
                 & \Vert\mathbf{w}\Vert_2 = 1
             \end{array}
         \end{equation}
-
-        (\aref{eq:max_margin}) is convex, with linear objective, linear and
-        convex constraints.
+        Here $ \mathbf{X} \triangleq [ \ \mathbf{x}_1 \ \ldots \
+        \mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $,
+        $ \mathbf{y} \triangleq [ \ y_1 \ \ldots \ y_N \ ]^\top \in
+        \{-1, 1\}^N $, $ \mathbf{Z} \triangleq [ \ y_1\mathbf{x}_1 \ \ldots \
+        y_N\mathbf{x}_N \ ]^\top \in \mathbb{R}^{N \times d} $, $ \mathbf{Z} $
+        the ``signed'' data matrix.
 
         \item
-        However, we can rewrite (\aref{eq:max_margin}) in a more convenient
-        form. If we drop the norm constraint on $ \mathbf{w} $, we can rewrite
-        the linear constraints as \cite{esl}
+        However, if we drop the $ \mathbf{w} $ norm constraint and redefine
+        $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $, we can replace the constraints
+        of (\aref{eq:max_margin_orig}) with\footnote{
+            The link between (\aref{eq:max_margin_orig}),
+            (\aref{eq:neo_margin_cons}) is clearer if we rewrite
+            (\aref{eq:neo_margin_cons}) as
+            $ \frac{1}{\Vert\mathbf{w}\Vert_2}(\mathbf{Zw} + b\mathbf{y})
+            \succeq M\mathbf{1} $. % gobble whitespace
+            % gobble whitespace
+            % prevent fraction from getting smushed into bottom border
+            \vspace{0.01 pt}
+        } \cite{esl}
+        \begin{equation} \label{eq:neo_margin_cons}
+            \mathbf{Zw} + b\mathbf{y} \succeq M\Vert\mathbf{w}\Vert_2\mathbf{1}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Margin maximization}
+    \begin{itemize}
+        \item
+        Now suppose $ \mathbf{w}^*, b^*, M^* $ solve (\aref{eq:max_margin_orig}),
+        i.e. $ \mathbf{Zw}^* + b^*\mathbf{y} \succeq
+        M^*\Vert\mathbf{w}^*\Vert_2\mathbf{1} $. Let $ \hat{\kappa} \triangleq
+        1 / M^*\Vert\mathbf{w}^*\Vert_2 $, $ \hat{\mathbf{w}} \triangleq
+        \hat{\kappa}\mathbf{w}^* $, $ \hat{b} \triangleq \hat{\kappa}b^* $.
+        Note that
         \begin{equation*}
-            \frac{1}{\Vert\mathbf{w}\Vert_2}(\mathbf{Zw} + b\mathbf{y})
-            \succeq M\mathbf{1}
+            \mathbf{Z}\hat{\mathbf{w}} + \hat{b}\mathbf{y} =
+            \hat{\kappa}(\mathbf{Zw}^* + b^*\mathbf{y}) \succeq
+            \hat{\kappa}M^*\Vert\mathbf{w}^*\Vert_2\mathbf{1} = \mathbf{1}
         \end{equation*}
-        Here we redefine $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $.
+
+        \item
+        Furthermore, $ \Vert\hat{\mathbf{w}}\Vert_2 =
+        \hat{\kappa}\Vert\mathbf{w}^*\Vert_2 = 1 / M^* $. Therefore, since
+        $ \hat{\mathbf{w}}, \hat{b} $ clearly satisfy
+        (\aref{eq:neo_margin_cons}), we can solve for them instead, i.e. we
+        solve\footnote{
+            Squaring the norm gives a nice quadratic objective, i.e. with
+            identity Hessian.
+        }
+        \begin{equation} \label{eq:max_margin_sep}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b} &
+                \frac{1}{2}\Vert\mathbf{w}\Vert_2^2 \\
+                \text{s.t.} & \mathbf{Zw} + b\mathbf{y} \succeq \mathbf{1}
+            \end{array}
+        \end{equation}
+        Here we set $ \Vert\mathbf{w}\Vert_2 = 1 / M $, so minimizing
+        $ \Vert\mathbf{w}\Vert_2 $ is a proxy for maximizing the margin $ 2M $
+        as is done in (\aref{eq:max_margin_orig}).
+
+        \item
+        (\aref{eq:max_margin_sep}) is readily solvable, as it has a quadratic
+        objective and linear constraints, i.e. it is a \alert{convex}
+        optimization problem.
     \end{itemize}
 
-    % spacing for footnote
+    % footnote spacing
     \medskip
 \end{frame}
+
+%\section{Linear SVMs}
+%
+%\subsection{Non-separable classes}
 %
 %\subsection{Primal formulation}
 %
