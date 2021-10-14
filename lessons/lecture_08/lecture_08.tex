@@ -191,10 +191,10 @@
         \mathbf{w}^\top\mathbf{x}' + b = 0\} $ s.t. $ \forall (\mathbf{x}, y)
         \in \mathcal{D} $, $ y = G(\mathbf{x}) $, where $ G $ is the
         classification rule defined in (\aref{eq:svm_classifier})\footnote{
-            More precisely, the existence of a separating hyperplane is
-            guaranteed by the separating hyperplane theorem when the sets
-            $ \mathcal{X}_\mathcal{D}^+, \mathcal{X}_\mathcal{D}^- $ are
-            convex \cite{bv_convex_opt}.
+            When $ \mathcal{X}_\mathcal{D}^+, \mathcal{X}_\mathcal{D}^- $ are
+            convex, the separating hyperplane theorem guarantees existence
+            of the separating hyperplane \cite{bv_convex_opt}. Sadly,
+            finite sets are by definition nonconvex.
         }.
 
         \item
@@ -235,7 +235,8 @@
             \begin{array}{ll}
                 \displaystyle\max_{\mathbf{w}, b, M} & M \\
                 \text{s.t.} &
-                \mathbf{Z}\mathbf{w} + b\mathbf{y} \succeq M\mathbf{1} \\
+                \mathbf{Z}\mathbf{w} + b\mathbf{y} \succeq M\mathbf{1}
+                \succ \mathbf{0} \\
                 & \Vert\mathbf{w}\Vert_2 = 1
             \end{array}
         \end{equation}
@@ -244,17 +245,16 @@
         However, if we drop the $ \mathbf{w} $ norm constraint and redefine
         $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $, we can replace the constraints
         of (\aref{eq:max_margin_orig}) with\footnote{
-            The link between (\aref{eq:max_margin_orig}),
-            (\aref{eq:neo_margin_cons}) is clearer if we rewrite
-            (\aref{eq:neo_margin_cons}) as
+            The link is clearer if we rewrite (\aref{eq:neo_margin_cons}) as
             $ \frac{1}{\Vert\mathbf{w}\Vert_2}(\mathbf{Zw} + b\mathbf{y})
-            \succeq M\mathbf{1} $. % gobble whitespace
+            \succeq M\mathbf{1} \succ \mathbf{0} $. % gobble whitespace
             % gobble whitespace
             % prevent fraction from getting smushed into bottom border
             \vspace{0.01 pt}
         } \cite{esl}
         \begin{equation} \label{eq:neo_margin_cons}
             \mathbf{Zw} + b\mathbf{y} \succeq M\Vert\mathbf{w}\Vert_2\mathbf{1}
+            \succ \mathbf{0}
         \end{equation}
     \end{itemize}
 \end{frame}
@@ -272,6 +272,7 @@
             \mathbf{Z}\hat{\mathbf{w}} + \hat{b}\mathbf{y} =
             \hat{\kappa}(\mathbf{Zw}^* + b^*\mathbf{y}) \succeq
             \hat{\kappa}M^*\Vert\mathbf{w}^*\Vert_2\mathbf{1} = \mathbf{1}
+            \succ \mathbf{0}
         \end{equation*}
 
         \item
@@ -283,7 +284,7 @@
             Squaring the norm gives a nice quadratic objective, i.e. with
             identity Hessian.
         }
-        \begin{equation} \label{eq:max_margin_sep}
+        \begin{equation} \label{eq:linear_svc_sep}
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{w}, b} &
                 \frac{1}{2}\Vert\mathbf{w}\Vert_2^2 \\
@@ -295,7 +296,7 @@
         as is done in (\aref{eq:max_margin_orig}).
 
         \item
-        (\aref{eq:max_margin_sep}) is readily solvable, as it has a quadratic
+        (\aref{eq:linear_svc_sep}) is readily solvable, as it has a quadratic
         objective and linear constraints, i.e. it is a \alert{convex}
         optimization problem.
     \end{itemize}
@@ -304,10 +305,20 @@
     \medskip
 \end{frame}
 
-%\section{Linear SVMs}
-%
-%\subsection{Non-separable classes}
-%
+\section{Linear SVMs}
+
+\subsection{Non-separable classes}
+
+\begin{frame}{Non-separable classes}
+    \begin{itemize}
+        \item
+        In reality, $ \mathcal{X}_\mathcal{D}^+ $,
+        $ \mathcal{X}_\mathcal{D}^- $ may not be linearly separable, in which
+        case (\aref{eq:max_margin_orig}), (\aref{eq:linear_svc_sep}) are
+        infeasible. Fortunately, this difficulty is easily addressable.
+    \end{itemize}
+\end{frame}
+
 %\subsection{Primal formulation}
 %
 %\begin{frame}{Primal formulation}
