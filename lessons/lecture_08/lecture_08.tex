@@ -204,7 +204,7 @@
         $ \Vert\tilde{\mathbf{w}}\Vert_2 = 1 $, $ \tilde{b} \in \mathbb{R} $
         s.t. $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
         $ y\big(\tilde{\mathbf{w}}^\top\mathbf{x} + \tilde{b}\big) \ge M $,
-        $ M \ge 0 $ maximized.
+        $ M \in (0, \infty) $ maximized.
 
         \item
         The $ \tilde{\mathbf{w}}, \tilde{b} $ hyperplane is the \alert{unique}
@@ -237,13 +237,14 @@
                 \text{s.t.} &
                 \mathbf{Z}\mathbf{w} + b\mathbf{y} \succeq M\mathbf{1}
                 \succ \mathbf{0} \\
-                & \Vert\mathbf{w}\Vert_2 = 1
+                & \Vert\mathbf{w}\Vert_2 = 1 \\
             \end{array}
         \end{equation}
 
         \item
         However, if we drop the $ \mathbf{w} $ norm constraint and redefine
-        $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $, we can replace the constraints
+        $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $, we can replace the linear
+        constraints
         of (\aref{eq:max_margin_orig}) with\footnote{
             The link is clearer if we rewrite (\aref{eq:neo_margin_cons}) as
             $ \frac{1}{\Vert\mathbf{w}\Vert_2}(\mathbf{Zw} + b\mathbf{y})
@@ -315,7 +316,22 @@
         In reality, $ \mathcal{X}_\mathcal{D}^+ $,
         $ \mathcal{X}_\mathcal{D}^- $ may not be linearly separable, in which
         case (\aref{eq:max_margin_orig}), (\aref{eq:linear_svc_sep}) are
-        infeasible. Fortunately, this difficulty is easily addressable.
+        infeasible. Fortunately, this problem is easily addressable.
+
+        \item
+        Consider modifying (\aref{eq:max_margin_orig}) to allow
+        $ y(\mathbf{w}^\top\mathbf{x} + b) < M $ for some $ (\mathbf{x}, y)
+        \in \mathcal{D} $ up to a certain bound $ \omega \in (0, \infty) $.
+
+%        \item
+%        Define $ \xi \succeq \mathbf{0} \in \mathbb{R}^N $ and replace the
+%        linear constraints in (\aref{eq:max_margin_orig}) with
+%        \begin{equation*}
+%            \begin{split}
+%                & \mathbf{Zw} + b\mathbf{y} \succeq M(\mathbf{1} - \xi) \\
+%                & M > 0
+%            \end{split}
+%        \end{equation*}
     \end{itemize}
 \end{frame}
 
