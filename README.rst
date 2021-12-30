@@ -4,8 +4,8 @@
    master/bac_advanced_ml_logo.png
    :alt: BAC Advanced ML logo
 
-A repository containing lectures and exercises for the
-`BAC Advanced Team`__\ 's former intro to machine learning curriculum.
+A repository of lectures and exercises for the `BAC Advanced Team`__\ 's
+intro to machine learning curriculum.
 
 .. __: https://sternbac.org/insightteam.html
 
