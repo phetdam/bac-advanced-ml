@@ -182,7 +182,7 @@
         \{\mathbf{x} \in \mathbb{R}^d : (\mathbf{x}, y) \in \mathcal{D},
         y = -1\} $ are linearly separable\footnote{
             In other words, $ \forall (\mathbf{x}, y) \in \mathcal{D} $,
-            the scaled signed distance
+            the scaled unsigned distance
             $ y(\mathbf{w}^\top\mathbf{x} + b) > 0 $.
         }.
 
@@ -228,8 +228,8 @@
 
         \item
         The margin maximization problem can be concisely written as\footnote{
-            (\aref{eq:max_margin_orig}) has a global solution as it is a convex
-            problem.        
+            When feasible, (\aref{eq:max_margin_orig}) has a global solution
+            as it is a convex problem.
         }
         \begin{equation} \label{eq:max_margin_orig}
             \begin{array}{ll}
@@ -323,15 +323,19 @@
         $ y(\mathbf{w}^\top\mathbf{x} + b) < M $ for some $ (\mathbf{x}, y)
         \in \mathcal{D} $ up to a certain bound $ \omega \in (0, \infty) $.
 
-%        \item
-%        Define $ \xi \succeq \mathbf{0} \in \mathbb{R}^N $ and replace the
-%        linear constraints in (\aref{eq:max_margin_orig}) with
-%        \begin{equation*}
-%            \begin{split}
-%                & \mathbf{Zw} + b\mathbf{y} \succeq M(\mathbf{1} - \xi) \\
-%                & M > 0
-%            \end{split}
-%        \end{equation*}
+        \item
+        Define $ \xi \succeq \mathbf{0} \in \mathbb{R}^N $, the ``slack''
+        vector\footnote{
+            From the Karush-Kuhn-Tucker conditions, $ \xi $ does actually
+            define slack variables.
+        }. One way to express this modification is to replace the linear
+        constraints in (\aref{eq:max_margin_orig}) with
+        \begin{equation*}
+            \begin{split}
+                & \mathbf{Zw} + b\mathbf{y} \succeq M(\mathbf{1} - \xi) \\
+                & M > 0
+            \end{split}
+        \end{equation*}
     \end{itemize}
 \end{frame}
 
