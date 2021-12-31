@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{October 18, 2021}
+\date{December 30, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -321,21 +321,67 @@
         \item
         Consider modifying (\aref{eq:max_margin_orig}) to allow
         $ y(\mathbf{w}^\top\mathbf{x} + b) < M $ for some $ (\mathbf{x}, y)
-        \in \mathcal{D} $ up to a certain bound $ \omega \in (0, \infty) $.
+        \in \mathcal{D} $, allowing up to $ K \in (0, \infty) $
+        misclassifications.
 
         \item
-        Define $ \xi \succeq \mathbf{0} \in \mathbb{R}^N $, the ``slack''
+        Defining $ \xi \succeq \mathbf{0} \in \mathbb{R}^N $, the ``slack''
         vector\footnote{
             From the Karush-Kuhn-Tucker conditions, $ \xi $ does actually
             define slack variables.
-        }. One way to express this modification is to replace the linear
-        constraints in (\aref{eq:max_margin_orig}) with
-        \begin{equation*}
+        }, one way to express this change is by replacing the linear
+        constraints in (\aref{eq:max_margin_orig}) with\footnote{
+            Like in (\aref{eq:max_margin_orig}), $ M > 0 $, but since it is
+            implied, we don't explicitly state it.
+        }
+        \begin{equation} \label{eq:slack_margin_cons}
             \begin{split}
                 & \mathbf{Zw} + b\mathbf{y} \succeq M(\mathbf{1} - \xi) \\
-                & M > 0
+                & \mathbf{1}^\top\xi \le K
             \end{split}
+        \end{equation}
+
+        \item
+        Again dropping the $ \Vert\mathbf{w}\Vert_2 = 1 $ constraint and
+        redefining $ b $ as $ b / \Vert\mathbf{w}\Vert_2 $, we can rewrite
+        the linear constraints in (\aref{eq:slack_margin_cons}) as
+        \begin{equation*}
+            \mathbf{Zw} + b\mathbf{y} \succeq
+            M\Vert\mathbf{w}\Vert_2(\mathbf{1} - \xi)
         \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Non-separable classes}
+    \begin{itemize}
+        \item
+        Now suppose $ \mathbf{w}^* $,  $ b^* $, $ M^* $, $ \xi^* $, satisfy
+        (\aref{eq:slack_margin_cons}). Again, if we let $ \hat{\kappa}
+        \triangleq 1 / M^*\Vert\mathbf{w}\Vert_2 $, $ \hat{\mathbf{w}}
+        \triangleq \hat{\kappa}\mathbf{w}^* $, $ \hat{b} \triangleq
+        \hat{\kappa}b^* $, we see that
+        \begin{equation*}
+            \mathbf{Z}\hat{\mathbf{w}} + \hat{b}\mathbf{y} =
+            \hat{\kappa}(\mathbf{Zw}^* + b^*\mathbf{y}) \succeq
+            \hat{\kappa}M^*\Vert\mathbf{w}^*\Vert_2(\mathbf{1} - \xi^*) =
+            \mathbf{1} - \xi^*
+        \end{equation*}
+
+        \item
+        Again, $ \Vert\hat{\mathbf{w}}\Vert_2 =
+        \hat{\kappa}\Vert\mathbf{w}^*\Vert_2 = 1 / M^* $, so we can modify
+        (\aref{eq:linear_svc_sep}) into
+        \begin{equation} \label{eq:linear_svc_nonsep}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b, \xi} &
+                \frac{1}{2}\Vert\mathbf{w}\Vert_2^2 \\
+                \text{s.t} & 
+                \mathbf{Zw} + b\mathbf{y} \succeq \mathbf{1} - \xi \\
+                & \mathbf{1}^\top\xi \le K \\
+                & \xi \succeq \mathbf{0}
+            \end{array}
+        \end{equation}
+        We again set $ \Vert\mathbf{w}\Vert_2 = 1 / M $.
     \end{itemize}
 \end{frame}
 
