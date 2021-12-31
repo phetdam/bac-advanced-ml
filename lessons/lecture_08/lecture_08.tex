@@ -260,7 +260,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Margin maximization}
+\begin{frame}{Optimal separating hyperplanes}
     \begin{itemize}
         \item
         Now suppose $ \mathbf{w}^*, b^*, M^* $ satisfy
@@ -308,9 +308,9 @@
 
 \section{Linear SVMs}
 
-\subsection{Non-separable classes}
+\subsection{Primal formulation}
 
-\begin{frame}{Non-separable classes}
+\begin{frame}{Primal formulation}
     \begin{itemize}
         \item
         In reality, $ \mathcal{X}_\mathcal{D}^+ $,
@@ -352,7 +352,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Non-separable classes}
+\begin{frame}{Primal formulation}
     \begin{itemize}
         \item
         Now suppose $ \mathbf{w}^* $,  $ b^* $, $ M^* $, $ \xi^* $, satisfy
@@ -375,13 +375,50 @@
             \begin{array}{ll}
                 \displaystyle\min_{\mathbf{w}, b, \xi} &
                 \frac{1}{2}\Vert\mathbf{w}\Vert_2^2 \\
-                \text{s.t} & 
+                \text{s.t.} & 
                 \mathbf{Zw} + b\mathbf{y} \succeq \mathbf{1} - \xi \\
                 & \mathbf{1}^\top\xi \le K \\
                 & \xi \succeq \mathbf{0}
             \end{array}
         \end{equation}
-        We again set $ \Vert\mathbf{w}\Vert_2 = 1 / M $.
+
+        \item
+        Note that (\aref{eq:slack_margin_cons}) uses $ M(\mathbf{1} - \xi) $
+        despite $ M\mathbf{1} - \xi $ seeming more natural as the latter
+        results in a nonconvex\footnote{
+            The linear constraints of (\aref{eq:linear_svc_nonsep}) would
+            become nonconvex constraints.
+        } optimization problem \cite{esl}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Primal formulation}
+    \begin{itemize}
+        \item
+        In practice, (\aref{eq:linear_svc_nonsep}) is not solved
+        directly. Instead, we solve a Lagrangian relaxation of
+        (\aref{eq:linear_svc_nonsep}), which for $ C \in (0, \infty) $ is
+        \begin{equation} \label{eq:linear_svc_primal}
+            \begin{array}{ll}
+                \displaystyle\min_{\mathbf{w}, b, \xi} &
+                \frac{1}{2}\Vert\mathbf{w}\Vert_2^2 + C\mathbf{1}^\top\xi \\
+                \text{s.t.} &
+                \mathbf{Zw} + b\mathbf{y} \succeq \mathbf{1} - \xi \\
+                & \xi \succeq \mathbf{0}
+            \end{array}
+        \end{equation}
+        Canonically, (\aref{eq:linear_svc_primal}) is the optimization
+        problem referred to as the \textit{primal problem}, where the
+        $ \mathbf{1}^\top\xi \le K $ constraint has been relaxed.
+
+        \item
+        Here the Lagrange multiplier $ C $ is the tuning parameter, where
+        increasing $ C $ corresponds to decreasing $ K $.
+
+        \item
+        We prefer (\aref{eq:linear_svc_primal}) to
+        (\aref{eq:linear_svc_nonsep}), as reducing hard constraints is
+        desirable from a computing perspective \cite{esl}.
     \end{itemize}
 \end{frame}
 
