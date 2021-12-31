@@ -24,7 +24,7 @@
 % metadata. content in brackets is displayed in footer bar
 \author[Derek Huang (BAC Advanced Team)]{Derek Huang}
 \institute{BAC Advanced Team}
-\date{December 30, 2021}
+\date{December 31, 2021}
 
 % change "ball" bullet to numbered bullet and section title for section
 \setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
@@ -409,28 +409,29 @@
         \end{equation}
         Canonically, (\aref{eq:linear_svc_primal}) is the optimization
         problem referred to as the \textit{primal problem}, where the
-        $ \mathbf{1}^\top\xi \le K $ constraint has been relaxed.
+        $ \mathbf{1}^\top\xi \le K $ constraint has been relaxed\footnote{
+            From a computing perspective, fewer constraints are
+            preferable, \textit{ceteris paribus}.
+        }.
 
         \item
         Here the Lagrange multiplier $ C $ is the tuning parameter, where
         increasing $ C $ corresponds to decreasing $ K $.
 
         \item
-        We prefer (\aref{eq:linear_svc_primal}) to
-        (\aref{eq:linear_svc_nonsep}), as reducing hard constraints is
-        desirable from a computing perspective \cite{esl}.
+        Since the solution to (\aref{eq:linear_svc_primal}) has $ d + N + 1 $
+        terms, compute time is affected by both feature dimension $ d $ and
+        training point number $ N $.
     \end{itemize}
 \end{frame}
 
-%\subsection{Primal formulation}
+%\subsection{Dual formulation}
 %
-%\begin{frame}{Primal formulation}
+%\begin{frame}{Dual formulation}
 %    \begin{itemize}
 %        \item
 %    \end{itemize}
 %\end{frame}
-%
-%\subsection{Dual formulation}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
