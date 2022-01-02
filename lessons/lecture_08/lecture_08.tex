@@ -466,8 +466,15 @@
         (\aref{eq:linear_svc_primal}), where
         \begin{equation} \label{eq:linear_svc_lagrangian}
             \mathcal{L}(\mathbf{x}, \lambda) \triangleq
-            \frac{1}{2}\mathbf{x}^\top\mathbf{D}\mathbf{x} +
-            \begin{bmatrix} \ \mathbf{0}_{d + 1}^\top & C\mathbf{1}_N^\top \ \end{bmatrix}\mathbf{x} + \lambda^\top\left(\begin{bmatrix} \ \mathbf{1}_N \ \\ \ \mathbf{0}_N \ \end{bmatrix} - \mathbf{Q}\right)\mathbf{x}
+            \frac{1}{2}\mathbf{x}^\top\mathbf{D}\mathbf{x} + \begin{bmatrix}
+                \ \mathbf{0}_{d + 1}^\top & C\mathbf{1}_N^\top \
+            \end{bmatrix}\mathbf{x} +
+            \lambda^\top\left(
+                \begin{bmatrix}
+                    \ \mathbf{1}_N \ \\ \ \mathbf{0}_N \
+                \end{bmatrix} -
+                \mathbf{Q}\mathbf{x}
+            \right)
         \end{equation}
     \end{itemize}
 \end{frame}
@@ -494,9 +501,8 @@
         \end{equation}
 
         \item
-        Rewriting (\aref{eq:linear_dual_system}) in terms of
-        $ \mathbf{w}_\lambda, b_\lambda, \xi_\lambda, \alpha, \beta $,
-        we see that
+        Recalling (\aref{eq:block_defs}), we can rewrite
+        (\aref{eq:linear_dual_system}) as the block system
         \begin{equation} \label{eq:linear_dual_eqs}
             \begin{bmatrix}
                 \ \mathbf{w}_\lambda \ \\ \ 0 \ \\ \ C\mathbf{1} \
@@ -506,12 +512,74 @@
                 \ \alpha + \beta \
             \end{bmatrix}
         \end{equation}
-        
+
+        \item
+        Using (\aref{eq:linear_svc_lagrangian}),
+        (\aref{eq:linear_dual_system}), (\aref{eq:linear_dual_eqs}), noting
+        $ \mathbf{x}_\lambda^\top\mathbf{Dx}_\lambda =
+        \mathbf{w}_\lambda^\top\mathbf{w}_\lambda $, we see that
+        \begin{equation} \label{eq:linear_svc_dual_func}
+            \mathcal{L}(\mathbf{x}_\lambda, \lambda) = \lambda^\top
+            \begin{bmatrix}
+                \ \mathbf{1}_N \ \\ \ \mathbf{0}_N \
+            \end{bmatrix} -
+            \frac{1}{2}\mathbf{x}_\lambda^\top\mathbf{Dx}_\lambda =
+            \mathbf{1}^\top\alpha -
+            \frac{1}{2}\alpha^\top\mathbf{ZZ}^\top\alpha
+        \end{equation}
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Dual formulation}
     \begin{itemize}
+        \item
+        Noting that $ \mathcal{L}(\mathbf{x}_\lambda, \lambda) \triangleq
+        \inf_\mathbf{x}\{\mathcal{L}(\mathbf{x}, \lambda)\} $, i.e. the dual
+        of the objective in (\aref{eq:linear_svc_primal}),
+        (\aref{eq:linear_svc_dual_func}) implies we can express the dual
+        only through $ \alpha \in \mathbb{R}^N $.
+
+        \item
+        Thus, from (\aref{eq:linear_dual_eqs}),
+        (\aref{eq:linear_svc_dual_func}), we can express the dual of the
+        primal (\aref{eq:linear_svc_primal}) as
+        \begin{equation} \label{eq:linear_svc_dual}
+            \begin{array}{ll}
+                \displaystyle\max_\alpha & \mathbf{1}^\top\alpha -
+                \frac{1}{2}\alpha^\top\mathbf{ZZ}^\top\alpha \\
+                \text{s.t.} & \alpha^\top\mathbf{y} = 0 \\
+                & \mathbf{0} \preceq \alpha \preceq C\mathbf{1}
+            \end{array}
+        \end{equation}
+        Here the constraints are due to (\aref{eq:linear_dual_eqs}) and the
+        dual constraint $ \lambda \succeq \mathbf{0} $, as from
+        (\aref{eq:linear_dual_eqs}), $ \alpha = C\mathbf{1} - \beta $, so
+        with $ \alpha, \beta \succeq \mathbf{0} $, we have 
+        $ \mathbf{0} \preceq \alpha \preceq C\mathbf{1} $.
+
+        \item
+        Note how the solution to (\aref{eq:linear_svc_dual}) has $ N $ terms
+        compared to $ d + N + 1 $ terms for (\aref{eq:linear_svc_primal}), so
+        we have finessed the effect of feature dimension.
+
+        \item
+        Solving (\aref{eq:linear_svc_dual}) is preferred, as it has a
+        lower-dimension solution independent of feature dimension and
+        simpler constraints than (\aref{eq:linear_svc_primal}).
+    \end{itemize}
+\end{frame}
+
+\section{Dual SVMs}
+
+\subsection{Dual to primal}
+
+\begin{frame}{Dual to primal}
+    \begin{itemize}
+        \item
+        However, after solving (\aref{eq:linear_svc_dual}), we must recover
+        the primal solution to classify new points, so we use some more
+        optimization theory.
+
         \item
         Since (\aref{eq:linear_svc_primal}) convex with only linear
         constraints, $ \mathbb{R}^{d + N + 1} $ open\footnote{
@@ -525,8 +593,16 @@
         \cite{bv_convex_opt}.
 
         \item
-        Strong duality $ \Rightarrow $ the primal and dual optimal
-        solutions satisfy the Karush-Kuhn-Tucker conditions, so we have
+        Strong duality $ \Rightarrow $ the primal optimal $ \hat{\mathbf{w}}, \hat{b}, \hat{\xi} $ and dual optimal $ \hat{\lambda} $ solutions exhibit complementary slackness. Thus, $ \forall k \in \{1, \ldots N\} $,
+        \begin{equation}
+            \begin{split}
+            \hat{\alpha}_k\big(1 - \hat{\xi}_k - y_k\big(\mathbf{x}_k^\top\hat{\mathbf{w}} + \hat{b}\big)\big) & = 0 \\
+                \hat{\beta}_k\hat{\xi}_k & = 0
+            \end{split}
+        \end{equation}
+
+        \item
+        Since $ \hat{\beta}_k > 0 \Leftrightarrow \hat{\xi}_k = 0 $,  
     \end{itemize}
 \end{frame}
 
