@@ -425,13 +425,110 @@
     \end{itemize}
 \end{frame}
 
-%\subsection{Dual formulation}
-%
-%\begin{frame}{Dual formulation}
-%    \begin{itemize}
-%        \item
-%    \end{itemize}
-%\end{frame}
+\subsection{Dual formulation}
+
+\begin{frame}{Dual formulation}
+    \begin{itemize}
+        \item
+        However, by applying some convex optimization theory, we can finesse
+        the effect the feature dimension $ d $ has on compute time.
+
+        \item
+        Define parameter vector $ \mathbf{x} \in \mathbb{R}^{d + N + 1} $,
+        Lagrangian [inequality] multipliers $ \lambda \in \mathbb{R}^{2N} $,
+        and block matrices for (\aref{eq:linear_svc_primal})
+        s.t. for $ \alpha, \beta \in \mathbb{R}^N $,
+        \begin{equation} \label{eq:block_defs}
+            \begin{array}{cc}
+                \mathbf{x} \triangleq
+                \begin{bmatrix}
+                    \ \mathbf{w} \ \\
+                    \ b \ \\
+                    \ \xi \
+                \end{bmatrix} &
+	            \mathbf{D} \triangleq \begin{bmatrix}
+	                \ \mathbf{I}_d & \mathbf{0}_{d \times (N + 1)} \ \\
+	                \ \mathbf{0}_{(N + 1) \times d} &
+	                \mathbf{0}_{(N + 1) \times (N + 1)} \
+	            \end{bmatrix} \\ \\
+	            \lambda \triangleq
+                \begin{bmatrix} \ \alpha \ \\ \ \beta \ \end{bmatrix} &
+	            \mathbf{Q} \triangleq \begin{bmatrix}
+                    \ \mathbf{Z} & \mathbf{y} & \mathbf{I}_N \ \\
+                    \ \mathbf{0}_{N \times d} & \mathbf{0}_N & \mathbf{I}_N \
+	            \end{bmatrix}
+            \end{array}
+        \end{equation}
+
+        \item
+        Now let $ \mathcal{L} : \mathbb{R}^{d + N + 1} \times \mathbb{R}^{2N}
+        \rightarrow \mathbb{R} $ be the Lagrangian for
+        (\aref{eq:linear_svc_primal}), where
+        \begin{equation} \label{eq:linear_svc_lagrangian}
+            \mathcal{L}(\mathbf{x}, \lambda) \triangleq
+            \frac{1}{2}\mathbf{x}^\top\mathbf{D}\mathbf{x} +
+            \begin{bmatrix} \ \mathbf{0}_{d + 1}^\top & C\mathbf{1}_N^\top \ \end{bmatrix}\mathbf{x} + \lambda^\top\left(\begin{bmatrix} \ \mathbf{1}_N \ \\ \ \mathbf{0}_N \ \end{bmatrix} - \mathbf{Q}\right)\mathbf{x}
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Dual formulation}
+    \begin{itemize}
+        \item
+        Since $ \mathcal{L} $ is convex in $ \mathbf{x} $, for any
+        fixed $ \lambda $, $ \mathbf{x}_\lambda \triangleq
+        \arg\min_\mathbf{x}\mathcal{L}(\mathbf{x}, \lambda) $ is
+        s.t.\footnote{
+            Of course, we know $ \nabla_\mathbf{x}\mathcal{L}(
+            \mathbf{x}_\lambda, \lambda) \triangleq \mathbf{Dx}_\lambda +            
+            \begin{bmatrix}
+                \ \mathbf{0}_{d + 1} \ \\ \ C\mathbf{1}_N \
+            \end{bmatrix} - \mathbf{Q}^\top\lambda = \mathbf{0}_{d + N + 1} $.
+            % if omitted, inline math is clipped
+            \vspace{0 pt}
+        }
+        \begin{equation} \label{eq:linear_dual_system}
+            \mathbf{Dx}_\lambda + \begin{bmatrix}
+                \ \mathbf{0}_{d + 1} \ \\ \ C\mathbf{1}_N \
+            \end{bmatrix} = \mathbf{Q}^\top\lambda
+        \end{equation}
+
+        \item
+        Rewriting (\aref{eq:linear_dual_system}) in terms of
+        $ \mathbf{w}_\lambda, b_\lambda, \xi_\lambda, \alpha, \beta $,
+        we see that
+        \begin{equation} \label{eq:linear_dual_eqs}
+            \begin{bmatrix}
+                \ \mathbf{w}_\lambda \ \\ \ 0 \ \\ \ C\mathbf{1} \
+            \end{bmatrix} = \begin{bmatrix}
+                \ \mathbf{Z}^\top\alpha \ \\
+                \ \alpha^\top\mathbf{y} \ \\
+                \ \alpha + \beta \
+            \end{bmatrix}
+        \end{equation}
+        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Dual formulation}
+    \begin{itemize}
+        \item
+        Since (\aref{eq:linear_svc_primal}) convex with only linear
+        constraints, $ \mathbb{R}^{d + N + 1} $ open\footnote{
+            Using any valid metric on $ \mathbb{R}^{d + N + 1} $, this is
+            trivial to show.
+        }, and
+        $ (\mathbf{0}, 0, \mathbf{1}) $ feasible, strong duality
+        holds\footnote{
+            Slater's condition reduces to feasibility in this case.
+        } for (\aref{eq:linear_svc_primal})
+        \cite{bv_convex_opt}.
+
+        \item
+        Strong duality $ \Rightarrow $ the primal and dual optimal
+        solutions satisfy the Karush-Kuhn-Tucker conditions, so we have
+    \end{itemize}
+\end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
 \begin{frame}{References}
