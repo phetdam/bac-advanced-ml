@@ -593,16 +593,66 @@
         \cite{bv_convex_opt}.
 
         \item
-        Strong duality $ \Rightarrow $ the primal optimal $ \hat{\mathbf{w}}, \hat{b}, \hat{\xi} $ and dual optimal $ \hat{\lambda} $ solutions exhibit complementary slackness. Thus, $ \forall k \in \{1, \ldots N\} $,
-        \begin{equation}
+        Strong duality $ \Rightarrow $ the primal optimal $ \hat{\mathbf{w}},
+        \hat{b}, \hat{\xi} $ and dual optimal $ \hat{\lambda} $ solutions
+        exhibit complementary slackness \cite{bv_convex_opt}. Thus,
+        $ \forall k \in \{1, \ldots N\} $,
+        \begin{equation} \label{eq:dual_compl_slack}
             \begin{split}
-            \hat{\alpha}_k\big(1 - \hat{\xi}_k - y_k\big(\mathbf{x}_k^\top\hat{\mathbf{w}} + \hat{b}\big)\big) & = 0 \\
+                \hat{\alpha}_k\big(
+                    1 - \hat{\xi}_k - y_k\big(
+                        \mathbf{x}_k^\top\hat{\mathbf{w}} + \hat{b}
+                    \big)
+                \big) & = 0 \\
                 \hat{\beta}_k\hat{\xi}_k & = 0
             \end{split}
         \end{equation}
 
         \item
-        Since $ \hat{\beta}_k > 0 \Leftrightarrow \hat{\xi}_k = 0 $,  
+        From (\aref{eq:linear_dual_eqs}) we know
+        $ \hat{\mathbf{w}} = \mathbf{Z}^\top\hat{\alpha} $, so
+        $ \hat{\mathbf{w}} $ depends only on $ \hat{\alpha}_k \in (0, C] $.
+        The $ \mathbf{x}_k $ with $ \hat{\alpha}_k \in (0, C] $ are called 
+        the \textit{support vectors} \cite{esl}.
+    \end{itemize}
+
+    % footnote spacing
+    \medskip
+\end{frame}
+
+\begin{frame}{Dual to primal}
+    \begin{itemize}
+        \item
+        By (\aref{eq:linear_dual_eqs}) and (\aref{eq:dual_compl_slack}), note
+        $ \hat{\alpha}_k \in (0, C) \Leftrightarrow
+        \hat{\beta}_k \in (0, C) \Rightarrow \hat{\xi}_k = 0 $, so support
+        vectors with $ \hat{\alpha}_k \in (0, C) $ are on the margin\footnote{
+            (\aref{eq:dual_compl_slack}) states $ \hat{\alpha}_k \in (0, C]
+            \Rightarrow $ the $ k $th inequality constraint of
+            (\aref{eq:linear_svc_primal}) is tight (equality).
+        }.
+
+        \item
+        We can recover $ \hat{b} $ from any support vector on the margin.
+        Noting $ y_k^2 = 1 $, from (\aref{eq:dual_compl_slack}) we see that
+        $ \forall\hat{\alpha}_k \in (0, C) $,
+        $ \hat{b} = y_k - \hat{\mathbf{w}}^\top\mathbf{x}_k $.
+
+        \item
+        For numerical stability \cite{esl} in practice, we use the average,
+        and so
+        \begin{equation} \label{eq:linear_svc_primal_from_dual}
+            \begin{array}{cc}
+                \displaystyle\hat{\mathbf{w}} = \mathbf{Z}^\top\hat{\alpha}
+                \quad &
+                \displaystyle\hat{b} =
+                \sum_{k = 1}^N\frac{
+                    \mathbb{I}_{(0, C)}(\hat{\alpha}_k)\big(
+                        y_k - \hat{\mathbf{w}}^\top\mathbf{x}_k
+                    \big)
+                }{\sum_{k = 1}^N\mathbb{I}_{(0, C)}(\hat{\alpha}_k)}
+            \end{array}
+        \end{equation}
     \end{itemize}
 \end{frame}
 
