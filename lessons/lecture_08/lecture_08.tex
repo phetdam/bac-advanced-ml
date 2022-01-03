@@ -601,7 +601,7 @@
             \begin{split}
                 \hat{\alpha}_k\big(
                     1 - \hat{\xi}_k - y_k\big(
-                        \mathbf{x}_k^\top\hat{\mathbf{w}} + \hat{b}
+                        \hat{\mathbf{w}}^\top\mathbf{x}_k + \hat{b}
                     \big)
                 \big) & = 0 \\
                 \hat{\beta}_k\hat{\xi}_k & = 0
@@ -633,6 +633,11 @@
         }.
 
         \item
+        In contrast, since $ \hat{\xi}_k > 0 \Rightarrow \hat{\beta}_k = 0
+        \Leftrightarrow \hat{\alpha}_k = C $, any $ \mathbf{x}_k $ inside the
+        margin, i.e. with $ \hat{\xi}_k > 0 $, is also a support vector.
+
+        \item
         We can recover $ \hat{b} $ from any support vector on the margin.
         Noting $ y_k^2 = 1 $, from (\aref{eq:dual_compl_slack}) we see that
         $ \forall\hat{\alpha}_k \in (0, C) $,
@@ -653,7 +658,58 @@
                 }{\sum_{k = 1}^N\mathbb{I}_{(0, C)}(\hat{\alpha}_k)}
             \end{array}
         \end{equation}
+
+        \item
+        Note that the dual (\aref{eq:linear_svc_dual}) gives a new way to
+        solve the primal (\aref{eq:linear_svc_primal}). From
+        (\aref{eq:dual_compl_slack}), we see that $ \forall \hat{\alpha}_k
+        \in (0, C] $, $ 1 - y_k\big(\hat{\mathbf{w}}^\top\mathbf{x}_k +
+        \hat{b}\big) = \hat{\xi}_k $.
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Dual to primal}
+    \begin{itemize}
+        \item
+        Furthermore, we see that $ \forall\hat{\alpha}_k = 0 $,
+        $ \hat{\beta}_k = C \Leftrightarrow \hat{\xi}_k = 0 $. Therefore,
+        since $ \hat{\xi} \succeq \mathbf{0} $, we can recast
+        (\aref{eq:linear_svc_primal}) as the unconstrained
+        \begin{equation} \label{eq:linear_svc_hinge}
+            \begin{array}{ll}
+                \displaystyle\max_{\mathbf{w}, b} &
+                \displaystyle\frac{1}{2}\Vert\mathbf{w}\Vert_2^2 +
+                C\sum_{k = 1}^N\max\big\{
+                    0, 1 - y_k\big(\mathbf{w}^\top\mathbf{x}_k + b\big)
+                \big\}
+            \end{array}
+        \end{equation}
+        $ \max $ is needed as $ y_k\big(\hat{\mathbf{w}}^\top\mathbf{x}_k +
+        \hat{b}\big) > 1 $ is possible if $ \hat{\alpha}_k = 0 $.
+
+        \item
+        Thus, (\aref{eq:dual_compl_slack}) allows us to simplify
+        (\aref{eq:linear_svc_primal}) by removing constraints and reducing
+        solution dimension to $ d + 1 $ at the cost of
+        differentiability\footnote{
+            The hinge loss does have a subgradient, so subgradient descent
+            can be used.        
+        }.
+
+        \item
+        The term $ \max\big\{0, 1 - y_k\big(\mathbf{w}^\top\mathbf{x}_k +
+        b\big)\big\} $ is the \textit{hinge loss}. Directly solving
+        (\aref{eq:linear_svc_hinge}) can be advantageous when $ N > d $,
+        $ d $ small and $ N $ large.
+
+        \item
+        In such a case, (\aref{eq:linear_svc_dual}) has large solution
+        dimension, and it is possible the dense $ \mathbf{ZZ}^\top $ may
+        not fit in memory, complicating computation.
+    \end{itemize}
+
+    % spacing for footnote
+    \medskip
 \end{frame}
 
 % BibTeX slide for references. should use either acm or ieeetr style
