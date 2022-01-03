@@ -4,12 +4,17 @@
    master/bac_advanced_ml_logo.png
    :alt: BAC Advanced ML logo
 
-A repository of lectures and exercises for the `BAC Advanced Team`__\ 's
-intro to machine learning curriculum.
+A repository of lectures and exercises on machine learning fundamentals.
+
+Originally, the first seven lectures were written for the
+`BAC Advanced Team`__\ 's intro to machine learning curriculum, but since my
+graduation, I have decided to keep producing lectures and exercises at my own
+leisure for educational value. After all, teaching others is in itself a
+method of testing one's own knowledge.
 
 .. __: https://sternbac.org/insightteam.html
 
-The source code in the repository is structured within a Python package.
+Source code in this repository is structured within a Python package.
 
 
 Contents
