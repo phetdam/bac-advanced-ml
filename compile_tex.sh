@@ -36,9 +36,15 @@ optional arguments:
  -v, --verbose  pass to show the full output of the pdflatex/bibtex commands.
                 by default, the output of pdflatex/bibtex is suppressed."
 
-# single-file compilation function. arguments:
-# $1: path to .tex file
-# $2: 0 for silence (direct output to /dev/null), 1 for no output suppression
+##
+# Single-file compilation function.
+#
+# Arguments:
+#   Path to .tex file
+#   0 for silence (direct output to /dev/null), 1 for no output suppression
+# Outputs:
+#   Message on which PDF file is being built and any TeX output if verbose
+#
 compile_tex() {
     # save current directory so we can cd back
     BASE_DIR=$(pwd)
@@ -74,8 +80,14 @@ compile_tex() {
     cd $BASE_DIR
 }
 
-# main compilation loop. arguments:
-# $1: 0 for silence (direct output to /dev/null), 1 for no output suppression
+##
+# Main compilation loop.
+#
+# Arguments:
+#   0 for silence (direct output to /dev/null), 1 for no output suppression
+# Outputs:
+#   Outputs from compile_tex
+#
 compile_loop() {
     # compile all .tex files in the top-level lessons directory
     for INFILE in $LESSON_ROOT/*.tex
@@ -97,6 +109,10 @@ compile_loop() {
     done
 }
 
+##
+# Main function.
+#
+#
 # if no arguments, then compile all lectures non-verbosely
 if [[ $# == 0 ]]
 then
