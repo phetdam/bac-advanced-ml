@@ -63,15 +63,18 @@ compile_tex() {
     then
         echo "building $LONG_PROJ_NAME.pdf..."
         $PDF_TEX $PROJ_NAME
-        bibtex $PROJ_NAME
+        # BibTeX returns nonzero exit code if it is called on project that has
+        # no citation, bibdata, or bibstyle commands. ignore so set -e works
+        bibtex $PROJ_NAME || true
         $PDF_TEX $PROJ_NAME
         $PDF_TEX $PROJ_NAME
         echo "done"
     # else suppress all stdout from pdflatex and bibtex
     else
-        echo -n "building $LONG_PROJ_NAME.pdf..."
+        echo -n "building $LONG_PROJ_NAME.pdf... "
         $PDF_TEX $PROJ_NAME > /dev/null
-        bibtex $PROJ_NAME > /dev/null
+        # see lines 66-67. ignore so set -e works
+        bibtex $PROJ_NAME > /dev/null || true
         $PDF_TEX $PROJ_NAME > /dev/null
         $PDF_TEX $PROJ_NAME > /dev/null
         echo "done"
@@ -112,41 +115,49 @@ compile_loop() {
 ##
 # Main function.
 #
+# If no arguments, all TeX files in repo are compiled to PDF non-verbosely.
 #
-# if no arguments, then compile all lectures non-verbosely
-if [[ $# == 0 ]]
-then
-    # compile all .tex files in the repo, suppressing pdflatex/bibtex output
-    compile_loop 0
-# else if 1 argument
-elif [[ $# == 1 ]]
-then
-    # if help argument, then print usage
-    if [ $1 = "-h" ] || [ $1 = "--help" ]
+# Arguments:
+#   -h, --help or list of individual TeX files to compile.
+#
+main() {
+    if [[ $# == 0 ]]
     then
-        # need double quote to preserve the spacing
-        echo "$USAGE"
-    # else if -v or --verbose, don't suppress pdflatex/bibtex output when
-    # compiling all the .tex files to pdf
-    elif [ $1 = "-v" ] || [ $1 = "--verbose" ]
+        # compile all .tex files in repo, suppressing pdflatex/bibtex output
+        compile_loop 0
+    # else if 1 argument
+    elif [[ $# == 1 ]]
     then
-        compile_loop 1
-    # else treat as .tex file and send to pdflatex. output written in same dir.
-    else
-        compile_tex $1 0
-    fi
-# else if two 2 arguments
-elif [[ $# == 2 ]]
-then
-    # if the second argument is -v or --verbose, compile file verbosely
-    if [ $2 = "-v" ] || [ $2 = "--verbose" ]
+        # if help argument, then print usage
+        if [ $1 = "-h" ] || [ $1 = "--help" ]
+        then
+            # need double quote to preserve the spacing
+            echo "$USAGE"
+        # else if -v or --verbose, don't suppress pdflatex/bibtex output when
+        # compiling all the .tex files to pdf
+        elif [ $1 = "-v" ] || [ $1 = "--verbose" ]
+        then
+            compile_loop 1
+        # else treat as .tex and send to pdflatex. output written in same dir.
+        else
+            compile_tex $1 0
+        fi
+    # else if two 2 arguments
+    elif [[ $# == 2 ]]
     then
-        compile_tex $1 1
+        # if the second argument is -v or --verbose, compile file verbosely
+        if [ $2 = "-v" ] || [ $2 = "--verbose" ]
+        then
+            compile_tex $1 1
+        # else too many arguments
+        else
+            echo $TOO_MANY_ARGS
+        fi
     # else too many arguments
     else
         echo $TOO_MANY_ARGS
     fi
-# else too many arguments
-else
-    echo $TOO_MANY_ARGS
-fi
+}
+
+set -e
+main "$@"
