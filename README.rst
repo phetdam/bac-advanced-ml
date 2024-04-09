@@ -36,7 +36,7 @@ From source
 
 After cloning the repository, ``cd`` into the repository root and run
 
-.. code:: bash
+.. code:: shell
 
    python3 setup.py build_ext --inplace && pip3 install .
 
